@@ -15,8 +15,17 @@ create table events(
   select * from events;
   select id, TO_CHAR(start_date, 'yyyy-mm-dd hh24:mi') start_date, TO_CHAR(end_date, 'yyyy-mm-dd hh24:mi') end_date, text from events where START_DATE like '__/03/__' or END_DATE like '__/03/__';
   
+  select 
+  		id
+  		, text
+  		, to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date
+  		, to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
+  from events
+  
 --일정 저장하기
-  INSERT INTO EVENTS (ID, START_DATE, END_DATE, TEXT) VALUES ('4', TO_DATE('2017-03-24 00:34', 'YYYY-MM-DD HH24:MI'), TO_DATE('2017-03-24 00:34:18', 'YYYY-MM-DD HH24:MI:SS'), '월세');
-
+  INSERT INTO EVENTS (ID, START_DATE, END_DATE, TEXT) 
+  VALUES ('4', TO_DATE('2017-03-24 00:34', 'YYYY-MM-DD HH24:MI'), TO_DATE('2017-03-24 00:34:18', 'YYYY-MM-DD HH24:MI:SS'), '월세');
+	
+  insert into events values (events_seq.nextval, sysdate-3, sysdate-1, '테스트 데이터!!');
 
 --일정 삭제하기

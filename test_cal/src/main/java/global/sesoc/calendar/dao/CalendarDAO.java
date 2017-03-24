@@ -1,5 +1,6 @@
 package global.sesoc.calendar.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -17,9 +18,9 @@ public class CalendarDAO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CalendarDAO.class); 
 	//1)일정 조회하기(월별)
-		public List<Calendar> listCal(int month){
+		public ArrayList<Calendar> listCal(int month){
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
-			List<Calendar> result=null;
+			ArrayList<Calendar> result=null;
 			try {
 				result=mapper.listCal(month);
 			} catch (Exception e) {
