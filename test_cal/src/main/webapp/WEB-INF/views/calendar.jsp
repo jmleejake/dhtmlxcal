@@ -128,7 +128,8 @@ $(function() {
 			});
  
  
-});//main
+ 
+});//mainㅇ
 
 
 function show_minical(){
