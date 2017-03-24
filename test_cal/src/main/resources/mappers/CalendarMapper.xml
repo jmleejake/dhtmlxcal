@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.calendar.dao.CalendarMapper">
+
+<!-- 1)캘린더 일정 월별 불러오기 -->
+<select id="listCal" resultType="Calendar" parameterType="int">
+  select * from events 
+  where START_DATE like '__/#{month}/__' or END_DATE like '__/{#month}/__';
+</select>
+<!-- 2)캘린더 일정 저장하기 -->
+<insert id="saveCal" parameterType="Calendar">
+	insert into 
+</insert>
+<!-- 3)캘린더 일정 삭제하기 -->
+<delete id="delCal" parameterType="int">
+</delete>
+</mapper>
