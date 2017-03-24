@@ -11,6 +11,18 @@ create table events(
   
   CREATE SEQUENCE events_seq;
   
+--기본 데이터 
+	Insert into EVENTS (ID,START_DATE,END_DATE,TEXT) values (1,to_date('17/03/11','RR/MM/DD'),to_date('17/03/11','RR/MM/DD'),'모임
+');
+Insert into EVENTS (ID,START_DATE,END_DATE,TEXT) values (2,to_date('17/03/15','RR/MM/DD'),to_date('17/03/18','RR/MM/DD'),'청소기간
+');
+Insert into EVENTS (ID,START_DATE,END_DATE,TEXT) values (3,to_date('17/03/24','RR/MM/DD'),to_date('17/03/24','RR/MM/DD'),'면접
+');
+Insert into EVENTS (ID,START_DATE,END_DATE,TEXT) values (4,to_date('17/03/24','RR/MM/DD'),to_date('17/03/24','RR/MM/DD'),'월세');
+
+  
+  
+  
 --일정 조회하기(월별)
   select * from events;
   select id, TO_CHAR(start_date, 'yyyy-mm-dd hh24:mi') start_date, TO_CHAR(end_date, 'yyyy-mm-dd hh24:mi') end_date, text from events where START_DATE like '__/03/__' or END_DATE like '__/03/__';
