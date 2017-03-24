@@ -1,23 +1,17 @@
 package global.sesoc.calendar.vo;
 
-import java.util.Date;
-
 public class Calendar {
 	
-	private int number;
+	private int id;
 	private String start_date;
 	private String end_date;
 	private String text;
 	
-	public Calendar() {
-		// TODO Auto-generated constructor stub
+	public int getId() {
+		return id;
 	}
-	
-	public int getNumber() {
-		return number;
-	}
-	public void setNumber(int number) {
-		this.number = number;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getStart_date() {
 		return start_date;
@@ -39,9 +33,6 @@ public class Calendar {
 	}
 	@Override
 	public String toString() {
-		return "Calendar [number=" + number + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
-				+ "]";
+		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text + "]";
 	}
-	
-	
 }

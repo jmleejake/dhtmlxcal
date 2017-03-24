@@ -1,6 +1,7 @@
 package global.sesoc.calendar;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import global.sesoc.calendar.dao.CalendarDAO;
+import global.sesoc.calendar.vo.Calendar;
 
 @Controller
 public class CalendarController {
@@ -36,7 +39,12 @@ public class CalendarController {
 		return "calendar";
 	}
 
-	
+	@ResponseBody
+	@RequestMapping(value="show", method=RequestMethod.POST)
+	public ArrayList<Calendar> showSchedule() {
+		logger.debug("showSchedule!");
+		return dao.listCal(0);
+	}
 	
 	
 }

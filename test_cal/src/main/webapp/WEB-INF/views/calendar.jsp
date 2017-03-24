@@ -13,6 +13,10 @@
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
 $(function() {
+	
+	scheduler.config.xml_date="%Y-%m-%d %H:%i";
+	//DB에서 값 읽어와 스케쥴러에서 조회
+	getScheduleData();
 
 		/* 
 		 초기 세팅!!!
@@ -84,11 +88,12 @@ $(function() {
 		       alert('id값 : '+id);
 		       return true;
 		  }); */
-		//이벤트 예시
+		
+		  //이벤트 예시
 		var events = [
-			{id:1, text:"모임",   start_date:"03/11/2017 14:00",end_date:"03/11/2017 17:00"},
-			{id:2, text:"대청소기간",start_date:"03/15/2017 12:00",end_date:"03/18/2017 19:00"},
-			{id:3, text:"면접", start_date:"03/24/2017 09:00",end_date:"03/24/2017 10:00"}
+			{id:1, text:"모임",   start_date:"2017-03-11 14:00",end_date:"2017-03-11 17:00"},
+			{id:2, text:"대청소기간",start_date:"2017-03-15 12:00",end_date:"2017-03-18 19:00"},
+			{id:3, text:"면접", start_date:"2017-03-24 09:00",end_date:"2017-03-24 10:00"}
 			];
 		//이벤트 넣기
 		scheduler.parse(events, "json");
@@ -148,7 +153,27 @@ function show_minical(){
     }
 }
 
+function getScheduleData() {
+	$.ajax({
+		url:"show"
+		, type:"post"
+		, success:showEvents
+		, error:function(e) {
+			alert(JSON.stringify(e));
+		} 
+	});
+}
 
+function showEvents(ret) {
+	console.log(ret);
+	var calArray = new Array();
+	
+	$.each(ret, function(i, event) {
+		var calObj = {id:event.id, text:event.text, start_date:event.start_date, end_date:event.end_date}
+		calArray.push(calObj);
+	});
+	scheduler.parse(calArray, "json");
+}
 	
 	
 </script>
