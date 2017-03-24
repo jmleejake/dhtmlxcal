@@ -11,12 +11,12 @@ create table events(
   
   CREATE SEQUENCE events_seq;
   
---ÀÏÁ¤ Á¶È¸ÇÏ±â(¿ùº°)
+--ì¼ì • ì¡°íšŒí•˜ê¸°(ì›”ë³„)
   select * from events;
   select id, TO_CHAR(start_date, 'yyyy-mm-dd hh24:mi') start_date, TO_CHAR(end_date, 'yyyy-mm-dd hh24:mi') end_date, text from events where START_DATE like '__/03/__' or END_DATE like '__/03/__';
   
---ÀÏÁ¤ ÀúÀåÇÏ±â
-  INSERT INTO EVENTS (ID, START_DATE, END_DATE, TEXT) VALUES ('4', TO_DATE('2017-03-24 00:34', 'YYYY-MM-DD HH24:MI'), TO_DATE('2017-03-24 00:34:18', 'YYYY-MM-DD HH24:MI:SS'), '¿ù¼¼');
+--ì¼ì • ì €ì¥í•˜ê¸°
+  INSERT INTO EVENTS (ID, START_DATE, END_DATE, TEXT) VALUES ('4', TO_DATE('2017-03-24 00:34', 'YYYY-MM-DD HH24:MI'), TO_DATE('2017-03-24 00:34:18', 'YYYY-MM-DD HH24:MI:SS'), 'ì›”ì„¸');
 
 
---ÀÏÁ¤ »èÁ¦ÇÏ±â
+--ì¼ì • ì‚­ì œí•˜ê¸°

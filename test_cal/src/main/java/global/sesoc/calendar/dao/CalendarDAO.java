@@ -16,7 +16,7 @@ public class CalendarDAO {
 	SqlSession sqlSession;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CalendarDAO.class); 
-	//1)ÀÏÁ¤ ÀĞ¾î¿À±â(¿ùº°) 
+	//1)ì¼ì • ì¡°íšŒí•˜ê¸°(ì›”ë³„)
 		public List<Calendar> listCal(int month){
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
 			List<Calendar> result=null;
@@ -28,7 +28,7 @@ public class CalendarDAO {
 			}
 			return result;
 		}
-		//2)ÀÏÁ¤ ÀúÀåÇÏ±â 
+		//2)ì¼ì • ì €ì¥
 		public int saveCal(Calendar calendar){
 			int result = -1;
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
@@ -40,7 +40,7 @@ public class CalendarDAO {
 			}
 			return result;
 		}
-		//3)ÀÏÁ¤ »èÁ¦ÇÏ±â 
+		//3)ì¼ì • ì‚­ì œ
 		public int delCal(int calId){
 			int result = -1;
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);

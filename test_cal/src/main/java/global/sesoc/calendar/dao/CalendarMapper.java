@@ -6,10 +6,10 @@ import global.sesoc.calendar.vo.Calendar;
 
 public interface CalendarMapper {
 
-	//1)ÀÏÁ¤ ÀĞ¾î¿À±â(¿ùº°) 
+	//1)ì¼ì •ì¡°íšŒ(ì›”ë³„)
 	public List<Calendar> listCal(int month) throws Exception;
-	//2)ÀÏÁ¤ ÀúÀåÇÏ±â 
+	//2)ì¼ì • ì €ì¥ 
 	public int saveCal(Calendar calendar) throws Exception;
-	//3)ÀÏÁ¤ »èÁ¦ÇÏ±â 
+	//3)ì¼ì • ì‚­ì œ 
 	public int delCal(int calId) throws Exception;
 }
