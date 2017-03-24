@@ -13,6 +13,11 @@
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
 $(function() {
+	
+	scheduler.config.xml_date="%Y-%m-%d %H:%i";
+	getScheduleData();
+	
+	
 
 		/* 
 		 초기 세팅!!!
@@ -161,6 +166,27 @@ function show_minical(){
             }
         });
     }
+}
+
+function getScheduleData() {
+	$.ajax({
+		url:"show"
+		, type:"post"
+		, success:showEvents
+		, error:function(e) {
+			alert(JSON.stringify(e));
+		} 
+	});
+}
+
+function showEvents(ret) {
+	var calArray = new Array();
+	
+	$.each(ret, function(i, event) {
+		var calObj = {id:event.id, text:event.text, start_date:event.start_date, end_date:event.end_date}
+		calArray.push(calObj);
+	});
+	scheduler.parse(calArray, "json");
 }
 
 
