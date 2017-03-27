@@ -12,9 +12,9 @@
 	type="text/javascript"></script>
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
-	var thisMonth = new Date().getMonth()+1;
-	var thisYear = new Date().getFullYear();
-	var viewMonth
+//현재 연월 값!
+var thisMonth = new Date().getMonth()+1;
+var thisYear = new Date().getFullYear();
 $(function() {	
 	// DB에서 가져오기
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
@@ -39,26 +39,19 @@ $(function() {
 			type : "time", //time or calendar_time
 			map_to : "auto"
 		} ];  
-		
 		//시간 입력설정 셋팅하는 곳
-		//default lightbox definition
-		/* scheduler.config.lightbox.sections=[
-		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
-		  {name:"time", height:72, type:"time", map_to:"auto"}
-		]; */
 		//change type:"time" -> type:"calendar_time"
-		/* scheduler.config.lightbox.sections = [
+		 scheduler.config.lightbox.sections = [
 		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
 		  {name:"time", height:72, type:"calendar_time", map_to:"auto" }
 		];
-		 */	
+		 
 		//설정
 		scheduler.config.wide_form = false;
 		scheduler.config.repeat_date = "%m/%d/%Y";
 		scheduler.config.include_end_by = true;
 		scheduler.config.start_on_monday = false;
 		scheduler.config.fix_tab_position = true; //스킨입히면 true	
-
 		scheduler.templates.event_text = function(start, end, ev) {
 			return '카테고리: ' + ev.text + '';
 		};//일정 카테고리별 나누기 	
@@ -66,12 +59,10 @@ $(function() {
 		scheduler.skin = "flat";
 		//시작화면 설정
 		scheduler.init('scheduler_here', new Date(), "month");		
-		
 		scheduler.templates.event_text = function(start,end,ev){
 			   return 'Subject: ' + ev.text + ''+ev.id;
 			};
-
- //미니캘린더 (스케줄러(주))
+ 		//미니캘린더 (스케줄러(주))
 			var calendar = scheduler.renderCalendar({
 			    container:"cal_here", 
 			    navigation:true,
@@ -79,21 +70,9 @@ $(function() {
 			        scheduler.setCurrentView(date, scheduler._mode);
 			    }
 			});
- 
  $('#getList').on('click', function(){
-
-	
 	alert(thisYear+'/'+thisMonth);
-	$.ajax({
-		url:"show"
-		, type:"post"
-		, data : {"thisYear":thisYear,"thisMonth" : thisMonth}
-		, dataType : "json"
-		, success:showEvents
-		, error:function(e) {
-			alert(JSON.stringify(e));
-		} 
-	});
+	getCalData(thisYear, thisMonth);
  });
  $('.dhx_cal_prev_button').on('click', function(){
 	 	thisMonth-=1;
@@ -105,24 +84,31 @@ $(function() {
 		alert(thisMonth);
 		getCalData(thisYear, thisMonth);
 	 });
- $('.dhx_save_btn').on('click', function(){	
-	 	
-		alert("저장되었음!!!");
-		
-	 });
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
-});//mainㅇ
+  
+});//main Function
 
-
+function getCalData(thisYear, thisMonth) {
+	$.ajax({
+		url:"show"
+			, type:"post"
+			, data : {"thisYear":thisYear,"thisMonth" : thisMonth}
+			, dataType : "json"
+			, success:showEvents
+			, error:function(e) {
+				alert(JSON.stringify(e));
+			} 
+	});
+}
+function showEvents(ret) {
+	var calArray = new Array();
+	$.each(ret, function(i, event) {
+		var calObj = {id:event.id, text:event.text, start_date:event.start_date, end_date:event.end_date}
+		calArray.push(calObj);
+	});
+	scheduler.parse(calArray, "json");
+}
+//미니캘린더
 function show_minical(){
     if (scheduler.isCalendarVisible()){
         scheduler.destroyCalendar();
@@ -138,33 +124,6 @@ function show_minical(){
         });
     }
 }
-
-
-function getCalData(thisYear, thisMonth) {
-	$.ajax({
-		url:"show"
-			, type:"post"
-			, data : {"thisYear":thisYear,"thisMonth" : thisMonth}
-			, dataType : "json"
-			, success:showEvents
-			, error:function(e) {
-				alert(JSON.stringify(e));
-			} 
-	});
-}
-
-function showEvents(ret) {
-	var calArray = new Array();
-	
-	$.each(ret, function(i, event) {
-		var calObj = {id:event.id, text:event.text, start_date:event.start_date, end_date:event.end_date}
-		calArray.push(calObj);
-	});
-	scheduler.parse(calArray, "json");
-}
-
-
-	
 	
 </script>
 <link rel="stylesheet" href="scheduler/dhtmlxscheduler_flat.css"
@@ -185,14 +144,7 @@ html, body {
 }
 </style>
 </head>
-
-
-
-
-
-
 <body>
-	
 <div class="mainwrapp">
 <h1>Calendar TEST</h1>
 <input type="button" id="getList" value="db값가져오기">
@@ -257,21 +209,13 @@ html, body {
 				</form>
 			</div>
 			<!--이벤트 설정시 반복view  -->
-					
 		</div>
 		<div class="dhx_cal_header">header</div>
 		<div class="dhx_cal_data">data</div>
 	</div>
-
 			<!-- 스케줄러 옆에 미니 달력! -->
 			<div style='float: left; padding:10px;'>
         <div id="cal_here" style='width:250px;'></div></div>
-
-
-
 </div><!-- mainDIV -->
-
-
-
 	</body>
 </html>
