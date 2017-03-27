@@ -6538,6 +6538,17 @@ scheduler._init_lightbox_events=function(){
 						scheduler._new_event = null; // clear flag, if it was
 														// unsaved event
 						scheduler.hide_lightbox();
+						$.ajax({
+							url : "del"
+							, method : "post"
+							, data : {"id" : scheduler._lightbox_id}
+							, success : function(){
+								alert("deleted!!!")
+							}
+							,error : function(){
+								alert("Not deleted!!!")
+							}
+					});
 					});
 
 					break;

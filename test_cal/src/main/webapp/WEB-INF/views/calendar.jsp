@@ -39,19 +39,13 @@ $(function() {
 			type : "time", //time or calendar_time
 			map_to : "auto"
 		} ];  
-		
 		//시간 입력설정 셋팅하는 곳
-		//default lightbox definition
-		/* scheduler.config.lightbox.sections=[
-		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
-		  {name:"time", height:72, type:"time", map_to:"auto"}
-		]; */
 		//change type:"time" -> type:"calendar_time"
-		/* scheduler.config.lightbox.sections = [
+		 scheduler.config.lightbox.sections = [
 		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
 		  {name:"time", height:72, type:"calendar_time", map_to:"auto" }
 		];
-		 */	
+		 
 		//설정
 		scheduler.config.wide_form = false;
 		scheduler.config.repeat_date = "%m/%d/%Y";
