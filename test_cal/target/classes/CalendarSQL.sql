@@ -23,6 +23,7 @@ INSERT INTO EVENTS (ID, START_DATE, END_DATE, TEXT) VALUES ('4', TO_DATE('2017-0
   select * from events;
   select id, TO_CHAR(start_date, 'yyyy-mm-dd hh24:mi') start_date, TO_CHAR(end_date, 'yyyy-mm-dd hh24:mi') end_date, text from events where START_DATE like '__/03/__' or END_DATE like '__/03/__';
   
+  -- 재민
   select 
   		id
   		, text

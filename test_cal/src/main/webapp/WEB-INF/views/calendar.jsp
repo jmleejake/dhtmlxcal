@@ -14,6 +14,7 @@
 <script type="text/javascript">
 $(function() {
 	
+	// DB에서 가져오기
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
 	getScheduleData();
 	
