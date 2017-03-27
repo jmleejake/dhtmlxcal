@@ -58,7 +58,6 @@ $(function() {
 		scheduler.config.include_end_by = true;
 		scheduler.config.start_on_monday = false;
 		scheduler.config.fix_tab_position = true; //스킨입히면 true	
-
 		scheduler.templates.event_text = function(start, end, ev) {
 			return '카테고리: ' + ev.text + '';
 		};//일정 카테고리별 나누기 	
@@ -66,12 +65,10 @@ $(function() {
 		scheduler.skin = "flat";
 		//시작화면 설정
 		scheduler.init('scheduler_here', new Date(), "month");		
-		
 		scheduler.templates.event_text = function(start,end,ev){
 			   return 'Subject: ' + ev.text + ''+ev.id;
 			};
-
- //미니캘린더 (스케줄러(주))
+ 		//미니캘린더 (스케줄러(주))
 			var calendar = scheduler.renderCalendar({
 			    container:"cal_here", 
 			    navigation:true,
@@ -79,7 +76,6 @@ $(function() {
 			        scheduler.setCurrentView(date, scheduler._mode);
 			    }
 			});
- 
  $('#getList').on('click', function(){
 	alert(thisYear+'/'+thisMonth);
 	getCalData(thisYear, thisMonth);
@@ -98,7 +94,6 @@ $(function() {
   
 });//main Function
 
-
 function getCalData(thisYear, thisMonth) {
 	$.ajax({
 		url:"show"
@@ -111,18 +106,15 @@ function getCalData(thisYear, thisMonth) {
 			} 
 	});
 }
-
 function showEvents(ret) {
 	var calArray = new Array();
-	
 	$.each(ret, function(i, event) {
 		var calObj = {id:event.id, text:event.text, start_date:event.start_date, end_date:event.end_date}
 		calArray.push(calObj);
 	});
 	scheduler.parse(calArray, "json");
 }
-
-
+//미니캘린더
 function show_minical(){
     if (scheduler.isCalendarVisible()){
         scheduler.destroyCalendar();
@@ -158,14 +150,7 @@ html, body {
 }
 </style>
 </head>
-
-
-
-
-
-
 <body>
-	
 <div class="mainwrapp">
 <h1>Calendar TEST</h1>
 <input type="button" id="getList" value="db값가져오기">
@@ -230,21 +215,13 @@ html, body {
 				</form>
 			</div>
 			<!--이벤트 설정시 반복view  -->
-					
 		</div>
 		<div class="dhx_cal_header">header</div>
 		<div class="dhx_cal_data">data</div>
 	</div>
-
 			<!-- 스케줄러 옆에 미니 달력! -->
 			<div style='float: left; padding:10px;'>
         <div id="cal_here" style='width:250px;'></div></div>
-
-
-
 </div><!-- mainDIV -->
-
-
-
 	</body>
 </html>
