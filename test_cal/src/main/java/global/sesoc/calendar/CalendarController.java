@@ -1,6 +1,7 @@
 package global.sesoc.calendar;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -48,12 +49,11 @@ public class CalendarController {
 		logger.debug("showSchedule!");
 		return dao.listCalYr(date);
 	}
+	
 	@ResponseBody
 	@RequestMapping(value="show", method=RequestMethod.POST)
 	public ArrayList<Calendar> showSchedule(int thisYear, int thisMonth) {
 		String date = "";
-		//System.out.println(thisYear+"/"+thisMonth);
-		//System.out.println(String.format("%02d", thisMonth));
 		date +=thisYear+"-"+String.format("%02d", thisMonth)+"-01";
 		System.out.println(date);
 		logger.debug("showSchedule!");
@@ -62,8 +62,13 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST)
-	public void saveschedule(Calendar cal) {
-		System.out.println(cal);
+	public String saveschedule(Calendar cal) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		cal.setStart_date(sdf.format(new Date(cal.getStart_date())));
+		cal.setEnd_date(sdf.format(new Date(cal.getEnd_date())));
+		logger.debug("showSchedule : \n{}", cal);
+		dao.saveCal(cal);
+		return "";
 	}
 	@ResponseBody
 	@RequestMapping(value="del", method=RequestMethod.POST)

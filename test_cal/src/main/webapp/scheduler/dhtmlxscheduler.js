@@ -6468,7 +6468,7 @@ scheduler.save_lightbox=function(){
 	var data = this._lightbox_out({}, this._lame_copy(this.getEvent(this._lightbox_id)));
 	$.ajax({
 			url : "save"
-			, method : "post"
+			, type : "post"
 			, data : data
 			, success : function(){
 				alert("saved!!!")
