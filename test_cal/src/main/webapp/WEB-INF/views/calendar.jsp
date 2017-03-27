@@ -12,9 +12,9 @@
 	type="text/javascript"></script>
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
-	var thisMonth = new Date().getMonth()+1;
-	var thisYear = new Date().getFullYear();
-	var viewMonth
+//현재 연월 값!
+var thisMonth = new Date().getMonth()+1;
+var thisYear = new Date().getFullYear();
 $(function() {	
 	// DB에서 가져오기
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
@@ -81,19 +81,8 @@ $(function() {
 			});
  
  $('#getList').on('click', function(){
-
-	
 	alert(thisYear+'/'+thisMonth);
-	$.ajax({
-		url:"show"
-		, type:"post"
-		, data : {"thisYear":thisYear,"thisMonth" : thisMonth}
-		, dataType : "json"
-		, success:showEvents
-		, error:function(e) {
-			alert(JSON.stringify(e));
-		} 
-	});
+	getCalData(thisYear, thisMonth);
  });
  $('.dhx_cal_prev_button').on('click', function(){
 	 	thisMonth-=1;
@@ -105,39 +94,9 @@ $(function() {
 		alert(thisMonth);
 		getCalData(thisYear, thisMonth);
 	 });
- $('.dhx_save_btn').on('click', function(){	
-	 	
-		alert("저장되었음!!!");
-		
-	 });
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
-});//mainㅇ
-
-
-function show_minical(){
-    if (scheduler.isCalendarVisible()){
-        scheduler.destroyCalendar();
-    } else {
-        scheduler.renderCalendar({
-            position:"dhx_minical_icon",
-            date:scheduler._date,
-            navigation:true,
-            handler:function(date,calendar){
-                scheduler.setCurrentView(date);
-                scheduler.destroyCalendar()
-            }
-        });
-    }
-}
+  
+});//main Function
 
 
 function getCalData(thisYear, thisMonth) {
@@ -164,7 +123,21 @@ function showEvents(ret) {
 }
 
 
-	
+function show_minical(){
+    if (scheduler.isCalendarVisible()){
+        scheduler.destroyCalendar();
+    } else {
+        scheduler.renderCalendar({
+            position:"dhx_minical_icon",
+            date:scheduler._date,
+            navigation:true,
+            handler:function(date,calendar){
+                scheduler.setCurrentView(date);
+                scheduler.destroyCalendar()
+            }
+        });
+    }
+}
 	
 </script>
 <link rel="stylesheet" href="scheduler/dhtmlxscheduler_flat.css"
