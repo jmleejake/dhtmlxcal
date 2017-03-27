@@ -6468,7 +6468,7 @@ scheduler.save_lightbox=function(){
 	var data = this._lightbox_out({}, this._lame_copy(this.getEvent(this._lightbox_id)));
 	$.ajax({
 			url : "save"
-			, type : "post"
+			, method : "post"
 			, data : data
 			, success : function(){
 				alert("saved!!!")
@@ -6535,9 +6535,22 @@ scheduler._init_lightbox_events=function(){
 
 					scheduler._dhtmlx_confirm(c, scheduler.locale.labels.title_confirm_deleting, function(){
 						scheduler.deleteEvent(scheduler._lightbox_id);
+						//삭제게시물
+						alert(scheduler._lightbox_id);
 						scheduler._new_event = null; // clear flag, if it was
 														// unsaved event
 						scheduler.hide_lightbox();
+						$.ajax({
+							url : "del"
+							, method : "post"
+							, data : {"id" : scheduler._lightbox_id}
+							, success : function(){
+								alert("deleted!!!")
+							}
+							,error : function(){
+								alert("Not deleted!!!")
+							}
+					});
 					});
 
 					break;
