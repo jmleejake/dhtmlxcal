@@ -7,16 +7,10 @@
 
 <!-- 1)캘린더 일정 월별 불러오기 -->
 <select id="listCal" resultType="Calendar" parameterType="int">
-  select 
-  		id
-  		, text
-  		, to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date
-  		, to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
-  from events
+  select id , text , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date from events
 </select>
 <!-- 2)캘린더 일정 저장하기 -->
 <insert id="saveCal" parameterType="Calendar">
-	insert into 
 </insert>
 <!-- 3)캘린더 일정 삭제하기 -->
 <delete id="delCal" parameterType="int">

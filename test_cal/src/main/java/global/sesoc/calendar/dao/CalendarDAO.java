@@ -22,6 +22,7 @@ public class CalendarDAO {
 			ArrayList<Calendar> result=null;
 			try {
 				result=mapper.listCal(month);
+				System.out.println(result);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
