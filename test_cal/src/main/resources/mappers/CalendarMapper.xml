@@ -20,6 +20,20 @@
 </select>
 <!-- 2)캘린더 일정 저장하기 -->
 <insert id="saveCal" parameterType="Calendar">
+insert into events 
+	(
+	id
+	, text
+	, start_date
+	, end_date
+	)
+values 
+	(
+	events_seq.nextval
+	, #{text}
+	, to_date(#{start_date}, 'yyyy-mm-dd hh24:mi')
+	, to_date(#{end_date}, 'yyyy-mm-dd hh24:mi')
+	)
 </insert>
 <!-- 3)캘린더 일정 삭제하기 -->
 <delete id="delCal" parameterType="int">
