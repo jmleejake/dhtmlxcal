@@ -62,8 +62,13 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST)
-	public void savechedule(Calendar cal) {
+	public void saveschedule(Calendar cal) {
 		System.out.println(cal);
+	}
+	@ResponseBody
+	@RequestMapping(value="del", method=RequestMethod.POST)
+	public void delchedule(int id) {
+		System.out.println("삭제할 게시물 :"+ id);
 	}
 	
 	

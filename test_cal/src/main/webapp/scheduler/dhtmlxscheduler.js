@@ -6535,6 +6535,8 @@ scheduler._init_lightbox_events=function(){
 
 					scheduler._dhtmlx_confirm(c, scheduler.locale.labels.title_confirm_deleting, function(){
 						scheduler.deleteEvent(scheduler._lightbox_id);
+						//삭제게시물
+						alert(scheduler._lightbox_id);
 						scheduler._new_event = null; // clear flag, if it was
 														// unsaved event
 						scheduler.hide_lightbox();
