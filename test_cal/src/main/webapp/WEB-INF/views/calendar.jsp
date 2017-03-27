@@ -71,17 +71,14 @@ $(function() {
 			    }
 			});
  $('#getList').on('click', function(){
-	alert(thisYear+'/'+thisMonth);
 	getCalData(thisYear, thisMonth);
  });
  $('.dhx_cal_prev_button').on('click', function(){
 	 	thisMonth-=1;
-		alert(thisMonth);
 		getCalData(thisYear, thisMonth);
 	 });
  $('.dhx_cal_next_button').on('click', function(){	
 	 	thisMonth+=1;
-		alert(thisMonth);
 		getCalData(thisYear, thisMonth);
 	 });
  

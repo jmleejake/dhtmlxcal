@@ -62,7 +62,7 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST)
-	public String saveschedule(Calendar cal) {
+	public String saveSchedule(Calendar cal) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		cal.setStart_date(sdf.format(new Date(cal.getStart_date())));
 		cal.setEnd_date(sdf.format(new Date(cal.getEnd_date())));
@@ -70,10 +70,13 @@ public class CalendarController {
 		dao.saveCal(cal);
 		return "";
 	}
+	
 	@ResponseBody
 	@RequestMapping(value="del", method=RequestMethod.POST)
-	public void delchedule(int id) {
+	public String delSchedule(int id) {
 		System.out.println("삭제할 게시물 :"+ id);
+		dao.delCal(id);
+		return "";
 	}
 	
 	

@@ -6464,24 +6464,28 @@ scheduler.show_cover=function(){
 	document.body.appendChild(this._cover);
 };
 scheduler.save_lightbox=function(){
-	// 여기에 내용을 입력하자 받고 싶은 것들을
 	var data = this._lightbox_out({}, this._lame_copy(this.getEvent(this._lightbox_id)));
+	// [0001] 등록
 	$.ajax({
 			url : "save"
 			, type : "post"
 			, data : data
 			, success : function(){
-				alert("saved!!!")
+				alert("saved!!!");
+				getCalData(thisYear,thisMonth); // 스케쥴 리프레쉬
 			}
 			,error : function(){
 				alert("Not saved!!!")
 			}
 	});
-	scheduler.getSaveEvent(data);
+//	scheduler.getSaveEvent(data);
 	
 	if (this.checkEvent("onEventSave") && !this.callEvent("onEventSave",[this._lightbox_id, data, this._new_event]))
 		return;
 	this._empty_lightbox(data);
+	console.log("1111111111");
+	console.log(this._lightbox_id);
+	scheduler.deleteEvent(this._lightbox_id);
 	this.hide_lightbox();
 };
 scheduler.startLightbox = function(id, box){
@@ -6528,29 +6532,27 @@ scheduler._init_lightbox_events=function(){
 			switch(className){
 				case "dhx_save_btn": //저장
 					scheduler.save_lightbox();
-					
 					break;
 				case "dhx_delete_btn": //삭제
 					var c=scheduler.locale.labels.confirm_deleting;
 
 					scheduler._dhtmlx_confirm(c, scheduler.locale.labels.title_confirm_deleting, function(){
 						scheduler.deleteEvent(scheduler._lightbox_id);
-						//삭제게시물
-						alert(scheduler._lightbox_id);
-						scheduler._new_event = null; // clear flag, if it was
-														// unsaved event
-						scheduler.hide_lightbox();
+						//[0001] 삭제
 						$.ajax({
 							url : "del"
 							, method : "post"
 							, data : {"id" : scheduler._lightbox_id}
 							, success : function(){
-								alert("deleted!!!")
+								alert("deleted!!!");
 							}
 							,error : function(){
 								alert("Not deleted!!!")
 							}
-					});
+						});
+						scheduler._new_event = null; // clear flag, if it was
+														// unsaved event
+						scheduler.hide_lightbox();
 					});
 
 					break;
