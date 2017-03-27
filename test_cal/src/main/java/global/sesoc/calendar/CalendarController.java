@@ -41,9 +41,20 @@ public class CalendarController {
 
 	@ResponseBody
 	@RequestMapping(value="show", method=RequestMethod.POST)
-	public ArrayList<Calendar> showSchedule() {
+	public ArrayList<Calendar> showSchedule(int thisYear, int thisMonth) {
+		String date = "";
+		//System.out.println(thisYear+"/"+thisMonth);
+		//System.out.println(String.format("%02d", thisMonth));
+		date +=thisYear+"-"+String.format("%02d", thisMonth)+"-01";
+		System.out.println(date);
 		logger.debug("showSchedule!");
-		return dao.listCal(0);
+		return dao.listCal(date);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="save", method=RequestMethod.POST)
+	public void savechedule(Calendar cal) {
+		System.out.println(cal);
 	}
 	
 	

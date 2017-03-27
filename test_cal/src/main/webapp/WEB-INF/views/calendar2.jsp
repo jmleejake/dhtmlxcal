@@ -15,12 +15,26 @@
 	var thisMonth = new Date().getMonth()+1;
 	var thisYear = new Date().getFullYear();
 	var viewMonth
-$(function() {	
+$(function() {
+	
 	// DB에서 가져오기
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
 	getCalData(thisYear, thisMonth);
 	
-	//반복설정
+	
+
+		/* 
+		 초기 세팅!!!
+		 scheduler.config.xml_date="%Y-%m-%d %H:%i";  //데이터 폼
+		 scheduler.config.first_hour = 8; //시작시간
+		 scheduler.config.last_hour = 17; //종료시간
+		 scheduler.init('scheduler_here',null,"week");
+		 scheduler.config.start_on_monday = true; //월요일 시작
+		 scheduler.config.repeat_date = "%m/%d/%Y";
+		 scheduler.config.include_end_by = true;
+		 */
+		 //scheduler.config.wide_form = true;
+		//반복설정
 		 scheduler.config.lightbox.sections = [ {
 			name : "description",
 			height : 130,
@@ -39,7 +53,7 @@ $(function() {
 			type : "time", //time or calendar_time
 			map_to : "auto"
 		} ];  
-		
+
 		//시간 입력설정 셋팅하는 곳
 		//default lightbox definition
 		/* scheduler.config.lightbox.sections=[
@@ -51,25 +65,67 @@ $(function() {
 		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
 		  {name:"time", height:72, type:"calendar_time", map_to:"auto" }
 		];
-		 */	
+		 */
+		
 		//설정
 		scheduler.config.wide_form = false;
 		scheduler.config.repeat_date = "%m/%d/%Y";
 		scheduler.config.include_end_by = true;
 		scheduler.config.start_on_monday = false;
 		scheduler.config.fix_tab_position = true; //스킨입히면 true	
-
+		
 		scheduler.templates.event_text = function(start, end, ev) {
 			return '카테고리: ' + ev.text + '';
 		};//일정 카테고리별 나누기 	
-		//스킨
+
 		scheduler.skin = "flat";
-		//시작화면 설정
-		scheduler.init('scheduler_here', new Date(), "month");		
+
+		scheduler.init('scheduler_here', new Date(), "month");
+		
+		
+		/* scheduler.attachEvent("onCellClick", function (x_ind, y_ind, x_val, y_val, e){
+		    //any custom logic here
+		    alert('clicked');
+		}); */
+		
+		//달력 이벤트 클릭
+		/* scheduler.attachEvent("onClick", function (id, e){
+		       alert('id값 : '+id);
+		       return true;
+		  }); */
+		//이벤트 예시
+		var events = [
+			{id:1, text:"모임",   start_date:"03/11/2017 14:00",end_date:"03/11/2017 17:00"},
+			{id:2, text:"대청소기간",start_date:"03/15/2017 12:00",end_date:"03/18/2017 19:00"},
+			{id:3, text:"면접", start_date:"03/24/2017 09:00",end_date:"03/24/2017 10:00"}
+			];
+		//이벤트 넣기
+		scheduler.parse(events, "json");
+		
+		//이벤트 기간으로 읽기 
+		/* var evs = scheduler.getEvents(new Date(2017,1,3),new Date(2017,30,3)); 
+		console.log(evs);
+		console.log(scheduler.getEvent(1));
+		for (var i=0; i<evs.length; i++){
+		       alert(evs[i].text);
+		} */  
+		
+		//이벤트 전제 가져오기 (현재 사용안됨)
+	/* 	var evs = scheduler.getEvents();
+		alert(evs); 
+		console.log(evs);
+		 for (var i=0; i<evs.length; i++){
+		       alert(evs[i].text);
+		} 
+		  */
 		
 		scheduler.templates.event_text = function(start,end,ev){
 			   return 'Subject: ' + ev.text + ''+ev.id;
 			};
+	/* 
+		var eventObj = scheduler.getEvent(1);
+		alert(JSON.stringify(eventObj));
+ */
 
  //미니캘린더 (스케줄러(주))
 			var calendar = scheduler.renderCalendar({
@@ -105,20 +161,6 @@ $(function() {
 		alert(thisMonth);
 		getCalData(thisYear, thisMonth);
 	 });
- $('.dhx_save_btn').on('click', function(){	
-	 	
-		alert("저장되었음!!!");
-		
-	 });
- 
- 
- 
- 
- 
- 
- 
- 
- 
  
 });//mainㅇ
 
@@ -138,7 +180,6 @@ function show_minical(){
         });
     }
 }
-
 
 function getCalData(thisYear, thisMonth) {
 	$.ajax({

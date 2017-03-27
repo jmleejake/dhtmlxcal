@@ -17,11 +17,11 @@ public class CalendarDAO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CalendarDAO.class); 
 	//1)일정 조회하기(월별)
-		public ArrayList<Calendar> listCal(int month){
+		public ArrayList<Calendar> listCal(String date){
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
 			ArrayList<Calendar> result=null;
 			try {
-				result=mapper.listCal(month);
+				result=mapper.listCal(date);
 				System.out.println(result);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

@@ -6,13 +6,17 @@
 <mapper namespace="global.sesoc.calendar.dao.CalendarMapper">
 
 <!-- 1)캘린더 일정 월별 불러오기 -->
-<select id="listCal" resultType="Calendar" parameterType="int">
+<select id="listCal" resultType="Calendar" parameterType="String">
+  <![CDATA[
   select 
   id 
   , text 
   , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date 
   , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date 
   from events
+  where start_date >= to_date(#{date}, 'yyyy-mm-dd')
+  and end_date <= last_day(to_date(#{date}, 'yyyy-mm-dd'))
+  ]]>
 </select>
 <!-- 2)캘린더 일정 저장하기 -->
 <insert id="saveCal" parameterType="Calendar">

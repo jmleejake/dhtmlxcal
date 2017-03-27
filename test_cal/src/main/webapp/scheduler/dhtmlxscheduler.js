@@ -11,21 +11,21 @@ window.dhtmlXScheduler = window.scheduler = { version: "4.4.0" };
 if (!window.dhtmlx) {
 	dhtmlx = function(obj){
 		for (var a in obj) dhtmlx[a]=obj[a];
-		return dhtmlx; //simple singleton
+		return dhtmlx; // simple singleton
 	};
 }
 dhtmlx.extend_api=function(name,map,ext){
     var t = window[name];
-    if (!t) return; //component not defined
+    if (!t) return; // component not defined
     window[name]=function(obj){
         var that;
 
         if (obj && typeof obj == "object" && !obj.tagName){
             that = t.apply(this,(map._init?map._init(obj):arguments));
-            //global settings
+            // global settings
             for (var a in dhtmlx)
                 if (map[a]) this[map[a]](dhtmlx[a]);
-            //local settings
+            // local settings
             for (var a in obj){
                 if (map[a]) this[map[a]](obj[a]);
                 else if (a.indexOf("on")===0){
@@ -66,13 +66,13 @@ dhtmlxAjax={
 };
 
 /**
- *     @desc: xmlLoader object
- *     @type: private
- *     @param: funcObject - xml parser function
- *     @param: object - jsControl object
- *     @param: async - sync/async mode (async by default)
- *     @param: rSeed - enable/disable random seed ( prevent IE caching)
- *     @topic: 0
+ * @desc: xmlLoader object
+ * @type: private
+ * @param: funcObject - xml parser function
+ * @param: object - jsControl object
+ * @param: async - sync/async mode (async by default)
+ * @param: rSeed - enable/disable random seed ( prevent IE caching)
+ * @topic: 0
  */
 function dtmlXMLLoaderObject(funcObject, dhtmlObject, async, rSeed){
     this.xmlDoc="";
@@ -92,10 +92,10 @@ function dtmlXMLLoaderObject(funcObject, dhtmlObject, async, rSeed){
 dtmlXMLLoaderObject.count = 0;
 
 /**
- *     @desc: xml loading handler
- *     @type: private
- *     @param: dtmlObject - xmlLoader object
- *     @topic: 0
+ * @desc: xml loading handler
+ * @type: private
+ * @param: dtmlObject - xmlLoader object
+ * @topic: 0
  */
 dtmlXMLLoaderObject.prototype.waitLoadFunction=function(dhtmlObject){
     var once = true;
@@ -105,7 +105,7 @@ dtmlXMLLoaderObject.prototype.waitLoadFunction=function(dhtmlObject){
                 if (!once)
                     return;
 
-                once=false; //IE 5 fix
+                once=false; // IE 5 fix
                 dtmlXMLLoaderObject.count++;
                 if (typeof dhtmlObject.onloadAction == "function")
                     dhtmlObject.onloadAction(dhtmlObject.mainObject, null, null, null, dhtmlObject);
@@ -121,11 +121,12 @@ dtmlXMLLoaderObject.prototype.waitLoadFunction=function(dhtmlObject){
 };
 
 /**
- *     @desc: return XML top node
- *     @param: tagName - top XML node tag name (not used in IE, required for Safari and Mozilla)
- *     @type: private
- *     @returns: top XML node
- *     @topic: 0
+ * @desc: return XML top node
+ * @param: tagName - top XML node tag name (not used in IE, required for Safari
+ *         and Mozilla)
+ * @type: private
+ * @returns: top XML node
+ * @topic: 0
  */
 dtmlXMLLoaderObject.prototype.getXMLTopNode=function(tagName, oldObj){
     var z;
@@ -159,10 +160,10 @@ dtmlXMLLoaderObject.prototype.getXMLTopNode=function(tagName, oldObj){
 };
 
 /**
- *     @desc: load XML from string
- *     @type: private
- *     @param: xmlString - xml string
- *     @topic: 0
+ * @desc: load XML from string
+ * @type: private
+ * @param: xmlString - xml string
+ * @topic: 0
  */
 dtmlXMLLoaderObject.prototype.loadXMLString=function(xmlString, silent){
 
@@ -188,12 +189,12 @@ dtmlXMLLoaderObject.prototype.loadXMLString=function(xmlString, silent){
     }
 };
 /**
- *     @desc: load XML
- *     @type: private
- *     @param: filePath - xml file path
- *     @param: postMode - send POST request
- *     @param: postVars - list of vars for post request
- *     @topic: 0
+ * @desc: load XML
+ * @type: private
+ * @param: filePath - xml file path
+ * @param: postMode - send POST request
+ * @param: postVars - list of vars for post request
+ * @topic: 0
  */
 dtmlXMLLoaderObject.prototype.loadXML=function(filePath, postMode, postVars, rpc){
     if (this.rSeed)
@@ -228,9 +229,9 @@ dtmlXMLLoaderObject.prototype.loadXML=function(filePath, postMode, postVars, rpc
         (new this.waitLoadFunction(this))();
 };
 /**
- *     @desc: destructor, cleans used memory
- *     @type: private
- *     @topic: 0
+ * @desc: destructor, cleans used memory
+ * @type: private
+ * @topic: 0
  */
 dtmlXMLLoaderObject.prototype.destructor=function(){
     this._filterXPath = null;
@@ -272,12 +273,12 @@ dtmlXMLLoaderObject.prototype.xmlNodeToJSON = function(node){
 };
 
 /**
- *     @desc: Call wrapper
- *     @type: private
- *     @param: funcObject - action handler
- *     @param: dhtmlObject - user data
- *     @returns: function handler
- *     @topic: 0
+ * @desc: Call wrapper
+ * @type: private
+ * @param: funcObject - action handler
+ * @param: dhtmlObject - user data
+ * @returns: function handler
+ * @topic: 0
  */
 function callerFunction(funcObject, dhtmlObject){
     this.handler=function(e){
@@ -290,19 +291,19 @@ function callerFunction(funcObject, dhtmlObject){
 }
 
 /**
- *     @desc: Calculate absolute position of html object
- *     @type: private
- *     @param: htmlObject - html object
- *     @topic: 0
+ * @desc: Calculate absolute position of html object
+ * @type: private
+ * @param: htmlObject - html object
+ * @topic: 0
  */
 function getAbsoluteLeft(htmlObject){
     return getOffset(htmlObject).left;
 }
 /**
- *     @desc: Calculate absolute position of html object
- *     @type: private
- *     @param: htmlObject - html object
- *     @topic: 0
+ * @desc: Calculate absolute position of html object
+ * @type: private
+ * @param: htmlObject - html object
+ * @topic: 0
  */
 function getAbsoluteTop(htmlObject){
     return getOffset(htmlObject).top;
@@ -338,10 +339,10 @@ function getOffset(elem) {
 }
 
 /**
- *     @desc: Convert string to it boolean representation
- *     @type: private
- *     @param: inputString - string for covertion
- *     @topic: 0
+ * @desc: Convert string to it boolean representation
+ * @type: private
+ * @param: inputString - string for covertion
+ * @topic: 0
  */
 function convertStringToBoolean(inputString){
     if (typeof (inputString) == "string")
@@ -361,10 +362,10 @@ function convertStringToBoolean(inputString){
 }
 
 /**
- *     @desc: find out what symbol to use as url param delimiters in further params
- *     @type: private
- *     @param: str - current url string
- *     @topic: 0
+ * @desc: find out what symbol to use as url param delimiters in further params
+ * @type: private
+ * @param: str - current url string
+ * @topic: 0
  */
 function getUrlSymbol(str){
     if (str.indexOf("?") != -1)
@@ -442,8 +443,8 @@ dhtmlDragAndDropObject.prototype.callDrag=function(e){
     var dragger=window.dhtmlDragAndDrop;
     if ((new Date()).valueOf()-dragger.downtime<100) return;
 
-    //if ((e.button == 0)&&(_isIE))
-    //	return dragger.stopDrag();
+    // if ((e.button == 0)&&(_isIE))
+    // return dragger.stopDrag();
 
     if (!dragger.dragNode){
         if (dragger.waitDrag){
@@ -469,14 +470,14 @@ dhtmlDragAndDropObject.prototype.callDrag=function(e){
         if (dragger.gldragNode.old)
             grd=dragger.gldragNode.old;
 
-        //if (!document.all) dragger.calculateFramePosition();
+        // if (!document.all) dragger.calculateFramePosition();
         grd.parentNode.removeChild(grd);
         var oldBody = dragger.dragNode.pWindow;
 
         if (grd.pWindow &&	grd.pWindow.dhtmlDragAndDrop.lastLanding)
             grd.pWindow.dhtmlDragAndDrop.lastLanding.dragLanding._dragOut(grd.pWindow.dhtmlDragAndDrop.lastLanding);
 
-        //		var oldp=dragger.dragNode.parentObject;
+        // var oldp=dragger.dragNode.parentObject;
         if (_isIE){
             var div = document.createElement("Div");
             div.innerHTML=dragger.dragNode.outerHTML;
@@ -485,7 +486,7 @@ dhtmlDragAndDropObject.prototype.callDrag=function(e){
             dragger.dragNode=dragger.dragNode.cloneNode(true);
 
         dragger.dragNode.pWindow=window;
-        //		dragger.dragNode.parentObject=oldp;
+        // dragger.dragNode.parentObject=oldp;
 
         dragger.gldragNode.old=dragger.dragNode;
         document.body.appendChild(dragger.dragNode);
@@ -508,7 +509,7 @@ dhtmlDragAndDropObject.prototype.callDrag=function(e){
 };
 
 dhtmlDragAndDropObject.prototype.calculateFramePosition=function(n){
-    //this.fx = 0, this.fy = 0;
+    // this.fx = 0, this.fy = 0;
     if (window.name){
         var el = parent.frames[window.name].frameElement.offsetParent;
         var fx = 0;
@@ -649,7 +650,7 @@ if (navigator.userAgent.toLowerCase().indexOf('chrome')>-1)
 if ((navigator.userAgent.indexOf('Safari') != -1)||(navigator.userAgent.indexOf('Konqueror') != -1)){
     _KHTMLrv = parseFloat(navigator.userAgent.substr(navigator.userAgent.indexOf('Safari')+7, 5));
 
-    if (_KHTMLrv > 525){ //mimic FF behavior for Safari 3.1+
+    if (_KHTMLrv > 525){ // mimic FF behavior for Safari 3.1+
         _isFF=true;
         _FFrv = 1.9;
     } else
@@ -666,7 +667,7 @@ else if (navigator.appName.indexOf("Microsoft") != -1){
         _isIE=8;
     }
 } else if (navigator.appName  == 'Netscape' && navigator.userAgent.indexOf("Trident") != -1){
-	//ie11
+	// ie11
 	_isIE=8;
 } else {
     _isFF=true;
@@ -674,12 +675,12 @@ else if (navigator.appName.indexOf("Microsoft") != -1){
 }
 
 
-//multibrowser Xpath processor
+// multibrowser Xpath processor
 dtmlXMLLoaderObject.prototype.doXPath=function(xpathExp, docObj, namespace, result_type){
     if (_isKHTML || (!_isIE && !window.XPathResult))
         return this.doXPathOpera(xpathExp, docObj);
 
-    if (_isIE){ //IE
+    if (_isIE){ // IE
         if (!docObj)
             if (!this.xmlDoc.nodeName)
                 docObj=this.xmlDoc.responseXML;
@@ -701,7 +702,7 @@ dtmlXMLLoaderObject.prototype.doXPath=function(xpathExp, docObj, namespace, resu
         else {
             return docObj.selectNodes(xpathExp)||new Array(0);
         }
-    } else { //Mozilla
+    } else { // Mozilla
         var nodeObj = docObj;
 
         if (!docObj){
@@ -773,10 +774,10 @@ _dhtmlxError.prototype.throwError=function(type, name, params){
 window.dhtmlxError=new _dhtmlxError();
 
 
-//opera fake, while 9.0 not released
-//multibrowser Xpath processor
+// opera fake, while 9.0 not released
+// multibrowser Xpath processor
 dtmlXMLLoaderObject.prototype.doXPathOpera=function(xpathExp, docObj){
-    //this is fake for Opera
+    // this is fake for Opera
     var z = xpathExp.replace(/[\/]+/gi, "/").split('/');
     var obj = null;
     var i = 1;
@@ -845,7 +846,7 @@ if(typeof (window.dhtmlxEvent) == 'undefined'){
     };
 }
 
-//============= XSL Extension ===================================
+// ============= XSL Extension ===================================
 
 dtmlXMLLoaderObject.prototype.xslDoc=null;
 dtmlXMLLoaderObject.prototype.setXSLParamValue=function(paramName, paramValue, xslDoc){
@@ -877,7 +878,7 @@ dtmlXMLLoaderObject.prototype.doXSLTransToObject=function(xslDoc, xmlDoc){
 
     
     var result;
-    //Mozilla
+    // Mozilla
     if (!_isIE){
         if (!this.XSLProcessor){
             this.XSLProcessor=new XSLTProcessor();
@@ -915,8 +916,8 @@ dtmlXMLLoaderObject.prototype.doSerialization=function(xmlDoc){
 };
 
 /**
- *   @desc:
- *   @type: private
+ * @desc:
+ * @type: private
  */
 dhtmlxEventable=function(obj){
     obj.attachEvent=function(name, catcher, callObj){
@@ -924,7 +925,8 @@ dhtmlxEventable=function(obj){
         if (!this[name])
             this[name]=new this.eventCatcher(callObj||this);
 
-        return(name+':'+this[name].addEvent(catcher)); //return ID (event name & event ID)
+        return(name+':'+this[name].addEvent(catcher)); // return ID (event name
+														// & event ID)
     };
     obj.callEvent=function(name, arg0){
         name='ev_'+name.toLowerCase();
@@ -961,8 +963,8 @@ dhtmlxEventable=function(obj){
     };
     obj.detachEvent=function(id){
         if (id){
-            var list = id.split(':');           //get EventName and ID
-            this[list[0]].removeEvent(list[1]); //remove event
+            var list = id.split(':');           // get EventName and ID
+            this[list[0]].removeEvent(list[1]); // remove event
         }
     };
     obj.detachAllEvents = function(){
@@ -1090,8 +1092,10 @@ if(!window.dhtmlx)
 
 			if (dhtmlx.message.keyboard){
 				if (code == 13 || code == 32){
-					// default behavior is to confirm/submit popup on space/enter
-					// if browser focus is set on button element - do button click instead of default behavior
+					// default behavior is to confirm/submit popup on
+					// space/enter
+					// if browser focus is set on button element - do button
+					// click instead of default behavior
 					var target = e.target || e.srcElement;
 					if(scheduler._getClassName(target).indexOf("dhtmlx_popup_button") > -1 && target.click){
 						target.click();
@@ -1123,7 +1127,7 @@ if(!window.dhtmlx)
 	function modality(mode){
 		if(!modality.cover){
 			modality.cover = document.createElement("DIV");
-			//necessary for IE only
+			// necessary for IE only
 			modality.cover.onkeydown = modal_key;
 			modality.cover.className = "dhx_modal_cover";
 			document.body.appendChild(modality.cover);
@@ -1136,7 +1140,8 @@ if(!window.dhtmlx)
 		var buttonAriaAttrs = scheduler._waiAria.messageButtonAttrString(text);
 		// css - for locale-independent class name
 		var className = css ? css : (text || "");
-		var button_css = "dhtmlx_"+(className).toLowerCase().replace(/ /g, "_")+"_button"; // dhtmlx_ok_button, dhtmlx_click_me_button
+		var button_css = "dhtmlx_"+(className).toLowerCase().replace(/ /g, "_")+"_button"; // dhtmlx_ok_button,
+																							// dhtmlx_click_me_button
 		return "<div "+buttonAriaAttrs+"class='dhtmlx_popup_button "+button_css+"' result='"+result+"' ><div>"+text+"</div></div>";
 	}
 
@@ -1197,7 +1202,8 @@ if(!window.dhtmlx)
 		inner+='<div class="dhtmlx_popup_text" '+(!hasTitle ? ' id="'+contentId+'" ' : "")+'><span>'+(config.content?'':config.text)+'</span></div><div  class="dhtmlx_popup_controls">';
 		if (ok){
 			var ok_text = (config.ok || scheduler.locale.labels.message_ok);
-			//default value for compatibility with custom locales some people have
+			// default value for compatibility with custom locales some people
+			// have
 			if(ok_text === undefined) ok_text = "OK";
 			inner += button(ok_text, true, "ok");
 		}
@@ -1237,7 +1243,7 @@ if(!window.dhtmlx)
 			}
 		};
 		config.box = box;
-		//if (ok||cancel)
+		// if (ok||cancel)
 		_dhx_msg_cfg = config;
 
 		return box;
@@ -1255,7 +1261,7 @@ if(!window.dhtmlx)
 		else
 			box.style.top = y+'px';
 		box.style.left = x+'px';
-		//necessary for IE only
+		// necessary for IE only
 		box.onkeydown = modal_key;
 
 		dhtmlx.modalbox.focus(box);
@@ -1374,16 +1380,16 @@ if(!dhtmlx.attachEvent){
 	dhtmlxEventable(dhtmlx);
 }
 /**
-	* 	@desc: constructor, data processor object 
-	*	@param: serverProcessorURL - url used for update
-	*	@type: public
-	*/
+ * @desc: constructor, data processor object
+ * @param: serverProcessorURL - url used for update
+ * @type: public
+ */
 function dataProcessor(serverProcessorURL){
     this.serverProcessor = serverProcessorURL;
     this.action_param="!nativeeditor_status";
     
 	this.object = null;
-	this.updatedRows = []; //ids of updated rows
+	this.updatedRows = []; // ids of updated rows
 	
 	this.autoUpdate = true;
 	this.updateMode = "cell";
@@ -1391,7 +1397,7 @@ function dataProcessor(serverProcessorURL){
 	this.post_delim = "_";
 	
     this._waitMode=0;
-    this._in_progress={};//?
+    this._in_progress={};// ?
     this._invalid={};
     this.mandatoryFields=[];
     this.messages=[];
@@ -1414,11 +1420,12 @@ function dataProcessor(serverProcessorURL){
 
 dataProcessor.prototype={
 	/**
-	* 	@desc: select GET or POST transaction model
-	*	@param: mode - GET/POST
-	*	@param: total - true/false - send records row by row or all at once (for grid only)
-	*	@type: public
-	*/
+	 * @desc: select GET or POST transaction model
+	 * @param: mode - GET/POST
+	 * @param: total - true/false - send records row by row or all at once (for
+	 *         grid only)
+	 * @type: public
+	 */
 	setTransactionMode:function(mode,total){
         this._tMode=mode;
 		this._tSend=total;
@@ -1434,50 +1441,54 @@ dataProcessor.prototype={
         	return escape(data);
 	},
     /**
-	* 	@desc: allows to set escaping mode
-	*	@param: true - utf based escaping, simple - use current page encoding
-	*	@type: public
-	*/	
+	 * @desc: allows to set escaping mode
+	 * @param: true - utf based escaping, simple - use current page encoding
+	 * @type: public
+	 */	
 	enableUTFencoding:function(mode){
         this._utf=convertStringToBoolean(mode);
     },
     /**
-	* 	@desc: allows to define, which column may trigger update
-	*	@param: val - array or list of true/false values
-	*	@type: public
-	*/
+	 * @desc: allows to define, which column may trigger update
+	 * @param: val - array or list of true/false values
+	 * @type: public
+	 */
 	setDataColumns:function(val){
 		this._columns=(typeof val == "string")?val.split(","):val;
     },
     /**
-	* 	@desc: get state of updating
-	*	@returns:   true - all in sync with server, false - some items not updated yet.
-	*	@type: public
-	*/
+	 * @desc: get state of updating
+	 * @returns: true - all in sync with server, false - some items not updated
+	 *           yet.
+	 * @type: public
+	 */
 	getSyncState:function(){
 		return !this.updatedRows.length;
 	},
 	/**
-	* 	@desc: enable/disable named field for data syncing, will use column ids for grid
-	*	@param:   mode - true/false
-	*	@type: public
-	*/
+	 * @desc: enable/disable named field for data syncing, will use column ids
+	 *        for grid
+	 * @param: mode - true/false
+	 * @type: public
+	 */
 	enableDataNames:function(mode){
 		this._endnm=convertStringToBoolean(mode);
 	},
 	/**
-	* 	@desc: enable/disable mode , when only changed fields and row id send to the server side, instead of all fields in default mode
-	*	@param:   mode - true/false
-	*	@type: public
-	*/
+	 * @desc: enable/disable mode , when only changed fields and row id send to
+	 *        the server side, instead of all fields in default mode
+	 * @param: mode - true/false
+	 * @type: public
+	 */
 	enablePartialDataSend:function(mode){
 		this._changed=convertStringToBoolean(mode);
 	},
 	/**
-	* 	@desc: set if rows should be send to server automaticaly
-	*	@param: mode - "row" - based on row selection changed, "cell" - based on cell editing finished, "off" - manual data sending
-	*	@type: public
-	*/
+	 * @desc: set if rows should be send to server automaticaly
+	 * @param: mode - "row" - based on row selection changed, "cell" - based on
+	 *         cell editing finished, "off" - manual data sending
+	 * @type: public
+	 */
 	setUpdateMode:function(mode,dnd){
 		this.autoUpdate = (mode=="cell");
 		this.updateMode = mode;
@@ -1489,12 +1500,13 @@ dataProcessor.prototype={
 		this._silent_mode=false;
 	},
 	/**
-	* 	@desc: mark row as updated/normal. check mandatory fields,initiate autoupdate (if turned on)
-	*	@param: rowId - id of row to set update-status for
-	*	@param: state - true for "updated", false for "not updated"
-	*	@param: mode - update mode name
-	*	@type: public
-	*/
+	 * @desc: mark row as updated/normal. check mandatory fields,initiate
+	 *        autoupdate (if turned on)
+	 * @param: rowId - id of row to set update-status for
+	 * @param: state - true for "updated", false for "not updated"
+	 * @param: mode - update mode name
+	 * @type: public
+	 */
 	setUpdated:function(rowId,state,mode){
 		if (this._silent_mode) return;
 		var ind=this.findRow(rowId);
@@ -1503,7 +1515,7 @@ dataProcessor.prototype={
 		var existing = this.obj.getUserData(rowId,this.action_param);
 		if (existing && mode == "updated") mode=existing;
 		if (state){
-			this.set_invalid(rowId,false); //clear previous error flag
+			this.set_invalid(rowId,false); // clear previous error flag
 			this.updatedRows[ind]=rowId;
 			this.obj.setUserData(rowId,this.action_param,mode);
 			if (this._in_progress[rowId]) 
@@ -1515,7 +1527,7 @@ dataProcessor.prototype={
 			}
 		}
 
-		//clear changed flag
+		// clear changed flag
 		if (!state)
 			this._clearUpdateFlag(rowId);
      			
@@ -1531,7 +1543,7 @@ dataProcessor.prototype={
         	state=true;
     	}
 		if (this.callEvent("onRowMark",[id,state,mode,invalid])){
-			//default logic
+			// default logic
 			str=this.styles[state?mode:"clear"]+str;
 			
         	this.obj[this._methods[0]](id,str);
@@ -1555,18 +1567,20 @@ dataProcessor.prototype={
 		this._invalid[id]=mode;
 	},
 	/**
-	* 	@desc: check mandatory fields and varify values of cells, initiate update (if specified)
-	*	@param: rowId - id of row to set update-status for
-	*	@type: public
-	*/
+	 * @desc: check mandatory fields and varify values of cells, initiate update
+	 *        (if specified)
+	 * @param: rowId - id of row to set update-status for
+	 * @type: public
+	 */
 	checkBeforeUpdate:function(rowId){ 
 		return true;
 	},
 	/**
-	* 	@desc: send row(s) values to server
-	*	@param: rowId - id of row which data to send. If not specified, then all "updated" rows will be send
-	*	@type: public
-	*/
+	 * @desc: send row(s) values to server
+	 * @param: rowId - id of row which data to send. If not specified, then all
+	 *         "updated" rows will be send
+	 * @type: public
+	 */
 	sendData:function(rowId){
 		if (this._waitMode && (this.obj.mytype=="tree" || this.obj._h2)) return;
 		if (this.obj.editStop) this.obj.editStop();
@@ -1614,7 +1628,7 @@ dataProcessor.prototype={
 		return stack.join("&");
     },
     _sendData:function(a1,rowId){
-    	if (!a1) return; //nothing to send
+    	if (!a1) return; // nothing to send
 		if (!this.callEvent("onBeforeDataSending",rowId?[rowId,this.getState(rowId),a1]:[null, null, a1])) return false;				
 		
     	if (rowId)
@@ -1664,7 +1678,11 @@ dataProcessor.prototype={
 				if (!this._in_progress[this.updatedRows[i]]){
 					if (this.is_invalid(this.updatedRows[i])) continue;
 					this._beforeSendData(this._getRowData(this.updatedRows[i]),this.updatedRows[i]);
-					if (this._waitMode && (this.obj.mytype=="tree" || this.obj._h2)) return; //block send all for tree
+					if (this._waitMode && (this.obj.mytype=="tree" || this.obj._h2)) return; // block
+																								// send
+																								// all
+																								// for
+																								// tree
 				}
 	},
     
@@ -1691,19 +1709,22 @@ dataProcessor.prototype={
 	
 	
 	/**
-	* 	@desc: specify column which value should be varified before sending to server
-	*	@param: ind - column index (0 based)
-	*	@param: verifFunction - function (object) which should verify cell value (if not specified, then value will be compared to empty string). Two arguments will be passed into it: value and column name
-	*	@type: public
-	*/
+	 * @desc: specify column which value should be varified before sending to
+	 *        server
+	 * @param: ind - column index (0 based)
+	 * @param: verifFunction - function (object) which should verify cell value
+	 *         (if not specified, then value will be compared to empty string).
+	 *         Two arguments will be passed into it: value and column name
+	 * @type: public
+	 */
 	setVerificator:function(ind,verifFunction){
 		this.mandatoryFields[ind] = verifFunction||(function(value){return (value!=="");});
 	},
 	/**
-	* 	@desc: remove column from list of those which should be verified
-	*	@param: ind - column Index (0 based)
-	*	@type: public
-	*/
+	 * @desc: remove column from list of those which should be verified
+	 * @param: ind - column Index (0 based)
+	 * @type: public
+	 */
 	clearVerificator:function(ind){
 		this.mandatoryFields[ind] = false;
 	},
@@ -1730,11 +1751,12 @@ dataProcessor.prototype={
 
 
 	/**
-	* 	@desc: define custom actions
-	*	@param: name - name of action, same as value of action attribute
-	*	@param: handler - custom function, which receives a XMl response content for action
-	*	@type: private
-	*/
+	 * @desc: define custom actions
+	 * @param: name - name of action, same as value of action attribute
+	 * @param: handler - custom function, which receives a XMl response content
+	 *         for action
+	 * @type: private
+	 */
 	defineAction:function(name,handler){
         if (!this._uActions) this._uActions=[];
             this._uActions[name]=handler;
@@ -1744,13 +1766,14 @@ dataProcessor.prototype={
 
 
 	/**
-*     @desc: used in combination with setOnBeforeUpdateHandler to create custom client-server transport system
-*     @param: sid - id of item before update
-*     @param: tid - id of item after up0ate
-*     @param: action - action name
-*     @type: public
-*     @topic: 0
-*/
+	 * @desc: used in combination with setOnBeforeUpdateHandler to create custom
+	 *        client-server transport system
+	 * @param: sid - id of item before update
+	 * @param: tid - id of item after up0ate
+	 * @param: action - action name
+	 * @type: public
+	 * @topic: 0
+	 */
 	afterUpdateCallback:function(sid, tid, action, btag) {
 		var marker = sid;
 		var correct=(action!="error" && action!="invalid");
@@ -1791,12 +1814,12 @@ dataProcessor.prototype={
 	},
 
 	/**
-	* 	@desc: response from server
-	*	@param: xml - XMLLoader object with response XML
-	*	@type: private
-	*/
+	 * @desc: response from server
+	 * @param: xml - XMLLoader object with response XML
+	 * @type: private
+	 */
 	afterUpdate:function(that,xml,id){
-		//try to use json first
+		// try to use json first
 		if (window.JSON){
 			try{
 				var tag = JSON.parse(xml.xmlDoc.responseText);
@@ -1809,8 +1832,8 @@ dataProcessor.prototype={
 			} catch(e){
 			}
 		}
-		//xml response
-		xml.getXMLTopNode("data"); //fix incorrect content type in IE
+		// xml response
+		xml.getXMLTopNode("data"); // fix incorrect content type in IE
 
 		if (!xml.xmlDoc.responseXML){
 			if(this.obj && this.obj.callEvent){
@@ -1852,10 +1875,10 @@ dataProcessor.prototype={
 
 	
 	/**
-	* 	@desc: initializes data-processor
-	*	@param: anObj - dhtmlxGrid object to attach this data-processor to
-	*	@type: public
-	*/
+	 * @desc: initializes data-processor
+	 * @param: anObj - dhtmlxGrid object to attach this data-processor to
+	 * @type: public
+	 */
 	init:function(anObj){
 		this.obj = anObj;
 		if (this.obj._dp_init) 
@@ -1874,10 +1897,10 @@ dataProcessor.prototype={
 
 
 
-	/* starts autoupdate mode
-		@param interval
-			time interval for sending update requests
-	*/
+	/*
+	 * starts autoupdate mode @param interval time interval for sending update
+	 * requests
+	 */
 	setAutoUpdate: function(interval, user) {
 		interval = interval || 2000;
 		
@@ -1900,10 +1923,10 @@ dataProcessor.prototype={
 	},
 
 
-	/* process updating request answer
-		if status == collision version is depricated
-		set flag for autoupdating immidiatly
-	*/
+	/*
+	 * process updating request answer if status == collision version is
+	 * depricated set flag for autoupdating immidiatly
+	 */
 	afterAutoUpdate: function(sid, action, tid, xml_node) {
 		if (action == 'collision') {
 			this._need_update = true;
@@ -1914,9 +1937,9 @@ dataProcessor.prototype={
 	},
 
 
-	/* callback function for onFillSync event
-		call update function if it's need
-	*/
+	/*
+	 * callback function for onFillSync event call update function if it's need
+	 */
 	fullSync: function() {
 		if (this._need_update) {
 			this._need_update = false;
@@ -1926,8 +1949,9 @@ dataProcessor.prototype={
 	},
 
 
-	/* sends query to the server and call callback function
-	*/
+	/*
+	 * sends query to the server and call callback function
+	 */
 	getUpdates: function(url,callback){
 		if (this._update_busy) 
 			return false;
@@ -1942,20 +1966,18 @@ dataProcessor.prototype={
 	},
 
 
-	/* returns xml node value
-		@param node
-			xml node
-	*/
+	/*
+	 * returns xml node value @param node xml node
+	 */
 	_v: function(node) {
 		if (node.firstChild) return node.firstChild.nodeValue;
 		return "";
 	},
 
 
-	/* returns values array of xml nodes array
-		@param arr
-			array of xml nodes
-	*/
+	/*
+	 * returns values array of xml nodes array @param arr array of xml nodes
+	 */
 	_a: function(arr) {
 		var res = [];
 		for (var i=0; i < arr.length; i++) {
@@ -1965,8 +1987,9 @@ dataProcessor.prototype={
 	},
 
 
-	/* loads updates and processes them
-	*/
+	/*
+	 * loads updates and processes them
+	 */
 	loadUpdate: function(){
 		var self = this;
 		var version = this.obj.getUserData(0,"version");
@@ -2014,7 +2037,7 @@ dataProcessor.prototype={
 
 };
 
-//(c)dhtmlx ltd. www.dhtmlx.com
+// (c)dhtmlx ltd. www.dhtmlx.com
 if (window.dataProcessor && !dataProcessor.prototype.init_original){
 	dataProcessor.prototype.init_original=dataProcessor.prototype.init;
 	dataProcessor.prototype.init=function(obj){
@@ -2354,7 +2377,7 @@ dhtmlxError.catchError("LoadXML", function(a, b, c){
 
 		messageInfoAttr: function(div){
 			div.setAttribute("role", "alert");
-			//div.setAttribute("tabindex", "-1");
+			// div.setAttribute("tabindex", "-1");
 		},
 
 		messageModalAttr: function(div, uid){
@@ -2363,7 +2386,7 @@ dhtmlxError.catchError("LoadXML", function(a, b, c){
 				div.setAttribute("aria-labelledby", uid);
 			}
 
-			//	div.setAttribute("tabindex", "-1");
+			// div.setAttribute("tabindex", "-1");
 		},
 
 		quickInfoAttr: function(div){
@@ -2435,7 +2458,8 @@ scheduler._init_once = function(){
 		scheduler._resize_timer = window.setTimeout(function () {
 			var newSize = getWindowSize();
 
-			// ie7-8 triggers "resize" when window's elements are resized, it messes container-autoresize extension
+			// ie7-8 triggers "resize" when window's elements are resized, it
+			// messes container-autoresize extension
 			// check if it's actually resized
 			if (!equals(oldSize, newSize)) {
 				if (!isAttachedNode(scheduler._obj))
@@ -2484,7 +2508,7 @@ scheduler.init=function(id,date,mode){
 	this._obj=(typeof id == "string")?document.getElementById(id):id;
 	this.$container = this._obj;
 
-	//hook for terrace skin
+	// hook for terrace skin
 	if (this._skin_init)
 		scheduler._skin_init();
 
@@ -2529,13 +2553,13 @@ scheduler.set_sizes=function(){
 	var w = this._x = this._obj.clientWidth-this.xy.margin_left;
 	var h = this._y = this._obj.clientHeight-this.xy.margin_top;
 	
-	//not-table mode always has scroll - need to be fixed in future
+	// not-table mode always has scroll - need to be fixed in future
 	var scale_x=this._table_view?0:(this.xy.scale_width+this.xy.scroll_width);
 	var scale_s=this._table_view?-1:this.xy.scale_width;
 	
 	this.set_xy(this._els["dhx_cal_navline"][0],w,this.xy.nav_height,0,0);
 	this.set_xy(this._els["dhx_cal_header"][0],w-scale_x,this.xy.scale_height,scale_s,this.xy.nav_height+(this._quirks?-1:1));
-	//to support alter-skin, we need a way to alter height directly from css
+	// to support alter-skin, we need a way to alter height directly from css
 	var actual_height = this._els["dhx_cal_navline"][0].offsetHeight;
 	if (actual_height > 0) this.xy.nav_height = actual_height;
 	
@@ -2551,7 +2575,7 @@ scheduler.set_xy=function(node,w,h,x,y){
 	}
 };
 scheduler.get_elements=function(){
-	//get all child elements as named hash
+	// get all child elements as named hash
 	var els=this._obj.getElementsByTagName("DIV");
 	for (var i=0; i < els.length; i++){
 		var class_name= scheduler._getClassName(els[i]);
@@ -2560,7 +2584,7 @@ scheduler.get_elements=function(){
 		if (!this._els[class_name]) this._els[class_name]=[];
 		this._els[class_name].push(els[i]);
 		
-		//check if name need to be changed
+		// check if name need to be changed
 		var label = scheduler.locale.labels[attr_value||class_name];
 		if (typeof label !== "string" && attr_value && !els[i].innerHTML)
 			 label = attr_value.split("_")[0];
@@ -2643,7 +2667,7 @@ scheduler.getState=function(){
 };
 scheduler._click={
 	dhx_cal_data:function(e){
-		//in case of touch disable click processing
+		// in case of touch disable click processing
 		if (scheduler._ignore_next_click){
 			if (e.preventDefault)
 				e.preventDefault();
@@ -2678,9 +2702,13 @@ scheduler._click={
 	},
 	dhx_cal_prev_button:function(){
 		scheduler._click.dhx_cal_next_button(0,-1);
+		
 	},
 	dhx_cal_next_button:function(dummy,step){
-		scheduler.setCurrentView(scheduler.date.add( //next line changes scheduler._date , but seems it has not side-effects
+		scheduler.setCurrentView(scheduler.date.add( // next line changes
+														// scheduler._date , but
+														// seems it has not
+														// side-effects
 			scheduler.date[scheduler._mode+"_start"](scheduler._date),(step||1),scheduler._mode));
 	},
 	dhx_cal_today_button:function(){
@@ -2738,7 +2766,8 @@ scheduler.addEventNow=function(start,end,e){
 	}
 	var end_date = new Date(end);
 
-	// scheduler.addEventNow(new Date(), new Date()) + collision though get_visible events defect (such event was not retrieved)
+	// scheduler.addEventNow(new Date(), new Date()) + collision though
+	// get_visible events defect (such event was not retrieved)
 	if(start_date.valueOf() == end_date.valueOf())
 		end_date.setTime(end_date.valueOf()+d);
 
@@ -2753,7 +2782,7 @@ scheduler.addEventNow=function(start,end,e){
 	this.callEvent("onEventCreated",[this._drag_id,e]);
 	this._loading=false;
 	
-	this._drag_event={}; //dummy , to trigger correct event updating logic
+	this._drag_event={}; // dummy , to trigger correct event updating logic
 	this._on_mouse_up(e);
 	return eventId;
 };
@@ -2797,7 +2826,7 @@ scheduler._on_dbl_click=function(e,src){
 			break;
 	}
 };
-//column index by mouse x-coordinate
+// column index by mouse x-coordinate
 scheduler._get_column_index = function(x_pos){
 	var column = 0;
 	if (this._cols){
@@ -2824,9 +2853,10 @@ scheduler._get_column_index = function(x_pos){
 	}
 	return column;
 };
-//transform mouse coordinates to day-time indexes of week based view
+// transform mouse coordinates to day-time indexes of week based view
 scheduler._week_indexes_from_pos = function(pos){
-	//"get position" can be invoked before columns are loaded into the units view(e.g. by onMouseMove handler in key_nav.js)
+	// "get position" can be invoked before columns are loaded into the units
+	// view(e.g. by onMouseMove handler in key_nav.js)
 	if(!this._cols){
 		return pos;
 	}else{
@@ -2849,7 +2879,7 @@ scheduler._mouse_coords=function(ev){
 	    y:ev.clientY + (b.scrollTop||d.scrollTop||0) - b.clientTop
 	};
 
-	//apply layout
+	// apply layout
 	pos.x-=getAbsoluteLeft(this._obj)+(this._table_view?0:this.xy.scale_width);
 	pos.y-=getAbsoluteTop(this._obj)+this.xy.nav_height+(this._dy_shift||0)+this.xy.scale_height-this._els["dhx_cal_data"][0].scrollTop;
 	pos.ev = ev;
@@ -2858,7 +2888,7 @@ scheduler._mouse_coords=function(ev){
 	if (handler){
 		pos = handler.call(this,pos);
 	}else{
-		//transform to date
+		// transform to date
 		if (!this._table_view) {
 			pos = this._week_indexes_from_pos(pos);
 		} else {
@@ -2874,11 +2904,11 @@ scheduler._mouse_coords=function(ev){
 			if (scheduler._drag_mode || this._mode == "month")
 				pos.y=(Math.max(0,Math.ceil(column)-1)+Math.max(0,dy-1)*7)*24*60/this.config.time_step;
 
-			//we care about ignored days only during event moving in month view
+			// we care about ignored days only during event moving in month view
 			if (this._drag_mode == "move"){
 				if (scheduler._ignores_detected && scheduler.config.preserve_length){
 					pos._ignores = true;
-					//get real lengtn of event
+					// get real lengtn of event
 					if (!this._drag_event._event_length)
 						this._drag_event._event_length = this._get_real_event_length(this._drag_event.start_date, this._drag_event.end_date, { x_step:1, x_unit:"day"});
 				}
@@ -2917,7 +2947,8 @@ scheduler._is_pos_changed = function(old_pos, new_pos){
 	var delay = 100,
 		d_pos = 5;
 
-	// start drag only if passed some time since mouse down, or if mouse position changed sufficiently
+	// start drag only if passed some time since mouse down, or if mouse
+	// position changed sufficiently
 	return !!(this._drag_pos.has_moved || !this._drag_pos.timestamp || (new_pos.timestamp - this._drag_pos.timestamp > delay) || diff(old_pos.ev.clientX, new_pos.ev.clientX, d_pos) || diff(old_pos.ev.clientY, new_pos.ev.clientY, d_pos));
 };
 
@@ -2961,7 +2992,7 @@ scheduler._on_mouse_move=function(e){
 			if (this._drag_mode=="create"){
 				this._close_not_saved();
 				this.unselect(this._select_id);
-				this._loading=true; //will be ignored by dataprocessor
+				this._loading=true; // will be ignored by dataprocessor
 				
 				start = this._get_date_from_pos(pos).valueOf();
 
@@ -3028,7 +3059,17 @@ scheduler._on_mouse_move=function(e){
 						resize_date = this._correct_shift(resize_date, false);
 						if( this._drag_from_start ) {
 							var day = 24*60*60000;
-							if( resize_date <= scheduler.date.date_part(new Date(end+day-1)).valueOf() ) // to get end time as 23:59:59 and then the day start
+							if( resize_date <= scheduler.date.date_part(new Date(end+day-1)).valueOf() ) // to
+																											// get
+																											// end
+																											// time
+																											// as
+																											// 23:59:59
+																											// and
+																											// then
+																											// the
+																											// day
+																											// start
 								start = resize_date - day;
 						} else {
 							end = resize_date;
@@ -3065,7 +3106,7 @@ scheduler._on_mouse_move=function(e){
 			}
 			var new_end = new Date(end-1);			
 			var new_start = new Date(start);
-			//deny drag out of visible scheduler scale in timeline view
+			// deny drag out of visible scheduler scale in timeline view
 			if(this._drag_mode=="move" && scheduler.config.limit_drag_out &&
 				(+new_start < +scheduler._min_date || +end > +scheduler._max_date)){
 
@@ -3113,7 +3154,8 @@ scheduler._on_mouse_move=function(e){
 
 
 
-			// fix event dates when resized to bottom of the column (day/week views)
+			// fix event dates when resized to bottom of the column (day/week
+			// views)
 			if(!this._table_view &&
 				!scheduler.config.all_timed &&
 				((!scheduler._get_section_view() && pos.x != this._get_event_sday({start_date: new Date(end), end_date:new Date(end)})) || new Date(end).getHours() >= this.config.last_hour)){
@@ -3127,12 +3169,12 @@ scheduler._on_mouse_move=function(e){
 				}
 			}
 
-			//prevent out-of-borders situation for day|week view
+			// prevent out-of-borders situation for day|week view
 			if ( this._table_view || (new_end.getDate()==new_start.getDate() && new_end.getHours()<this.config.last_hour) || scheduler._allow_dnd ){
 				ev.start_date=new_start;
 				ev.end_date=new Date(end);
 				if (this.config.update_render){
-					//fix for repaint after dnd and scroll issue, #231
+					// fix for repaint after dnd and scroll issue, #231
 					var sx = scheduler._els["dhx_cal_data"][0].scrollTop;
 					this.update_view();
 					scheduler._els["dhx_cal_data"][0].scrollTop = sx;
@@ -3155,7 +3197,8 @@ scheduler._on_mouse_move=function(e){
 	}
 };
 scheduler._on_mouse_down=function(e,src) {
-	// on Mac we do not get onmouseup event when clicking right mouse button leaving us in dnd state
+	// on Mac we do not get onmouseup event when clicking right mouse button
+	// leaving us in dnd state
 	// let's ignore right mouse button then
 	if (e.button == 2)
 		return;
@@ -3168,7 +3211,7 @@ scheduler._on_mouse_down=function(e,src) {
 		case "dhx_cal_event_line":
 		case "dhx_cal_event_clear":
 			if (this._table_view)
-				this._drag_mode="move"; //item in table mode
+				this._drag_mode="move"; // item in table mode
 			break;
 		case "dhx_event_move":
 		case "dhx_wa_ev_body":
@@ -3248,7 +3291,7 @@ scheduler._on_mouse_up=function(e){
 	if (e && e.button == 2 && scheduler.config.touch) return;
 	if (this._drag_mode && this._drag_id){
 		this._els["dhx_cal_data"][0].style.cursor="default";
-		//drop
+		// drop
 
 		var drag_id = this._drag_id;
 		var mode = this._drag_mode;
@@ -3272,13 +3315,13 @@ scheduler._on_mouse_up=function(e){
 				this._drag_id = this._drag_mode = null;
 				if (is_new && this.config.edit_on_create){
 					this.unselect();
-					this._new_event=new Date();//timestamp of creation
-					//if selection disabled - force lightbox usage
+					this._new_event=new Date();// timestamp of creation
+					// if selection disabled - force lightbox usage
 					if (this._table_view || this.config.details_on_create || !this.config.select || !this.isOneDayEvent(this.getEvent(drag_id))) {
 						scheduler.callEvent("onDragEnd", [drag_id, mode, e]);
 						return this.showLightbox(drag_id);
 					}
-					this._drag_pos = true; //set flag to trigger full redraw
+					this._drag_pos = true; // set flag to trigger full redraw
 					this._select_id = this._edit_id = drag_id;
 				} else {
 					if (!this._new_event)
@@ -3287,8 +3330,12 @@ scheduler._on_mouse_up=function(e){
 			}
 		}
 		if (this._drag_pos && (this._drag_pos.has_moved || this._drag_pos === true)) {
-			this._drag_id = this._drag_mode = null; // set null to prevent _sorder recalculation for drag event
-			this.render_view_data(); //redraw even if there is no real changes - necessary for correct positioning item after drag
+			this._drag_id = this._drag_mode = null; // set null to prevent
+													// _sorder recalculation for
+													// drag event
+			this.render_view_data(); // redraw even if there is no real
+										// changes - necessary for correct
+										// positioning item after drag
 		}
 		scheduler.callEvent("onDragEnd", [drag_id, mode, e]);
 	}
@@ -3363,9 +3410,11 @@ scheduler.updateView = function(date, mode) {
 		container.className = container.className.replace(oldClass, newClass);
 	}
 
-	var prev_scroll = (this._mode == mode && this.config.preserve_scroll) ? this._els[dhx_cal_data][0].scrollTop : false; // saving current scroll
+	var prev_scroll = (this._mode == mode && this.config.preserve_scroll) ? this._els[dhx_cal_data][0].scrollTop : false; // saving
+																															// current
+																															// scroll
 
-	//hide old custom view
+	// hide old custom view
 	if (this[this._mode + "_view"] && mode && this._mode != mode)
 		this[this._mode + "_view"](false);
 
@@ -3381,13 +3430,13 @@ scheduler.updateView = function(date, mode) {
 	this._date = date;
 	this._table_view = (this._mode == "month");
 
-	this._dy_shift = 0;//correction for multiday section in week/day views
+	this._dy_shift = 0;// correction for multiday section in week/day views
 
 
 	this._set_aria_buttons_attrs();
 
 	var tabs = this._els["dhx_cal_tab"];
-	if(tabs){//calendar can work without view tabs
+	if(tabs){// calendar can work without view tabs
 		for (var i = 0; i < tabs.length; i++) {
 			var tab = tabs[i];
 
@@ -3403,11 +3452,14 @@ scheduler.updateView = function(date, mode) {
 			tab.className = name;
 		}
 	}
-	//show new view
+	// show new view
 	this.update_view();
 
-	if (typeof prev_scroll == "number") // if we are updating or working with the same view scrollTop should be saved
-		this._els[dhx_cal_data][0].scrollTop = prev_scroll; // restoring original scroll
+	if (typeof prev_scroll == "number") // if we are updating or working with
+										// the same view scrollTop should be
+										// saved
+		this._els[dhx_cal_data][0].scrollTop = prev_scroll; // restoring
+															// original scroll
 };
 scheduler.setCurrentView = function(date, mode) {
 	if (!this.callEvent("onBeforeViewChange", [this._mode, this._date, mode || this._mode, date || this._date])) return;
@@ -3416,12 +3468,13 @@ scheduler.setCurrentView = function(date, mode) {
 };
 scheduler._render_x_header = function(i,left,d,h, offset_top){
 	offset_top = offset_top || 0;
-	//header scale	
+	// header scale
 	var head=document.createElement("DIV");
 	head.className = "dhx_scale_bar";
 
 	if(this.templates[this._mode+"_scalex_class"]){
-		//'_scalex_class' - timeline already have similar template, use the same name
+		// '_scalex_class' - timeline already have similar template, use the
+		// same name
 		head.className += ' ' + this.templates[this._mode+"_scalex_class"](d);
 	}
 
@@ -3431,9 +3484,16 @@ scheduler._render_x_header = function(i,left,d,h, offset_top){
 		head.className += " dhx_scale_bar_border";
 		left = left+1;
 	}
-	this.set_xy(head, width, this.xy.scale_height-2, left, offset_top);//-1 for border
+	this.set_xy(head, width, this.xy.scale_height-2, left, offset_top);// -1
+																		// for
+																		// border
 
-	var columnHeaderText = this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+	var columnHeaderText = this.templates[this._mode+"_scale_date"](d,this._mode); // TODO
+																					// -
+																					// move
+																					// in
+																					// separate
+																					// method
 	head.innerHTML = columnHeaderText;
 
 	this._waiAria.dayHeaderAttr(head, columnHeaderText);
@@ -3451,7 +3511,7 @@ scheduler._get_columns_num = function(from, to){
 	return count;
 };
 scheduler._get_timeunit_start = function(){
-	//start date of currently displayed time unit(day, week,...)
+	// start date of currently displayed time unit(day, week,...)
 	return this.date[this._mode+"_start"](new Date(this._date.valueOf()));
 };
 
@@ -3465,8 +3525,9 @@ scheduler._get_view_end = function(){
 	return ed;
 };
 scheduler._calc_scale_sizes = function(width, from, to){
-	//calculates number of displayed columns(days/units/month view cols) and their widths
-	var summ = width; //border delta
+	// calculates number of displayed columns(days/units/month view cols) and
+	// their widths
+	var summ = width; // border delta
 	var count = this._get_columns_num(from, to);
 
 	this._process_ignores(from, count, "day", 1);
@@ -3488,16 +3549,18 @@ scheduler._calc_scale_sizes = function(width, from, to){
 };
 scheduler._set_scale_col_size = function(div, width, left){
 	var c = this.config;
-	this.set_xy(div, width-1, c.hour_size_px*(c.last_hour-c.first_hour), left+this.xy.scale_width+1, 0);//-1 for border
+	this.set_xy(div, width-1, c.hour_size_px*(c.last_hour-c.first_hour), left+this.xy.scale_width+1, 0);// -1
+																										// for
+																										// border
 };
 
 scheduler._render_scales = function(header, data_area){
-	//render columns in week/units view, or header in month view
+	// render columns in week/units view, or header in month view
 	var sd = new Date(scheduler._min_date),
 		ed = new Date(scheduler._max_date),
 		today = this.date.date_part( scheduler._currentDate());
 
-	var summ = parseInt(header.style.width,10); //border delta
+	var summ = parseInt(header.style.width,10); // border delta
 	var d = new Date(this._min_date);
 	var count = this._get_columns_num(sd, ed);
 	this._calc_scale_sizes(summ, sd, ed);
@@ -3532,8 +3595,8 @@ scheduler._render_scales = function(header, data_area){
 };
 
 scheduler._reset_scale=function(){
-	//current mode doesn't support scales
-	//we mustn't call reset_scale for such modes, so it just to be sure
+	// current mode doesn't support scales
+	// we mustn't call reset_scale for such modes, so it just to be sure
 	if (!this.templates[this._mode + "_date"]) return;
 
 	var h = this._els["dhx_cal_header"][0];
@@ -3541,14 +3604,15 @@ scheduler._reset_scale=function(){
 	var c = this.config;
 
 	h.innerHTML = "";
-	//data_area.scrollTop = 0; //fix flickering in FF; makes IE8 flicker instead
+	// data_area.scrollTop = 0; //fix flickering in FF; makes IE8 flicker
+	// instead
 	data_area.innerHTML = "";
 
 	var str = ((c.readonly || (!c.drag_resize)) ? " dhx_resize_denied" : "") + ((c.readonly || (!c.drag_move)) ? " dhx_move_denied" : "");
 	data_area.className = "dhx_cal_data" + str;
 
 	this._scales = {};
-	this._cols = [];	//store for data section
+	this._cols = [];	// store for data section
 	this._colsS = {height: 0};
 	this._dy_shift = 0;
 
@@ -3589,13 +3653,22 @@ scheduler._reset_scale=function(){
 			var c1 = document.createElement("DIV");
 			c1.className = dhx_multi_day;
 			c1.style.visibility="hidden";
-			this.set_xy(c1, Math.max(this._colsS[this._colsS.col_length]+this.xy.scroll_width - 2, 0), 0, 0, top); // 2 extra borders, dhx_header has -1 bottom margin
+			this.set_xy(c1, Math.max(this._colsS[this._colsS.col_length]+this.xy.scroll_width - 2, 0), 0, 0, top); // 2
+																													// extra
+																													// borders,
+																													// dhx_header
+																													// has
+																													// -1
+																													// bottom
+																													// margin
 			data_area.parentNode.insertBefore(c1,data_area);
 			
 			var c2 = c1.cloneNode(true);
 			c2.className = dhx_multi_day+"_icon";
 			c2.style.visibility="hidden";
-			this.set_xy(c2, this.xy.scale_width, 0, 0, top); // dhx_header has -1 bottom margin
+			this.set_xy(c2, this.xy.scale_width, 0, 0, top); // dhx_header
+																// has -1 bottom
+																// margin
 			
 			c1.appendChild(c2);
 			this._els[dhx_multi_day]=[c1,c2];
@@ -3662,8 +3735,11 @@ scheduler._process_ignores = function(sd, n, mode, step, preserve){
 	}
 };
 
-scheduler._render_month_scale = function(div, dd/*month start*/, sd/*view start*/, rows ){
-	//renders month view layout
+scheduler._render_month_scale = function(div, dd/* month start */, sd/*
+																	 * view
+																	 * start
+																	 */, rows ){
+	// renders month view layout
 
 	var ed=scheduler.date.add(dd,1,"month"),
 		view_start = new Date(sd);
@@ -3767,7 +3843,8 @@ scheduler._render_month_scale = function(div, dd/*month start*/, sd/*view start*
 
 	this._scales = {};
 	var divs = div.getElementsByTagName('div');
-	for (var i=0; i<rendered_dates.length; i++) { // [header, body, header, body, ...]
+	for (var i=0; i<rendered_dates.length; i++) { // [header, body, header,
+													// body, ...]
 		var div = divs[(i*2)+1];
 		var date = rendered_dates[i];
 		this._scales[+date] = div;
@@ -3783,10 +3860,10 @@ scheduler._render_month_scale = function(div, dd/*month start*/, sd/*view start*
 };
 
 scheduler._reset_month_scale=function(b,dd,sd,rows){
-	//recalculates rows height and redraws month layout
+	// recalculates rows height and redraws month layout
 	var ed=scheduler.date.add(dd,1,"month");
 	
-	//trim time part for comparation reasons
+	// trim time part for comparation reasons
 	var cd = scheduler._currentDate();
 	this.date.date_part(cd);
 	this.date.date_part(sd);
@@ -3838,7 +3915,8 @@ scheduler._lame_clone = function(object, cache) {
 		t = [Array,Date,Number,String,Boolean];
 		for (i=0; i<t.length; i++) {
 			if (object instanceof t[i])
-				result = i ? new t[i](object) : new t[i](); // first one is array
+				result = i ? new t[i](object) : new t[i](); // first one is
+															// array
 		}
 		cache.push(object, result);
 		for (i in object) {
@@ -3881,7 +3959,7 @@ scheduler._focus = function(node, select){
 	}
 };
 
-//non-linear scales
+// non-linear scales
 scheduler._get_real_event_length=function(sd, fd, obj){
 	var ev_length = fd -sd;
 	var hours = (obj._start_correction + obj._end_correction)||0;
@@ -3917,7 +3995,7 @@ scheduler._get_fictional_event_length=function(end_date, ev_length, obj, back){
 	var sd = new Date(end_date);
 	var dir = back ? -1 : 1;
 
-	//get difference caused by first|last hour
+	// get difference caused by first|last hour
 	if (obj._start_correction || obj._end_correction){
 		var today;
 		if (back)
@@ -3987,7 +4065,8 @@ scheduler._getClassName = function(node){
 	if(!node) return "";
 
 	var className = node.className || "";
-	if(className.baseVal)//'className' exist but not a string - IE svg element in DOM
+	if(className.baseVal)// 'className' exist but not a string - IE svg
+							// element in DOM
 		className = className.baseVal;
 
 	if(!className.indexOf)
@@ -4013,7 +4092,7 @@ scheduler.date={
 		date.setMinutes(0);
 		date.setSeconds(0);
 		date.setMilliseconds(0);
-		if (date.getHours() && //shift to yesterday on dst
+		if (date.getHours() && // shift to yesterday on dst
 			(date.getDate() < old.getDate() || date.getMonth() < old.getMonth() || date.getFullYear() < old.getFullYear()) )
 			date.setTime(date.getTime() + 60 * 60 * 1000 * (24 - date.getHours()));
 		return date;
@@ -4055,7 +4134,9 @@ scheduler.date={
 			}
 		}
 
-		if (inc >= 0 && (!date.getHours() && ndate.getHours()) &&//shift to yesterday on dst
+		if (inc >= 0 && (!date.getHours() && ndate.getHours()) &&// shift to
+																	// yesterday
+																	// on dst
 			(ndate.getDate() < date.getDate() || ndate.getMonth() < date.getMonth() || ndate.getFullYear() < date.getFullYear()) )
 			ndate.setTime(ndate.getTime() + 60 * 60 * 1000 * (24 - ndate.getHours()));
 		return ndate;
@@ -4073,9 +4154,10 @@ scheduler.date={
 			case "year": ndate.setYear(ndate.getFullYear()+inc); break;
 			case "hour":
 				/*
-				 setHour(getHour() + inc) and setMinutes gives weird result when is applied on a Daylight Saving time switch
-				 setTime seems working as expected
-				*/
+				 * setHour(getHour() + inc) and setMinutes gives weird result
+				 * when is applied on a Daylight Saving time switch setTime
+				 * seems working as expected
+				 */
 				ndate.setTime(ndate.getTime() + inc * 60 * 60 * 1000);
 				break;
 			case "minute":
@@ -4171,8 +4253,20 @@ scheduler.date={
 		}
 		var first_thursday = new Date(ndate.valueOf());
 		first_thursday.setDate(ndate.getDate() + (4 - nday));
-		var year_number = first_thursday.getFullYear(); // year of the first Thursday
-		var ordinal_date = Math.round( (first_thursday.getTime() - new Date(year_number, 0, 1).getTime()) / 86400000); //ordinal date of the first Thursday - 1 (so not really ordinal date)
+		var year_number = first_thursday.getFullYear(); // year of the first
+														// Thursday
+		var ordinal_date = Math.round( (first_thursday.getTime() - new Date(year_number, 0, 1).getTime()) / 86400000); // ordinal
+																														// date
+																														// of
+																														// the
+																														// first
+																														// Thursday
+																														// - 1
+																														// (so
+																														// not
+																														// really
+																														// ordinal
+																														// date)
 		var week_number = 1 + Math.floor( ordinal_date / 7);
 		return week_number;
 	},
@@ -4201,13 +4295,13 @@ scheduler.locale = {
 		icon_details:"Details",
 		icon_edit:"Edit",
 		icon_delete:"Delete",
-		confirm_closing:"",//Your changes will be lost, are your sure ?
+		confirm_closing:"",// Your changes will be lost, are your sure ?
 		confirm_deleting:"Event will be deleted permanently, are you sure?",
 		section_description:"Description",
 		section_time:"Time period",
 		full_day:"Full day",
 
-		/*recurring events*/
+		/* recurring events */
 		confirm_recurring:"Do you want to edit the whole set of repeated events?",
 		section_recurring:"Repeat event",
 		button_recurring:"Disabled",
@@ -4215,21 +4309,21 @@ scheduler.locale = {
 		button_edit_series: "Edit series",
 		button_edit_occurrence: "Edit occurrence",
 
-		/*agenda view extension*/
+		/* agenda view extension */
 		agenda_tab:"Agenda",
 		date:"Date",
 		description:"Description",
 
-		/*year view extension*/
+		/* year view extension */
 		year_tab:"Year",
 
 		/* week agenda extension */
 		week_agenda_tab: "Agenda",
 
-		/*grid view extension*/
+		/* grid view extension */
 		grid_tab: "Grid",
 
-		/* touch tooltip*/
+		/* touch tooltip */
 		drag_to_create:"Drag to create",
 		drag_to_move:"Drag to move",
 
@@ -4250,20 +4344,19 @@ scheduler.locale = {
 
 
 /*
-%e	Day of the month without leading zeros (01..31)
-%d	Day of the month, 2 digits with leading zeros (01..31)
-%j	Day of the year, 3 digits with leading zeros (001..366)
-%a	A textual representation of a day, two letters
-%W	A full textual representation of the day of the week
-
-%c	Numeric representation of a month, without leading zeros (0..12)
-%m	Numeric representation of a month, with leading zeros (00..12)
-%b	A short textual representation of a month, three letters (Jan..Dec)
-%M	A full textual representation of a month, such as January or March (January..December)
-
-%y	A two digit representation of a year (93..03)
-%Y	A full numeric representation of a year, 4 digits (1993..03)
-*/
+ * %e Day of the month without leading zeros (01..31) %d Day of the month, 2
+ * digits with leading zeros (01..31) %j Day of the year, 3 digits with leading
+ * zeros (001..366) %a A textual representation of a day, two letters %W A full
+ * textual representation of the day of the week
+ * 
+ * %c Numeric representation of a month, without leading zeros (0..12) %m
+ * Numeric representation of a month, with leading zeros (00..12) %b A short
+ * textual representation of a month, three letters (Jan..Dec) %M A full textual
+ * representation of a month, such as January or March (January..December)
+ * 
+ * %y A two digit representation of a year (93..03) %Y A full numeric
+ * representation of a year, 4 digits (1993..03)
+ */
 
 scheduler.config={
 	default_date: "%j %M %Y",
@@ -4325,7 +4418,7 @@ scheduler.config={
 	highlight_displayed_event: true,
 	left_border: false,
 
-	ajax_error: "alert",//"ignore"|"console"
+	ajax_error: "alert",// "ignore"|"console"
 	delay_render: 0,
 	timeline_swap_resize: true,
 	wai_aria_attributes: true
@@ -4464,9 +4557,9 @@ scheduler.deleteEvent = function(id, silent) {
 
 	this.callEvent("onEventDeleted", [id, ev]);
 };
-//저장 하였을때 데이터를 저장해놓고 리턴 해주자. 
-scheduler.getSaveEvent = function(){
-	return;
+// 저장 하였을때 데이터를 저장해놓고 리턴 해주자.
+scheduler.getSaveEvent = function(data){
+	return data;
 }
 scheduler.getEvent = function(id) {
 	return this._events[id];
@@ -4495,7 +4588,7 @@ scheduler.changeEventId = function(id, new_id) {
 	});
 	if (this._select_id == id) this._select_id = new_id;
 	if (this._edit_id == id) this._edit_id = new_id;
-	//if (this._drag_id==id) this._drag_id=new_id;
+	// if (this._drag_id==id) this._drag_id=new_id;
 	this.callEvent("onEventIdChange", [id, new_id]);
 };
 
@@ -4526,12 +4619,12 @@ scheduler.event_updated = function(ev, force) {
 		this.clear_event(ev.id);
 };
 scheduler.is_visible_events = function(ev) {
-	//if in displayed dates
+	// if in displayed dates
 	var in_visible_range = (ev.start_date.valueOf() < this._max_date.valueOf() && this._min_date.valueOf() < ev.end_date.valueOf());
 
 	if(in_visible_range){
 
-		//end dates are not between last/first hours
+		// end dates are not between last/first hours
 		var evFirstHour = ev.start_date.getHours(),
 			evLastHour = ev.end_date.getHours() + (ev.end_date.getMinutes()/60),
 			lastHour = this.config.last_hour,
@@ -4543,8 +4636,8 @@ scheduler.is_visible_events = function(ev) {
 			return true;
 		}else{
 
-			//event is bigger than area hidden between last/first hours
-			var event_duration = (ev.end_date.valueOf() - ev.start_date.valueOf()) / (1000*60*60),//hours
+			// event is bigger than area hidden between last/first hours
+			var event_duration = (ev.end_date.valueOf() - ev.start_date.valueOf()) / (1000*60*60),// hours
 				hidden_duration = 24 - (this.config.last_hour - this.config.first_hour);
 
 			return !!((event_duration > hidden_duration) || (evFirstHour < lastHour && evLastHour >= firstHour));
@@ -4566,7 +4659,7 @@ scheduler.isOneDayEvent = function(ev) {
 
 };
 scheduler.get_visible_events = function(only_timed) {
-	//not the best strategy for sure
+	// not the best strategy for sure
 	var stack = [];
 
 	for (var id in this._events)
@@ -4645,7 +4738,7 @@ scheduler._render_month_link = function(ev){
 	var parent = this._rendered_location;
 	var toRender = this._lame_clone(ev);
 
-	//render links in each cell of multiday events
+	// render links in each cell of multiday events
 	for(var d = ev._sday; d < ev._eday; d++){
 
 		toRender._sday = d;
@@ -4692,18 +4785,21 @@ scheduler.render_data = function(evs, hold) {
 	for (var i = 0; i < evs.length; i++)
 		if (this._table_view){
 			if(scheduler._mode != 'month'){
-				this.render_event_bar(evs[i]);//may be multiday section on other views
+				this.render_event_bar(evs[i]);// may be multiday section on
+												// other views
 			}else{
 
 				var max_evs = scheduler.config.max_month_events;
 				if(max_evs !== max_evs*1 || evs[i]._sorder < max_evs){
-					//of max number events per month cell is set and event can be rendered
+					// of max number events per month cell is set and event can
+					// be rendered
 					this.render_event_bar(evs[i]);
 				}else if(max_evs !== undefined && evs[i]._sorder == max_evs){
-					//render 'view more' links
+					// render 'view more' links
 					scheduler._render_month_link(evs[i]);
 				}else{
-					//do not render events with ordinal number > maximum events per cell
+					// do not render events with ordinal number > maximum events
+					// per cell
 				}
 			}
 
@@ -4719,7 +4815,8 @@ scheduler._get_first_visible_cell = function(cells) {
 			return cells[i];
 		}
 	}
-	// if no visible cell found, return cells[0] to be more tolerant, since it's the original logic
+	// if no visible cell found, return cells[0] to be more tolerant, since it's
+	// the original logic
 	return cells[0];
 };
 
@@ -4730,7 +4827,8 @@ scheduler._pre_render_events = function(evs, hold) {
 	var data = this._els["dhx_cal_data"][0];
 
 	if (!this._table_view)
-		evs = this._pre_render_events_line(evs, hold); //ignore long events for now
+		evs = this._pre_render_events_line(evs, hold); // ignore long events
+														// for now
 	else
 		evs = this._pre_render_events_table(evs, hold);
 
@@ -4744,8 +4842,9 @@ scheduler._pre_render_events = function(evs, hold) {
 					h[i]++;
 					var cells = evl.rows[i].cells;
 					var cellHeight = this._colsS.height - this.xy.month_head_height;
-					if ((h[i]) * hb > cellHeight) { // 22 - height of cell's header
-						//we have overflow, update heights
+					if ((h[i]) * hb > cellHeight) { // 22 - height of cell's
+													// header
+						// we have overflow, update heights
 
 						var cHeight = cellHeight;
 						if(this.config.max_month_events*1 !== this.config.max_month_events || h[i] <= this.config.max_month_events){
@@ -4757,7 +4856,7 @@ scheduler._pre_render_events = function(evs, hold) {
 						for (var j = 0; j < cells.length; j++) {
 							cells[j].childNodes[1].style.height = cHeight + "px";
 						}
-					//	h[i] = (h[i - 1] || 0) + cells[0].offsetHeight;
+					// h[i] = (h[i - 1] || 0) + cells[0].offsetHeight;
 					}
 
 					h[i] = (h[i - 1] || 0) + scheduler._get_first_visible_cell(cells).offsetHeight;
@@ -4783,10 +4882,11 @@ scheduler._pre_render_events = function(evs, hold) {
 				if (!evs.length && this._els["dhx_multi_day"][0].style.visibility == "visible")
 					h[0] = -1;
 				if (evs.length || h[0] == -1) {
-					//shift days to have space for multiday events
+					// shift days to have space for multiday events
 					var childs = evl.parentNode.childNodes;
 
-					// +1 so multiday events would have 2px from top and 2px from bottom by default
+					// +1 so multiday events would have 2px from top and 2px
+					// from bottom by default
 					var full_multi_day_height = (h[0] + 1) * hb + 1;
 
 					var used_multi_day_height = full_multi_day_height;
@@ -4818,7 +4918,9 @@ scheduler._pre_render_events = function(evs, hold) {
 						data.style.top = (parseInt(data.style.top) + 2) + "px";
 
 						multi_day_section.style.overflowY = "auto";
-					//	multi_day_section.style.width = (parseInt(this._els["dhx_cal_navline"][0].style.width)) + "px";
+					// multi_day_section.style.width =
+					// (parseInt(this._els["dhx_cal_navline"][0].style.width)) +
+					// "px";
 
 						multi_day_icon.style.position = "fixed";
 						multi_day_icon.style.top = "";
@@ -4853,24 +4955,30 @@ scheduler._pre_render_events_line = function(evs, hold){
 			return a.id > b.id ? 1 : -1;
 		return a.start_date > b.start_date ? 1 : -1;
 	});
-	var days = []; //events by weeks
+	var days = []; // events by weeks
 	var evs_originals = [];
 
-	this._min_mapped_duration = Math.ceil(this.xy.min_event_height * 60 / this.config.hour_size_px);  // values could change along the way
+	this._min_mapped_duration = Math.ceil(this.xy.min_event_height * 60 / this.config.hour_size_px);  // values
+																										// could
+																										// change
+																										// along
+																										// the
+																										// way
 
 	for (var i = 0; i < evs.length; i++) {
 		var ev = evs[i];
 
-		//check date overflow
+		// check date overflow
 		var sd = ev.start_date;
 		var ed = ev.end_date;
-		//check scale overflow
+		// check scale overflow
 		var sh = sd.getHours();
 		var eh = ed.getHours();
 
-		ev._sday = this._get_event_sday(ev); // sday based on event start_date
+		ev._sday = this._get_event_sday(ev); // sday based on event
+												// start_date
 		if (this._ignores[ev._sday]){
-			//ignore event
+			// ignore event
 			evs.splice(i,1);
 			i--;
 			continue;
@@ -4954,8 +5062,10 @@ scheduler._pre_render_events_line = function(evs, hold){
 		}
 
 		if (sh < this.config.first_hour || eh >= this.config.last_hour) {
-			// Need to create copy of event as we will be changing it's start/end date
-			// e.g. first_hour = 11 and event.start_date hours = 9. Need to preserve that info
+			// Need to create copy of event as we will be changing it's
+			// start/end date
+			// e.g. first_hour = 11 and event.start_date hours = 9. Need to
+			// preserve that info
 			evs_originals.push(ev);
 			evs[i] = ev = this._copy_event(ev);
 
@@ -4995,7 +5105,8 @@ scheduler._time_order = function(evs) {
 		return a.start_date > b.start_date ? 1 : -1;
 	});
 };
-scheduler._pre_render_events_table = function(evs, hold) { // max - max height of week slot
+scheduler._pre_render_events_table = function(evs, hold) { // max - max height
+															// of week slot
 	this._time_order(evs);
 	var out = [];
 	var weeks = [
@@ -5006,7 +5117,7 @@ scheduler._pre_render_events_table = function(evs, hold) { // max - max height o
 		[],
 		[],
 		[]
-	]; //events by weeks
+	]; // events by weeks
 	var max = this._colsS.heights;
 	var start_date;
 	var cols = this._cols.length;
@@ -5024,7 +5135,7 @@ scheduler._pre_render_events_table = function(evs, hold) { // max - max height o
 		var chunk_info = chunks_info[id];
 		var sd = (start_date || ev.start_date);
 		var ed = ev.end_date;
-		//trim events which are crossing through current view
+		// trim events which are crossing through current view
 		if (sd < this._min_date) {
 			chunk_info.first_chunk = false;
 			sd = this._min_date;
@@ -5037,19 +5148,20 @@ scheduler._pre_render_events_table = function(evs, hold) { // max - max height o
 		var locate_s = this.locate_holder_day(sd, false, ev);
 		ev._sday = locate_s % cols;
 
-		//skip single day events for ignored dates
+		// skip single day events for ignored dates
 		if (this._ignores[ev._sday] && ev._timed) continue;
 
 		var locate_e = this.locate_holder_day(ed, true, ev) || cols;
-		ev._eday = (locate_e % cols) || cols; //cols used to fill full week, when event end on monday
+		ev._eday = (locate_e % cols) || cols; // cols used to fill full week,
+												// when event end on monday
 		ev._length = locate_e - locate_s;
 
-		//3600000 - compensate 1 hour during winter|summer time shift
+		// 3600000 - compensate 1 hour during winter|summer time shift
 		ev._sweek = Math.floor((this._correct_shift(sd.valueOf(), 1) - this._min_date.valueOf()) / (60 * 60 * 1000 * 24 * cols));
 
-		//current slot
+		// current slot
 		var stack = weeks[ev._sweek];
-		//check order position
+		// check order position
 		var stack_line;
 
 		for (stack_line = 0; stack_line < stack.length; stack_line++)
@@ -5064,7 +5176,7 @@ scheduler._pre_render_events_table = function(evs, hold) { // max - max height o
 			start_date = null;
 			out.push(ev);
 			stack[stack_line] = ev;
-			//get max height of slot
+			// get max height of slot
 			max[ev._sweek] = stack.length - 1;
 			ev._first_chunk = chunk_info.first_chunk;
 			ev._last_chunk = chunk_info.last_chunk;
@@ -5085,10 +5197,10 @@ scheduler._pre_render_events_table = function(evs, hold) { // max - max height o
 			out.push(copy);
 			stack[stack_line] = copy;
 			start_date = copy.end_date;
-			//get max height of slot
+			// get max height of slot
 			max[ev._sweek] = stack.length - 1;
 			i--;
-			continue;  //repeat same step
+			continue;  // repeat same step
 		}
 	}
 	return out;
@@ -5102,7 +5214,8 @@ scheduler._copy_dummy = function() {
 scheduler._copy_event = function(ev) {
 	this._copy_dummy.prototype = ev;
 	return new this._copy_dummy();
-	//return {start_date:ev.start_date, end_date:ev.end_date, text:ev.text, id:ev.id}
+	// return {start_date:ev.start_date, end_date:ev.end_date, text:ev.text,
+	// id:ev.id}
 };
 scheduler._rendered = [];
 scheduler.clear_view = function() {
@@ -5137,7 +5250,7 @@ scheduler.clear_event = function(id) {
 };
 scheduler._y_from_date = function(date){
 	var sm = date.getHours() * 60 + date.getMinutes();
-	return ((Math.round((sm * 60 * 1000 - this.config.first_hour * 60 * 60 * 1000) * this.config.hour_size_px / (60 * 60 * 1000))) % (this.config.hour_size_px * 24)); //42px/hour
+	return ((Math.round((sm * 60 * 1000 - this.config.first_hour * 60 * 60 * 1000) * this.config.hour_size_px / (60 * 60 * 1000))) % (this.config.hour_size_px * 24)); // 42px/hour
 };
 scheduler._calc_event_y = function(ev, min_height){
 	min_height = min_height || 0;
@@ -5145,7 +5258,7 @@ scheduler._calc_event_y = function(ev, min_height){
 	var em = (ev.end_date.getHours() * 60 + ev.end_date.getMinutes()) || (scheduler.config.last_hour * 60);
 	var top = this._y_from_date(ev.start_date);
 
-	var height = Math.max(min_height, (em - sm) * this.config.hour_size_px / 60); //42px/hour
+	var height = Math.max(min_height, (em - sm) * this.config.hour_size_px / 60); // 42px/hour
 	return {
 		top: top,
 		height: height
@@ -5154,10 +5267,11 @@ scheduler._calc_event_y = function(ev, min_height){
 scheduler.render_event = function(ev) {
 	var menu = scheduler.xy.menu_width;
 	var menu_offset = (this.config.use_select_menu_space) ? 0 : menu;
-	if (ev._sday < 0) return; //can occur in case of recurring event during time shift
+	if (ev._sday < 0) return; // can occur in case of recurring event during
+								// time shift
 
 	var parent = scheduler.locate_holder(ev._sday);	
-	if (!parent) return; //attempt to render non-visible event
+	if (!parent) return; // attempt to render non-visible event
 
 	var pos_y = this._calc_event_y(ev, scheduler.xy.min_event_height);
 	var top = pos_y.top,
@@ -5186,7 +5300,7 @@ scheduler.render_event = function(ev) {
 
 	if (this._edit_id == ev.id) {
 
-		d.style.zIndex = 1; //fix overlapping issue
+		d.style.zIndex = 1; // fix overlapping issue
 		width = Math.max(width - 4, scheduler.xy.editor_width);
 		d = document.createElement("DIV");
 		d.setAttribute("event_id", ev.id);
@@ -5211,7 +5325,7 @@ scheduler.render_event = function(ev) {
 		this._rendered.push(d);
 
 		d2.innerHTML = "<textarea class='dhx_cal_editor'>" + ev.text + "</textarea>";
-		if (this._quirks7) d2.firstChild.style.height = height - 12 + "px"; //IEFIX
+		if (this._quirks7) d2.firstChild.style.height = height - 12 + "px"; // IEFIX
 		this._editor = d2.firstChild;
 		this._editor.onkeydown = function(e) {
 			if ((e || event).shiftKey) return true;
@@ -5224,12 +5338,13 @@ scheduler.render_event = function(ev) {
 			return true;
 		};
 		scheduler._focus(d2.firstChild, true);
-		//IE and opera can add x-scroll during focusing
+		// IE and opera can add x-scroll during focusing
 		this._els["dhx_cal_data"][0].scrollLeft = 0;
 	}
 	if (this.xy.menu_width !== 0 && this._select_id == ev.id) {
 		if (this.config.cascade_event_display && this._drag_mode)
-			d.style.zIndex = 1; //fix overlapping issue for cascade view in case of dnd of selected event
+			d.style.zIndex = 1; // fix overlapping issue for cascade view in
+								// case of dnd of selected event
 		var icons = this.config["icons_" + ((this._edit_id == ev.id) ? "edit" : "select")];
 		var icons_str = "";
 		var bg_color = (ev.color ? ("background-color: " + ev.color + ";") : "");
@@ -5272,7 +5387,12 @@ scheduler._render_v_bar = function (ev, x, y, w, h, style, contentA, contentB, b
 
 		var inner_html = '<div class="dhx_event_move dhx_header" style=" width:' + (w - 6) + 'px;' + bg_color + '" >&nbsp;</div>';
 		inner_html += '<div class="dhx_event_move dhx_title" style="' + bg_color + '' + color + '">' + contentA + '</div>';
-		inner_html += '<div class="dhx_body" style=" width:' + (w - (this._quirks ? 4 : 14)) + 'px; height:' + (h - (this._quirks ? 20 : 30) + 1) + 'px;' + bg_color + '' + color + '">' + contentB + '</div>'; // +2 css specific, moved from render_event
+		inner_html += '<div class="dhx_body" style=" width:' + (w - (this._quirks ? 4 : 14)) + 'px; height:' + (h - (this._quirks ? 20 : 30) + 1) + 'px;' + bg_color + '' + color + '">' + contentB + '</div>'; // +2
+																																																				// css
+																																																				// specific,
+																																																				// moved
+																																																				// from
+																																																				// render_event
 
 		var footer_class = "dhx_event_resize dhx_footer";
 		if (bottom)
@@ -5289,12 +5409,13 @@ scheduler.renderEvent = function(){
 	return false;
 };
 scheduler.locate_holder = function(day) {
-	if (this._mode == "day") return this._els["dhx_cal_data"][0].firstChild; //dirty
+	if (this._mode == "day") return this._els["dhx_cal_data"][0].firstChild; // dirty
 	return this._els["dhx_cal_data"][0].childNodes[day];
 };
 scheduler.locate_holder_day = function(date, past) {
 	var day = Math.floor((this._correct_shift(date, 1) - this._min_date) / (60 * 60 * 24 * 1000));
-	//when locating end data of event , we need to use next day if time part was defined
+	// when locating end data of event , we need to use next day if time part
+	// was defined
 	if (past && this.date.time_part(date)) day++;
 	return day;
 };
@@ -5317,7 +5438,7 @@ scheduler._get_dnd_order = function(order, ev_height, max_height){
 	order = Math.max(order, 0);
 	return order;
 };
-//scheduler._get_event_bar_pos = function(sday, eday, week, drag){
+// scheduler._get_event_bar_pos = function(sday, eday, week, drag){
 scheduler._get_event_bar_pos = function(ev){
 	var x = this._colsS[ev._sday];
 	var x2 = this._colsS[ev._eday];
@@ -5326,7 +5447,11 @@ scheduler._get_event_bar_pos = function(ev){
 
 	var order = ev._sorder;
 	if(ev.id == this._drag_id){
-		var cellHeight = this._colsS.heights[ev._sweek + 1] - this._colsS.heights[ev._sweek]- this.xy.month_head_height;//22 for month head height
+		var cellHeight = this._colsS.heights[ev._sweek + 1] - this._colsS.heights[ev._sweek]- this.xy.month_head_height;// 22
+																														// for
+																														// month
+																														// head
+																														// height
 		order = scheduler._get_dnd_order(order, hb, cellHeight);
 	}
 	var y_event_offset =  order * hb;
@@ -5345,7 +5470,7 @@ scheduler.render_event_bar = function (ev) {
 	// resize for month mutliday events
 	var resize_handle = "";
 
-	//events in ignored dates
+	// events in ignored dates
 
 	if (!x2) return;
 
@@ -5399,7 +5524,8 @@ scheduler.render_event_bar = function (ev) {
 		html += resize_handle;
 	}
 	if(scheduler.getState().mode == "month"){
-		ev = scheduler.getEvent(ev.id); // ev at this point could be a part (row in a month view) of a larger event
+		ev = scheduler.getEvent(ev.id); // ev at this point could be a part (row
+										// in a month view) of a larger event
 	}
 
 	if (ev._timed)
@@ -5438,7 +5564,7 @@ scheduler._locate_css = function(e, classname, strict){
 				if (!strict)
 					return trg;
 
-				//check that we have exact match
+				// check that we have exact match
 				var left = (ind === 0) || (!scheduler._trim(css.charAt(ind - 1)));
 				var right = ((ind + classname.length >= css.length)) || (!scheduler._trim(css.charAt(ind + classname.length)));
 
@@ -5584,7 +5710,8 @@ scheduler._load = function(url, from) {
 	url = url || this._load_url;
 
 	if(!url){
-		//if scheduler.setLoadMode is called before scheduler.init, initial rendering will invoke data loading while url is undefined
+		// if scheduler.setLoadMode is called before scheduler.init, initial
+		// rendering will invoke data loading while url is undefined
 		return;
 	}
 
@@ -5614,7 +5741,7 @@ scheduler._load = function(url, from) {
 		} while (temp_to > from && this._loaded[lf(temp_to)]);
 
 		if (to <= from)
-			return false; //already loaded
+			return false; // already loaded
 		dhtmlxAjax.get(url + "&from=" + lf(from) + "&to=" + lf(to), function(l) {scheduler.on_load(l);});
 		while (from < to) {
 			this._loaded[lf(from)] = true;
@@ -5701,15 +5828,19 @@ scheduler.json.parse = function(data) {
 			var collection = collections[key];
 			var arr = scheduler.serverList[key];
 			if (!arr) continue;
-			arr.splice(0, arr.length); //clear old options
+			arr.splice(0, arr.length); // clear old options
 			for (var j = 0; j < collection.length; j++) {
 				var option = collection[j];
-				var obj = { key: option.value, label: option.label }; // resulting option object
+				var obj = { key: option.value, label: option.label }; // resulting
+																		// option
+																		// object
 				for (var option_key in option) {
 					if (option.hasOwnProperty(option_key)) {
 						if (option_key == "value" || option_key == "label")
 							continue;
-						obj[option_key] = option[option_key]; // obj['value'] = option['value']
+						obj[option_key] = option[option_key]; // obj['value']
+																// =
+																// option['value']
 					}
 				}
 				arr.push(obj);
@@ -5741,7 +5872,7 @@ scheduler.load = function(url, call) {
 	this._after_call = call;
 	this._load(url, this._date);
 };
-//possible values - day,week,month,year,all
+// possible values - day,week,month,year,all
 scheduler.setLoadMode = function(mode) {
 	if (mode == "all") mode = "";
 	this._load_mode = mode;
@@ -5758,14 +5889,14 @@ scheduler.serverList = function(name, array) {
 scheduler._userdata = {};
 scheduler._magic_parser = function(loader) {
 	var xml;
-	if (!loader.getXMLTopNode) { //from a string
+	if (!loader.getXMLTopNode) { // from a string
 		var xml_string = loader.xmlDoc.responseText;
 		loader = new dtmlXMLLoaderObject(function() {});
 		loader.loadXMLString(xml_string);
 	}
 
 	xml = loader.getXMLTopNode("data");
-	if (xml.tagName != "data") return null;//not an xml
+	if (xml.tagName != "data") return null;// not an xml
 	var skey = xml.getAttribute("dhx_security");
 	if (skey)
 		dhtmlx.security_key = skey;
@@ -5775,7 +5906,7 @@ scheduler._magic_parser = function(loader) {
 		var bind = opts[i].getAttribute("for");
 		var arr = this.serverList[bind];
 		if (!arr) continue;
-		arr.splice(0, arr.length);	//clear old options
+		arr.splice(0, arr.length);	// clear old options
 		var itms = loader.doXPath(".//item", opts[i]);
 		for (var j = 0; j < itms.length; j++) {
 			var itm = itms[j];
@@ -5846,9 +5977,9 @@ scheduler.ical={
 		var data = str.match(RegExp(this.c_start+"[^\f]*"+this.c_end,""));
 		if (!data.length) return;
 		
-		//unfolding 
+		// unfolding
 		data[0]=data[0].replace(/[\r\n]+(?=[a-z \t])/g," ");
-		//drop property
+		// drop property
 		data[0]=data[0].replace(/\;[^:\r\n]*:/g,":");
 		
 		
@@ -5861,7 +5992,8 @@ scheduler.ical={
 			var param_r = /[^\r\n]+[\r\n]+/g;
 			while ((param=param_r.exec(match[1])) !== null)
 				this.parse_param(param.toString(),e);
-			if (e.uid && !e.id) e.id = e.uid; //fallback to UID, when ID is not defined
+			if (e.uid && !e.id) e.id = e.uid; // fallback to UID, when ID is
+												// not defined
 			incoming.push(e);	
 		}
 		return incoming;
@@ -5893,7 +6025,9 @@ scheduler.ical={
 		var dy = t[0].substr(0,4);
 		var dn = parseInt(t[0].substr(4,2),10)-1;
 		var dd = t[0].substr(6,2);
-		if (scheduler.config.server_utc && !t[1]) { // if no hours/minutes were specified == full day event
+		if (scheduler.config.server_utc && !t[1]) { // if no hours/minutes were
+													// specified == full day
+													// event
 			return new Date(Date.UTC(dy,dn,dd,dh,dm)) ;
 		}
 		return new Date(dy,dn,dd,dh,dm);
@@ -6038,26 +6172,27 @@ scheduler.form_blocks={
 				switch (time_option) {
 					case "%Y":
 						sns._time_format_order[3] = p;
-						//year
-						var year = dt.getFullYear()-5; //maybe take from config?
+						// year
+						var year = dt.getFullYear()-5; // maybe take from
+														// config?
 						for (var i=0; i < 10; i++)
 							options+="<option value='"+(year+i)+"'>"+(year+i)+"</option>";
 						break;
 					case "%m":
 						sns._time_format_order[2] = p;
-						//month
+						// month
 						for (var i=0; i < 12; i++)
 							options+="<option value='"+i+"'>"+this.locale.date.month_full[i]+"</option>";
 						break;
 					case "%d":
 						sns._time_format_order[1] = p;
-						//days
+						// days
 						for (var i=1; i < 32; i++)
 							options+="<option value='"+i+"'>"+i+"</option>";
 						break;
 					case "%H:%i":
 						sns._time_format_order[0] = p;
-						//hours
+						// hours
 						var i = first;
 						var tdate = dt.getDate();
 						sns._time_values = [];
@@ -6067,7 +6202,10 @@ scheduler.form_blocks={
 							options+="<option value='"+i+"'>"+time+"</option>";
 							sns._time_values.push(i);
 							dt.setTime(dt.valueOf()+this.config.time_step*60*1000);
-							var diff = (dt.getDate()!=tdate)?1:0; // moved or not to the next day
+							var diff = (dt.getDate()!=tdate)?1:0; // moved or
+																	// not to
+																	// the next
+																	// day
 							i=diff*24*60+dt.getHours()*60+dt.getMinutes();
 						}
 						break;
@@ -6154,7 +6292,7 @@ scheduler.form_blocks={
 
 				s[i+map[0]].value=(value_found)?direct_value:fixed_value;
 				if(!(value_found || fixed_value)){
-					s[i+map[0]].selectedIndex = -1;//show empty select in FF
+					s[i+map[0]].selectedIndex = -1;// show empty select in FF
 				}
 				s[i+map[1]].value=d.getDate();
 				s[i+map[2]].value=d.getMonth();
@@ -6172,7 +6310,8 @@ scheduler.form_blocks={
 			ev.end_date=new Date(s[map[3]+4].value,s[map[2]+4].value,s[map[1]+4].value,0,s[map[0]+4].value);
 
 			if(!(s[map[3]].value && s[map[3]+4].value)){
-				// use the previous date if start/end years are empty (outside lightbox range)
+				// use the previous date if start/end years are empty (outside
+				// lightbox range)
 				var original = this.getEvent(this._lightbox_id);
 				if(original){
 					ev.start_date = original.start_date;
@@ -6204,10 +6343,20 @@ scheduler.showCover=function(box){
 		if(scroll_top) // if vertical scroll on window
 			box.style.top=Math.round(scroll_top+Math.max((view_height-box.offsetHeight)/2, 0))+"px";
 		else // vertical scroll on body
-			box.style.top=Math.round(Math.max(((view_height-box.offsetHeight)/2), 0) + 9)+"px"; // +9 for compatibility with auto tests
+			box.style.top=Math.round(Math.max(((view_height-box.offsetHeight)/2), 0) + 9)+"px"; // +9
+																								// for
+																								// compatibility
+																								// with
+																								// auto
+																								// tests
 
 		// not quite accurate but used for compatibility reasons
-		if(document.documentElement.scrollWidth > document.body.offsetWidth) // if horizontal scroll on the window
+		if(document.documentElement.scrollWidth > document.body.offsetWidth) // if
+																				// horizontal
+																				// scroll
+																				// on
+																				// the
+																				// window
 			box.style.left=Math.round(scroll_left+(document.body.offsetWidth-box.offsetWidth)/2)+"px";
 		else // horizontal scroll on the body
 			box.style.left=Math.round((document.body.offsetWidth-box.offsetWidth)/2)+"px";
@@ -6240,7 +6389,8 @@ scheduler._fill_lightbox = function(id, box) {
 		s[2].innerHTML = headerContent;
 	} else {
 		var headerDate = this.templates.event_header(ev.start_date, ev.end_date, ev);
-		var headerTitle = (this.templates.event_bar_text(ev.start_date, ev.end_date, ev) || "").substr(0, 70); //IE6 fix;
+		var headerTitle = (this.templates.event_bar_text(ev.start_date, ev.end_date, ev) || "").substr(0, 70); // IE6
+																												// fix;
 
 		lightboxHeader.push(headerDate);
 		lightboxHeader.push(headerTitle);
@@ -6314,10 +6464,20 @@ scheduler.show_cover=function(){
 	document.body.appendChild(this._cover);
 };
 scheduler.save_lightbox=function(){
-	//여기에 내용을 입력하자 받고 싶은 것들을 
+	// 여기에 내용을 입력하자 받고 싶은 것들을
 	var data = this._lightbox_out({}, this._lame_copy(this.getEvent(this._lightbox_id)));
-	alert(data);
-	alert(JSON.stringify(data));
+	$.ajax({
+			url : "save"
+			, method : "post"
+			, data : data
+			, success : function(){
+				alert("saved!!!")
+			}
+			,error : function(){
+				alert("Not saved!!!")
+			}
+	});
+	scheduler.getSaveEvent(data);
 	
 	if (this.checkEvent("onEventSave") && !this.callEvent("onEventSave",[this._lightbox_id, data, this._new_event]))
 		return;
@@ -6342,7 +6502,10 @@ scheduler.endLightbox = function(mode, box){
 		this._lightbox = this._temp_lightbox;
 		this._custom_lightbox = false;
 	}
-	this._temp_lightbox = this._lightbox_id = null; // in case of custom lightbox user only calls endLightbox so we need to reset _lightbox_id
+	this._temp_lightbox = this._lightbox_id = null; // in case of custom
+													// lightbox user only calls
+													// endLightbox so we need to
+													// reset _lightbox_id
 };
 scheduler.resetLightbox = function(){
 	if (scheduler._lightbox && !scheduler._custom_lightbox)
@@ -6363,20 +6526,22 @@ scheduler._init_lightbox_events=function(){
 
 		if (src && className)
 			switch(className){
-				case "dhx_save_btn":
+				case "dhx_save_btn": //저장
 					scheduler.save_lightbox();
+					
 					break;
-				case "dhx_delete_btn":
+				case "dhx_delete_btn": //삭제
 					var c=scheduler.locale.labels.confirm_deleting;
 
 					scheduler._dhtmlx_confirm(c, scheduler.locale.labels.title_confirm_deleting, function(){
 						scheduler.deleteEvent(scheduler._lightbox_id);
-						scheduler._new_event = null; //clear flag, if it was unsaved event
+						scheduler._new_event = null; // clear flag, if it was
+														// unsaved event
 						scheduler.hide_lightbox();
 					});
 
 					break;
-				case "dhx_cancel_btn":
+				case "dhx_cancel_btn": //취소
 					scheduler.cancel_lightbox();
 					break;
 
@@ -6413,7 +6578,7 @@ scheduler._init_lightbox_events=function(){
 		}
 
 		switch((e||event).keyCode){
-			case 32:{//space
+			case 32:{// space
 				if ((e||event).shiftKey) return;
 				if(buttonTarget && buttonTarget.click){
 					buttonTarget.click();
@@ -6445,7 +6610,8 @@ scheduler.setLightboxSize=function(){
 	con.style.height="0px";
 	con.style.height=con.scrollHeight+"px";
 	d.style.height=con.scrollHeight+scheduler.xy.lightbox_additional_height+"px";
-	con.style.height=con.scrollHeight+"px"; //it is incredible , how ugly IE can be
+	con.style.height=con.scrollHeight+"px"; // it is incredible , how ugly IE
+											// can be
 };
 
 scheduler._init_dnd_events = function(){
@@ -6477,7 +6643,7 @@ scheduler._finish_dnd = function(){
 		document.dhx_unselectable = false;
 	}
 };
-scheduler.getLightbox=function(){ //scheduler.config.wide_form=true;
+scheduler.getLightbox=function(){ // scheduler.config.wide_form=true;
 	if (!this._lightbox){
 		var d=document.createElement("DIV");
 		d.className="dhx_cal_light";
@@ -6524,7 +6690,7 @@ scheduler.getLightbox=function(){ //scheduler.config.wide_form=true;
 		html="";
 		for (var i=0; i < sns.length; i++) {
 			var block=this.form_blocks[sns[i].type];
-			if (!block) continue; //ignore incorrect blocks
+			if (!block) continue; // ignore incorrect blocks
 			sns[i].id="area_"+this.uid();
 			var button = "";
 			if (sns[i].button){
@@ -6576,7 +6742,7 @@ scheduler.getLightbox=function(){ //scheduler.config.wide_form=true;
 			}
 		}
 
-		//sizes
+		// sizes
 		this.setLightboxSize();
 
 		this._init_lightbox_events(this);
@@ -6623,13 +6789,13 @@ scheduler._init_touch_events = function(){
 };
 
 scheduler._touch_events = function(names, accessor, ignore){
-	//webkit on android need to be handled separately
+	// webkit on android need to be handled separately
 	var a_webkit = (navigator.userAgent.indexOf("Android")!=-1) && (navigator.userAgent.indexOf("WebKit")!=-1);
 	var source, tracker, timer, drag_mode, scroll_mode, action_mode;
 	var dblclicktime = 0;
 
 	function attachTouchEvent(element, name, callback){
-		//touch gestures must be disabled when ligthbox is opened
+		// touch gestures must be disabled when ligthbox is opened
 		dhtmlxEvent(element, name, function(e){
 			if(scheduler._is_lightbox_open()){
 				return true;
@@ -6647,7 +6813,7 @@ scheduler._touch_events = function(names, accessor, ignore){
 			t = t.parentNode;
 		}
 		if(t != scheduler._obj){
-			//swipe outside scheduler
+			// swipe outside scheduler
 			return;
 		}
 
@@ -6667,7 +6833,7 @@ scheduler._touch_events = function(names, accessor, ignore){
 
 		var original_render = scheduler.render_view_data;
 		if(dnd == 'create' && timeline){
-			//suppress full redraw of timeline on creating event
+			// suppress full redraw of timeline on creating event
 			scheduler.render_view_data = function() {
 				var id = scheduler.getState().drag_id;
 				var ev = scheduler.getEvent(id);
@@ -6710,21 +6876,21 @@ scheduler._touch_events = function(names, accessor, ignore){
 			return false;
 		}
 
-		//if (tracker && a_webkit){
-		//	check_direction_swipe(tracker, accessor(e), 0);
-		//}
+		// if (tracker && a_webkit){
+		// check_direction_swipe(tracker, accessor(e), 0);
+		// }
 
 		tracker = accessor(e);
-		//ignore common and scrolling moves
+		// ignore common and scrolling moves
 		if (!action_mode) return;
 
-		//multitouch		
+		// multitouch
 		if (!tracker){
 			scroll_mode = true;
 			return;
 		}
 
-		//target changed - probably in scroll mode
+		// target changed - probably in scroll mode
 
 		if (source.target != tracker.target || (Math.abs(source.pageX - tracker.pageX) > 5) || (Math.abs(source.pageY - tracker.pageY) > 5)){
 			scroll_mode = true;
@@ -6760,7 +6926,7 @@ scheduler._touch_events = function(names, accessor, ignore){
 			return;
 		}
 
-		//dbl click
+		// dbl click
 		var now = new Date();
 
 		if (!scroll_mode && !drag_mode && now - dblclicktime < 250){
@@ -6778,7 +6944,7 @@ scheduler._touch_events = function(names, accessor, ignore){
 		}
 		dblclicktime = now;
 
-		//drag
+		// drag
 		
 		if (scroll_mode || drag_mode || !scheduler.config.touch_drag)
 			return;
@@ -6799,7 +6965,7 @@ scheduler._touch_events = function(names, accessor, ignore){
 			return false;
 		}
 		
-		//there is no target
+		// there is no target
 		timer = setTimeout(function(){
 
 			drag_mode = true;
@@ -6810,16 +6976,18 @@ scheduler._touch_events = function(names, accessor, ignore){
 
 			scheduler._on_mouse_down(source, target);
 			if (scheduler._drag_mode && scheduler._drag_mode != "create"){
-				//var pos = -1;
+				// var pos = -1;
 				scheduler.for_rendered(scheduler._drag_id, function(node, i) {
-				//	pos = node.getBoundingClientRect().top;
+				// pos = node.getBoundingClientRect().top;
 					node.style.display='none';
 					scheduler._rendered.splice(i, 1);
 				});
-				/*if (pos>=0){
-					var step = scheduler.config.time_step;
-					scheduler._move_pos_shift = step* Math.round((fake_event.pageY - pos)*60/(scheduler.config.hour_size_px*step));
-				}*/
+				/*
+				 * if (pos>=0){ var step = scheduler.config.time_step;
+				 * scheduler._move_pos_shift = step*
+				 * Math.round((fake_event.pageY -
+				 * pos)*60/(scheduler.config.hour_size_px*step)); }
+				 */
 			}
 
 			if (scheduler.config.touch_tip)
@@ -6957,7 +7125,8 @@ scheduler._dp_init=function(dp){
 		
 		for (var a in obj){
 			if (a.indexOf("_") === 0) continue;
-			if (obj[a] && obj[a].getUTCFullYear) //not very good, but will work
+			if (obj[a] && obj[a].getUTCFullYear) // not very good, but will
+													// work
 				data[prefix+a] = this.obj.templates.xml_format(obj[a]);
 			else {
 				if (obj[a] && typeof obj[a] == "object")
@@ -7025,7 +7194,7 @@ scheduler._set_event_text_style=function(id,style){
 scheduler._update_callback = function(upd,id){
 	var data		=	scheduler._xmlNodeToJSON(upd.firstChild);
 
-	//fix for updates of recurring events
+	// fix for updates of recurring events
 	if (data.rec_type == "none") data.rec_pattern = "none";
 	data.text		=	data.text||data._tagvalue;
 	data.start_date	=	scheduler.templates.xml_date(data.start_date);
@@ -7073,7 +7242,7 @@ scheduler._skin_init = function(){
 	var set = 0;
 	if (scheduler.skin && (scheduler.skin === "classic" || scheduler.skin === "glossy")) set = 1;
 
-	//apply skin related settings
+	// apply skin related settings
 	this._configure(scheduler.config, scheduler._skin_settings, set);
 	this._configure(scheduler.xy, scheduler._skin_xy, set);
 
@@ -7088,7 +7257,7 @@ scheduler._skin_init = function(){
 		};
 	}
 
-	//classic skin need not any further customization
+	// classic skin need not any further customization
 	if (set) return;
 	
 	
@@ -7099,7 +7268,10 @@ scheduler._skin_init = function(){
 		return "• <b>"+scheduler.templates.event_date(start)+"</b> ";
 	};
 
-	//scheduler._lightbox_template="<div class='dhx_cal_ltitle'><span class='dhx_mark'>&nbsp;</span><span class='dhx_time'></span><span class='dhx_title'></span><div class='dhx_close_icon'></div></div><div class='dhx_cal_larea'></div>";
+	// scheduler._lightbox_template="<div class='dhx_cal_ltitle'><span
+	// class='dhx_mark'>&nbsp;</span><span class='dhx_time'></span><span
+	// class='dhx_title'></span><div class='dhx_close_icon'></div></div><div
+	// class='dhx_cal_larea'></div>";
 	scheduler.attachEvent("onTemplatesReady", function() {
 
 		var date_to_str = scheduler.date.date_to_str("%d");
