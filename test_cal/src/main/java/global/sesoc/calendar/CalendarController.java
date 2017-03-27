@@ -40,6 +40,15 @@ public class CalendarController {
 	}
 
 	@ResponseBody
+	@RequestMapping(value="showYr", method=RequestMethod.POST)
+	public ArrayList<Calendar> showYr(int thisYear) {
+		String date = "";
+		date +=thisYear;		
+		System.out.println(date+"년도");
+		logger.debug("showSchedule!");
+		return dao.listCalYr(date);
+	}
+	@ResponseBody
 	@RequestMapping(value="show", method=RequestMethod.POST)
 	public ArrayList<Calendar> showSchedule(int thisYear, int thisMonth) {
 		String date = "";
