@@ -6,6 +6,7 @@ public class Calendar {
 	private String start_date;
 	private String end_date;
 	private String text;
+	private String content;
 	
 	public int getId() {
 		return id;
@@ -31,8 +32,15 @@ public class Calendar {
 	public void setText(String text) {
 		this.text = text;
 	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
 	@Override
 	public String toString() {
-		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text + "]";
+		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
+				+ ", content=" + content + "]";
 	}
 }

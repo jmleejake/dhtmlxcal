@@ -8,8 +8,7 @@
 <script src="resources/jquery-3.1.1.min.js"></script>
 <script src="scheduler/dhtmlxscheduler.js" type="text/javascript"></script>
 <script src='scheduler/ext/dhtmlxscheduler_minical.js' type="text/javascript"></script>
-<script src="scheduler/ext/dhtmlxscheduler_recurring.js"
-	type="text/javascript"></script>
+<script src="scheduler/ext/dhtmlxscheduler_recurring.js" type="text/javascript"></script>
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
 //현재 연월 값!
@@ -20,56 +19,42 @@ $(function() {
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
 	getCalData(thisYear, thisMonth);
 	
-		
-		//시간 입력설정 셋팅하는 곳
-		//change type:"time" -> type:"calendar_time"
-		/*  scheduler.config.lightbox.sections = [
-		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
-		  {name:"time", height:72, type:"calendar_time", map_to:"auto" }
-		]; */
 		//설정
 		scheduler.config.wide_form = false;
 		scheduler.config.repeat_date = "%m/%d/%Y";
 		scheduler.config.include_end_by = true;
 		scheduler.config.start_on_monday = false;
-		scheduler.config.fix_tab_position = true; //스킨입히면 true	
-		scheduler.templates.event_text = function(start, end, ev) {
-			return '카테고리: ' + ev.text + '';
-		};//일정 카테고리별 나누기 	
-		//스킨
-		scheduler.skin = "flat";
+		scheduler.config.fix_tab_position = true; //스킨입히면 true		
+		//스킨 ===> css에도 바꿔줘야함!!!
+		scheduler.skin = "terrace";
 		//시작화면 설정
 		scheduler.init('scheduler_here', new Date(), "month");		
-		scheduler.templates.event_text = function(start,end,ev){
-			   return 'Subject: ' + ev.text + ''+ev.id;
-			};
+		//커스텀
+		var custom_form = document.getElementById("custom_form");
+		
+		scheduler.showLightbox = function(id){
+		    var ev = scheduler.getEvent(id);
+		    scheduler.startLightbox(id, custom_form );
+		   
+		    //document.getElementById("some_input").value = ev.text;
+		}
+		//needs to be attached to the 'save' button
+		function save_form() {
+		    var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
+		    
+		    //ev.text = document.getElementById("some_input").value;
+		    scheduler.endLightbox(true, custom_form);
+		}
+		//needs to be attached to the 'cancel' button
+		function close_form(argument) {
+		    scheduler.endLightbox(false, custom_form);
+		} 
 
-		//반복설정
-		 scheduler.locale.labels.section_title = "title";
-			 scheduler.config.lightbox.sections = [{
-				name:"title", 
-				height:80, 
-				map_to:"title", 
-				type:"textarea"
-			},{
-				name : "description",
-				height : 130,
-				map_to : "text",
-				type : "textarea",
-				focus : true
-			}, {
-				name : "recurring",
-				type : "recurring",
-				map_to : "rec_type",
-				button : "recurring",
-				form : "my_recurring_form"
-			}, {
-				name : "time",
-				height : 72,
-				type : "time", //time or calendar_time
-				map_to : "auto"
-			} ];  
- 		//미니캘린더 (스케줄러(주))
+			 
+			 
+			 
+			 
+ //미니캘린더 (스케줄러(주))
 			var calendar = scheduler.renderCalendar({
 			    container:"cal_here", 
 			    navigation:true,
@@ -130,7 +115,7 @@ function show_minical(){
 }
 	
 </script>
-<link rel="stylesheet" href="scheduler/dhtmlxscheduler_flat.css"
+<link rel="stylesheet" href="scheduler/dhtmlxscheduler.css"
 	type="text/css">
 <style type="text/css" media="screen">
 html, body {
@@ -169,50 +154,13 @@ html, body {
 			<div class="dhx_cal_tab" name="day_tab" style="right: 204px;"></div>
 			<div class="dhx_cal_tab" name="week_tab" style="right: 140px;"></div>
 			<div class="dhx_cal_tab" name="month_tab" style="right: 76px;"></div>
-			<!-- <div class="dhx_cal_tab" name="day_tab" style="right: 204px;"></div>
-			<div class="dhx_cal_tab" name="week_tab" style="right: 140px;"></div>
-			<div class="dhx_cal_tab" name="month_tab" style="right: 76px;"></div> -->
-			<!--이벤트 설정시 반복view  -->
-			<div class="dhx_form_repeat" id="my_recurring_form">
-				<form>
-					<div>
-						<select name="repeat">
-							<option value="day">매일</option>
-							<option value="week">매주</option>
-							<option value="month">매월</option>
-							<option value="year">매년</option>
-						</select>
-					</div>
-					<div>
-						<div style="display: none;" id="dhx_repeat_day">
-							<input type="hidden" name="day_type" value="d" /> <input
-								type="hidden" name="day_count" value="1" />
-						</div>
-						<div style="display: none;" id="dhx_repeat_week">
-							원하는 요일을 선택하여 주세요!:<br /> <label><input type="checkbox"
-								name="week_day" value="1" />월</label> <label><input
-								type="checkbox" name="week_day" value="2" />화</label> <label><input
-								type="checkbox" name="week_day" value="3" />수</label> <label><input
-								type="checkbox" name="week_day" value="4" />목</label> <label><input
-								type="checkbox" name="week_day" value="5" />금</label> <label><input
-								type="checkbox" name="week_day" value="6" />토</label> <label><input
-								type="checkbox" name="week_day" value="0" />일</label> <input
-								type="hidden" name="week_count" value="1" />
-						</div>
-						<div style="display: none;" id="dhx_repeat_month">
-							<label><input class="dhx_repeat_radio" type="hidden"
-								name="month_type" value="d" /></label> <input class="dhx_repeat_text"
-								type="text" name="month_day" value="1" />일<input
-								class="dhx_repeat_text" type="hidden" name="month_count" value="1" /><br />
-						</div>
-						<div style="display: none;" id="dhx_repeat_year">
-							<label><select name="year_month"><option value="0" selected >1월<option value="1">2월<option value="2">3월<option value="3">4월<option value="4">5월<option value="5">6월<option value="6">7월<option value="7">8월<option value="8">9월<option value="9">10월<option value="10">11월<option value="11">12월</select><input class="dhx_repeat_radio" type="hidden" name="year_type" value="d"/></label><input class="dhx_repeat_text" type="text" name="year_day" value="1" />일<br />
-						</div>
-					</div>
-					<input type="hidden" value="no" name="end">
-				</form>
+
+			<!--커스텀view  -->
+			<div style="display: none;" id='custom_form'>
+				<input type="button" value="check">
+			
 			</div>
-			<!--이벤트 설정시 반복view  -->
+			<!--커스텀view  -->
 		</div>
 		<div class="dhx_cal_header">header</div>
 		<div class="dhx_cal_data">data</div>

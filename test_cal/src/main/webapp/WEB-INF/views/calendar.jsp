@@ -45,18 +45,31 @@ $(function() {
 			};
 
 		//반복설정
-		 scheduler.locale.labels.section_title = "title";
+		 scheduler.locale.labels.section_title = "타이토루";
+		 scheduler.locale.labels.section_alarm = "알람설정";
+		
+ 		var alarm_opts = [
+ 			{key:"none", label:"없는거다요"}
+ 			, {key:"5", label:"고분마에"}
+ 			, {key:"10", label:"쥬뿐마에"}
+ 		];
 			 scheduler.config.lightbox.sections = [{
 				name:"title", 
 				height:80, 
-				map_to:"title", 
-				type:"textarea"
-			},{
+				map_to:"text", 
+				type:"textarea",
+				focus : true
+			 },{
 				name : "description",
 				height : 130,
-				map_to : "text",
-				type : "textarea",
-				focus : true
+				map_to : "content",
+				type : "textarea"
+			}, {
+				name:"alarm",
+				height:25,
+				type:"select",
+				options:alarm_opts,
+				map_to:"alarm_val"
 			}, {
 				name : "recurring",
 				type : "recurring",
@@ -77,6 +90,7 @@ $(function() {
 			        scheduler.setCurrentView(date, scheduler._mode);
 			    }
 			});
+ 		
  $('#getList').on('click', function(){
 	getCalData(thisYear, thisMonth);
  });
