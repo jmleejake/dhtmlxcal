@@ -20,25 +20,6 @@ $(function() {
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
 	getCalData(thisYear, thisMonth);
 	
-	//반복설정
-		 scheduler.config.lightbox.sections = [ {
-			name : "description",
-			height : 130,
-			map_to : "text",
-			type : "textarea",
-			focus : true
-		}, {
-			name : "recurring",
-			type : "recurring",
-			map_to : "rec_type",
-			button : "recurring",
-			form : "my_recurring_form"
-		}, {
-			name : "time",
-			height : 72,
-			type : "time", //time or calendar_time
-			map_to : "auto"
-		} ];  
 		//시간 입력설정 셋팅하는 곳
 		//change type:"time" -> type:"calendar_time"
 		 scheduler.config.lightbox.sections = [
@@ -62,6 +43,26 @@ $(function() {
 		scheduler.templates.event_text = function(start,end,ev){
 			   return 'Subject: ' + ev.text + ''+ev.id;
 			};
+
+		//반복설정
+			 scheduler.config.lightbox.sections = [ {
+				name : "description",
+				height : 130,
+				map_to : "text",
+				type : "textarea",
+				focus : true
+			}, {
+				name : "recurring",
+				type : "recurring",
+				map_to : "rec_type",
+				button : "recurring",
+				form : "my_recurring_form"
+			}, {
+				name : "time",
+				height : 72,
+				type : "time", //time or calendar_time
+				map_to : "auto"
+			} ];  
  		//미니캘린더 (스케줄러(주))
 			var calendar = scheduler.renderCalendar({
 			    container:"cal_here", 
