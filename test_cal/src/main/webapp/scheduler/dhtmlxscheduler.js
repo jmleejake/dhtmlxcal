@@ -6466,6 +6466,7 @@ scheduler.show_cover=function(){
 scheduler.save_lightbox=function(){
 	var data = this._lightbox_out({}, this._lame_copy(this.getEvent(this._lightbox_id)));
 	// [0001] 등록
+	alert(JSON.stringify(data));
 	$.ajax({
 			url : "save"
 			, type : "post"
@@ -6600,6 +6601,7 @@ scheduler._init_lightbox_events=function(){
 				}
 				break;
 			}
+			/* [0001] 엔터치면 저장되는 키이벤트 주석처리
 			case scheduler.keys.edit_save:
 				if ((e||event).shiftKey) return;
 				if(buttonTarget && buttonTarget.click){
@@ -6608,6 +6610,7 @@ scheduler._init_lightbox_events=function(){
 					scheduler.save_lightbox();
 				}
 				break;
+			*/
 			case scheduler.keys.edit_cancel:
 				scheduler.cancel_lightbox();
 				break;
