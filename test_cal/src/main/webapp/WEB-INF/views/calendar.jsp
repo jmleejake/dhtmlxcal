@@ -20,13 +20,13 @@ $(function() {
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
 	getCalData(thisYear, thisMonth);
 	
+		
 		//시간 입력설정 셋팅하는 곳
 		//change type:"time" -> type:"calendar_time"
-		 scheduler.config.lightbox.sections = [
+		/*  scheduler.config.lightbox.sections = [
 		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
 		  {name:"time", height:72, type:"calendar_time", map_to:"auto" }
-		];
-		 
+		]; */
 		//설정
 		scheduler.config.wide_form = false;
 		scheduler.config.repeat_date = "%m/%d/%Y";
@@ -45,7 +45,13 @@ $(function() {
 			};
 
 		//반복설정
-			 scheduler.config.lightbox.sections = [ {
+		 scheduler.locale.labels.section_title = "title";
+			 scheduler.config.lightbox.sections = [{
+				name:"title", 
+				height:80, 
+				map_to:"title", 
+				type:"textarea"
+			},{
 				name : "description",
 				height : 130,
 				map_to : "text",

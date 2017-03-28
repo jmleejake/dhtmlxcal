@@ -6466,6 +6466,7 @@ scheduler.show_cover=function(){
 scheduler.save_lightbox=function(){
 	var data = this._lightbox_out({}, this._lame_copy(this.getEvent(this._lightbox_id)));
 	// [0001] 등록
+	alert(JSON.stringify(data));
 	$.ajax({
 			url : "save"
 			, type : "post"
