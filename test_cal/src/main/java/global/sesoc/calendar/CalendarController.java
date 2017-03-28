@@ -39,6 +39,10 @@ public class CalendarController {
 		
 		return "calendar";
 	}
+	@RequestMapping(value = "custom", method = RequestMethod.GET)
+	public String custome() {
+		return "custom_cal";
+	}
 
 	@ResponseBody
 	@RequestMapping(value="showYr", method=RequestMethod.POST)
