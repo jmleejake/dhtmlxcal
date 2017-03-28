@@ -20,13 +20,13 @@ $(function() {
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
 	getCalData(thisYear, thisMonth);
 	
+		
 		//시간 입력설정 셋팅하는 곳
 		//change type:"time" -> type:"calendar_time"
-		 scheduler.config.lightbox.sections = [
+		/*  scheduler.config.lightbox.sections = [
 		  {name:"description", height:200, map_to:"text", type:"textarea", focus:true},
 		  {name:"time", height:72, type:"calendar_time", map_to:"auto" }
-		];
-		 
+		]; */
 		//설정
 		scheduler.config.wide_form = false;
 		scheduler.config.repeat_date = "%m/%d/%Y";
@@ -45,12 +45,31 @@ $(function() {
 			};
 
 		//반복설정
-			 scheduler.config.lightbox.sections = [ {
+		 scheduler.locale.labels.section_title = "타이토루";
+		 scheduler.locale.labels.section_alarm = "알람설정";
+		
+ 		var alarm_opts = [
+ 			{key:"none", label:"없는거다요"}
+ 			, {key:"5", label:"고분마에"}
+ 			, {key:"10", label:"쥬뿐마에"}
+ 		];
+			 scheduler.config.lightbox.sections = [{
+				name:"title", 
+				height:80, 
+				map_to:"text", 
+				type:"textarea",
+				focus : true
+			 },{
 				name : "description",
 				height : 130,
-				map_to : "text",
-				type : "textarea",
-				focus : true
+				map_to : "content",
+				type : "textarea"
+			}, {
+				name:"alarm",
+				height:25,
+				type:"select",
+				options:alarm_opts,
+				map_to:"alarm_val"
 			}, {
 				name : "recurring",
 				type : "recurring",
@@ -71,6 +90,7 @@ $(function() {
 			        scheduler.setCurrentView(date, scheduler._mode);
 			    }
 			});
+ 		
  $('#getList').on('click', function(){
 	getCalData(thisYear, thisMonth);
  });
