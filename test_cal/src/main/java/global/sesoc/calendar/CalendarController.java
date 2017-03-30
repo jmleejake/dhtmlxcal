@@ -4,8 +4,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
+import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +70,78 @@ public class CalendarController {
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	public String saveSchedule(Calendar cal) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		cal.setStart_date(sdf.format(new Date(cal.getStart_date())));
-		cal.setEnd_date(sdf.format(new Date(cal.getEnd_date())));
-		logger.debug("showSchedule : \n{}", cal);
+		logger.debug("cal :: \n{}", cal);
+		logger.debug("--------------------");
+		logger.debug("{} ~ {}", cal.getStart_date(), cal.getEnd_date());
+		StringTokenizer st_start_date = new StringTokenizer(cal.getStart_date(), " ");
+		StringTokenizer st_end_date = new StringTokenizer(cal.getEnd_date(), " ");
+		
+		HashMap<String, Object> month_map = new HashMap<String, Object>();
+		//month_short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+		month_map.put("Jan", "01");
+		month_map.put("Feb", "02");
+		month_map.put("Mar", "03");
+		month_map.put("Apr", "04");
+		month_map.put("May", "05");
+		month_map.put("Jun", "06");
+		month_map.put("Jul", "07");
+		month_map.put("Aug", "08");
+		month_map.put("Sep", "09");
+		month_map.put("Oct", "10");
+		month_map.put("Nov", "11");
+		month_map.put("Dec", "12");
+		
+		logger.debug("+++++++++++++");
+		String syear = "";
+		String smonth = "";
+		String sday = "";
+		String stime = "";
+		int i=0;
+		
+		while (st_start_date.hasMoreElements()) {
+			// month-short
+			if(i==1) smonth = month_map.get(st_start_date.nextElement().toString()).toString();
+			// day
+			else if(i==2) sday = st_start_date.nextElement().toString();
+			// year
+			else if(i==3) syear = st_start_date.nextElement().toString();
+			// time
+			else if(i==4) stime = st_start_date.nextElement().toString();
+			// others
+			else st_start_date.nextElement();
+			
+			i++;
+		}
+		
+		logger.debug("start_time: {}-{}-{} {}", syear, smonth, sday, stime);
+		
+		logger.debug("+++++++++++++");
+		String eyear = "";
+		String emonth = "";
+		String eday = "";
+		String etime = "";
+		i=0;
+		
+		while (st_end_date.hasMoreElements()) {
+			// month-short
+			if(i==1) emonth = month_map.get(st_end_date.nextElement().toString()).toString();
+			// day
+			else if(i==2) eday = st_end_date.nextElement().toString();
+			// year
+			else if(i==3) eyear = st_end_date.nextElement().toString();
+			// time
+			else if(i==4) etime = st_end_date.nextElement().toString();
+			// others
+			else st_end_date.nextElement();
+			
+			i++;
+		}
+		
+		logger.debug("end_time: {}-{}-{} {}", eyear, emonth, eday, etime);
+		
+		cal.setStart_date(syear+ "-" + smonth + "-" + sday + " " + stime);
+		cal.setEnd_date(eyear+ "-" + emonth + "-" + eday + " " + etime);
+		
 		dao.saveCal(cal);
 		return "";
 	}
