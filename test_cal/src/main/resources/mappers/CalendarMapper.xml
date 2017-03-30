@@ -43,4 +43,21 @@ values
 delete from events
 where id = #{id}
 </delete>
+
+<!-- id에 대한 이벤트 존재여부 구하기 -->
+<select id="selectEvent" parameterType="string" resultType="Calendar">
+select * from events where id = #{id}
+</select>
+
+<!-- 일정 수정 -->
+<update id="updateEvent" parameterType="Calendar">
+	update events
+	set 
+		text = #{text}
+		, content = #{content}
+		, start_date = to_date(#{start_date}, 'yyyy-mm-dd hh24:mi:ss')
+		, end_date = to_date(#{end_date}, 'yyyy-mm-dd hh24:mi:ss')
+	where
+		id = #{id}
+</update>
 </mapper>

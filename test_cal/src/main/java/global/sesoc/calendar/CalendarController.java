@@ -68,13 +68,22 @@ public class CalendarController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="save", method=RequestMethod.POST)
-	public String saveSchedule(Calendar cal) {
-		logger.debug("cal :: \n{}", cal);
-		logger.debug("--------------------");
-		logger.debug("{} ~ {}", cal.getStart_date(), cal.getEnd_date());
-		StringTokenizer st_start_date = new StringTokenizer(cal.getStart_date(), " ");
-		StringTokenizer st_end_date = new StringTokenizer(cal.getEnd_date(), " ");
+	@RequestMapping(value="save", method=RequestMethod.POST, produces="application/json;charset=utf-8")
+	public String saveSchedule(
+			String id
+			, String text
+			, String content
+			, String start_date
+			, String end_date) {
+		logger.debug("-------------------- event save process start");
+		Calendar vo = new Calendar();
+		vo.setId(id);
+		vo.setText(text);
+		vo.setContent(content);
+		vo.setStart_date(start_date);
+		vo.setEnd_date(end_date);
+		
+		logger.debug("cal :: \n{}", vo);
 		
 		HashMap<String, Object> month_map = new HashMap<String, Object>();
 		//month_short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
@@ -90,6 +99,9 @@ public class CalendarController {
 		month_map.put("Oct", "10");
 		month_map.put("Nov", "11");
 		month_map.put("Dec", "12");
+		
+		StringTokenizer st_start_date = new StringTokenizer(vo.getStart_date(), " ");
+		StringTokenizer st_end_date = new StringTokenizer(vo.getEnd_date(), " ");
 		
 		logger.debug("+++++++++++++");
 		String syear = "";
@@ -139,10 +151,21 @@ public class CalendarController {
 		
 		logger.debug("end_time: {}-{}-{} {}", eyear, emonth, eday, etime);
 		
-		cal.setStart_date(syear+ "-" + smonth + "-" + sday + " " + stime);
-		cal.setEnd_date(eyear+ "-" + emonth + "-" + eday + " " + etime);
+		vo.setStart_date(syear+ "-" + smonth + "-" + sday + " " + stime);
+		vo.setEnd_date(eyear+ "-" + emonth + "-" + eday + " " + etime);
 		
-		dao.saveCal(cal);
+		Calendar exist = dao.getEvent(id);
+		logger.debug("exist: {}", exist);
+		if(exist != null) {
+			logger.debug("-------------------- event update process start");
+			dao.modifyEvent(vo);
+			logger.debug("-------------------- event update process end");
+		} else {
+			logger.debug("-------------------- event create process start");
+			dao.saveCal(vo);
+			logger.debug("-------------------- event create process end");
+		}
+		logger.debug("-------------------- event save process end");
 		return "";
 	}
 	

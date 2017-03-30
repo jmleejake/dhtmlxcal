@@ -2,16 +2,16 @@ package global.sesoc.calendar.vo;
 
 public class Calendar {
 	
-	private int id;
+	private String id;
 	private String start_date;
 	private String end_date;
 	private String text;
 	private String content;
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getStart_date() {

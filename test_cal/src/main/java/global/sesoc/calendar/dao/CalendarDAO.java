@@ -57,4 +57,26 @@ public class CalendarDAO {
 			// TODO Auto-generated method stub
 			return null;
 		}
+		
+		public Calendar getEvent(String id) {
+			Calendar ret = null;
+			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
+			try {
+				ret = mapper.selectEvent(id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return ret;
+		}
+		
+		public int modifyEvent(Calendar vo) {
+			int ret = 0;
+			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
+			try {
+				ret = mapper.updateEvent(vo);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return ret;
+		}
 }

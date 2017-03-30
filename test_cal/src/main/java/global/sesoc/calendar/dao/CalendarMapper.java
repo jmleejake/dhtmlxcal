@@ -15,4 +15,6 @@ public interface CalendarMapper {
 	public int saveCal(Calendar calendar) throws Exception;
 	//3)일정 삭제 
 	public int delCal(int calId) throws Exception;
+	public Calendar selectEvent(String id) throws Exception;
+	public int updateEvent(Calendar vo) throws Exception;
 }
