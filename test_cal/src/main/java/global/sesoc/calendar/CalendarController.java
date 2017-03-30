@@ -74,7 +74,8 @@ public class CalendarController {
 			, String text
 			, String content
 			, String start_date
-			, String end_date) {
+			, String end_date
+			, String rec_type) {
 		logger.debug("-------------------- event save process start");
 		Calendar vo = new Calendar();
 		vo.setId(id);
@@ -82,6 +83,7 @@ public class CalendarController {
 		vo.setContent(content);
 		vo.setStart_date(start_date);
 		vo.setEnd_date(end_date);
+		vo.setRec_type(rec_type);
 		
 		logger.debug("cal :: \n{}", vo);
 		

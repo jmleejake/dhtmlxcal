@@ -13,7 +13,8 @@
   , text 
   , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date 
   , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
-  , content 
+  , content
+  , rec_type
   from events
   where start_date >= to_date(#{date}, 'yyyy-mm-dd')
   and end_date <= last_day(to_date(#{date}, 'yyyy-mm-dd'))
@@ -28,6 +29,9 @@ insert into events
 	, start_date
 	, end_date
 	, content
+	<if test="rec_type != null">
+	, rec_type
+	</if>
 	)
 values 
 	(
@@ -36,6 +40,10 @@ values
 	, to_date(#{start_date}, 'yyyy-mm-dd hh24:mi:ss')
 	, to_date(#{end_date}, 'yyyy-mm-dd hh24:mi:ss')
 	, #{content}
+	<if test="rec_type != null">
+	, #{rec_type}
+	</if>
+	
 	)
 </insert>
 <!-- 3)캘린더 일정 삭제하기 -->
@@ -57,6 +65,9 @@ select * from events where id = #{id}
 		, content = #{content}
 		, start_date = to_date(#{start_date}, 'yyyy-mm-dd hh24:mi:ss')
 		, end_date = to_date(#{end_date}, 'yyyy-mm-dd hh24:mi:ss')
+		<if test="rec_type != null">
+		, rec_type = #{rec_type}
+		</if>
 	where
 		id = #{id}
 </update>
