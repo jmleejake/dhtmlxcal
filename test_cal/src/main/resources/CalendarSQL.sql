@@ -7,7 +7,8 @@ create table events(
   start_date date, 
   end_date date,
   text varchar2(500),
-  content varchar2(2000)
+  content varchar2(2000),
+  rec_type varchar2(50)
   );
   
   CREATE SEQUENCE events_seq;

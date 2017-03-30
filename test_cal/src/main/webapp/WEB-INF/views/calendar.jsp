@@ -127,6 +127,7 @@ function showEvents(ret) {
 				, start_date:event.start_date
 				, end_date:event.end_date
 				, content:event.content
+				, rec_type:event.rec_type
 		}
 		calArray.push(calObj);
 	});

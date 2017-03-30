@@ -6477,6 +6477,7 @@ scheduler.save_lightbox=function(){
 				, content: data.content
 				, start_date: data.start_date
 				, end_date: data.end_date
+				, rec_type: data.rec_type
 			}
 			, success : function(){
 				getCalData(thisYear,thisMonth); // 스케쥴 리프레쉬
