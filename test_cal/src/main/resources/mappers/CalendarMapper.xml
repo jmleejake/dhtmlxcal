@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.calendar.dao.CalendarMapper">
+
+<!-- 1)캘린더 일정 월별 불러오기 -->
+<select id="listCal" resultType="Calendar" parameterType="String">
+  <![CDATA[
+  select 
+  id 
+  , text 
+  , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date 
+  , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
+  , content 
+  from events
+  where start_date >= to_date(#{date}, 'yyyy-mm-dd')
+  and end_date <= last_day(to_date(#{date}, 'yyyy-mm-dd'))
+  ]]>
+</select>
+<!-- 2)캘린더 일정 저장하기 -->
+<insert id="saveCal" parameterType="Calendar">
+insert into events 
+	(
+	id
+	, text
+	, start_date
+	, end_date
+	, content
+	)
+values 
+	(
+	events_seq.nextval
+	, #{text}
+	, to_date(#{start_date}, 'yyyy-mm-dd hh24:mi:ss')
+	, to_date(#{end_date}, 'yyyy-mm-dd hh24:mi:ss')
+	, #{content}
+	)
+</insert>
+<!-- 3)캘린더 일정 삭제하기 -->
+<delete id="delCal" parameterType="int">
+delete from events
+where id = #{id}
+</delete>
+
+<!-- id에 대한 이벤트 존재여부 구하기 -->
+<select id="selectEvent" parameterType="string" resultType="Calendar">
+select * from events where id = #{id}
+</select>
+
+<!-- 일정 수정 -->
+<update id="updateEvent" parameterType="Calendar">
+	update events
+	set 
+		text = #{text}
+		, content = #{content}
+		, start_date = to_date(#{start_date}, 'yyyy-mm-dd hh24:mi:ss')
+		, end_date = to_date(#{end_date}, 'yyyy-mm-dd hh24:mi:ss')
+	where
+		id = #{id}
+</update>
+</mapper>

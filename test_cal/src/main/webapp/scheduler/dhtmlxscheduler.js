@@ -6466,17 +6466,23 @@ scheduler.show_cover=function(){
 scheduler.save_lightbox=function(){
 	var data = this._lightbox_out({}, this._lame_copy(this.getEvent(this._lightbox_id)));
 	// [0001] 등록
-	alert(JSON.stringify(data));
+	console.log(scheduler._lightbox_id);
+	console.log(JSON.stringify(data));
 	$.ajax({
-			url : "save"
+		url : "save"
 			, type : "post"
-			, data : data
+			, data : {
+				id: scheduler._lightbox_id
+				, text: data.text
+				, content: data.content
+				, start_date: data.start_date
+				, end_date: data.end_date
+			}
 			, success : function(){
-				alert("saved!!!");
 				getCalData(thisYear,thisMonth); // 스케쥴 리프레쉬
 			}
 			,error : function(){
-				alert("Not saved!!!")
+				getCalData(thisYear,thisMonth); // 스케쥴 리프레쉬
 			}
 	});
 //	scheduler.getSaveEvent(data);
@@ -6484,8 +6490,6 @@ scheduler.save_lightbox=function(){
 	if (this.checkEvent("onEventSave") && !this.callEvent("onEventSave",[this._lightbox_id, data, this._new_event]))
 		return;
 	this._empty_lightbox(data);
-	console.log("1111111111");
-	console.log(this._lightbox_id);
 	scheduler.deleteEvent(this._lightbox_id);
 	this.hide_lightbox();
 };

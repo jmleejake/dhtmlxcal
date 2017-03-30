@@ -121,7 +121,13 @@ function getCalData(thisYear, thisMonth) {
 function showEvents(ret) {
 	var calArray = new Array();
 	$.each(ret, function(i, event) {
-		var calObj = {id:event.id, text:event.text, start_date:event.start_date, end_date:event.end_date}
+		var calObj = {
+				id:event.id
+				, text:event.text
+				, start_date:event.start_date
+				, end_date:event.end_date
+				, content:event.content
+		}
 		calArray.push(calObj);
 	});
 	scheduler.parse(calArray, "json");
