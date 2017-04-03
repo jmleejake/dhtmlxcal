@@ -15,6 +15,12 @@ public interface CalendarMapper {
 	public int saveCal(Calendar calendar) throws Exception;
 	//3)일정 삭제 
 	public int delCal(int calId) throws Exception;
+	// 아이디에 해당하는 이벤트 존재여부 구하기 (수정/등록 분기처리시 사용)
 	public Calendar selectEvent(String id) throws Exception;
+	// 일정 수정
 	public int updateEvent(Calendar vo) throws Exception;
+	// 최신글번호 구하기 (반복등록시 필요)
+	public String selectLatestEventNum() throws Exception;
+	// 날짜 구하기 (반복등록시 필요)
+	public String selectNextDate(String current_date) throws Exception;
 }

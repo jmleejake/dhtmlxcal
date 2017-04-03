@@ -131,7 +131,6 @@ function showEvents(ret) {
 				, content:event.content
 				, rec_type:event.rec_type
 				, event_pid:event.event_pid
-				, event_length:event.event_length
 		}
 		calArray.push(calObj);
 	});

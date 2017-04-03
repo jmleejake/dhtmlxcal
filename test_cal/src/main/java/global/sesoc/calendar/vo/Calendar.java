@@ -11,7 +11,7 @@ public class Calendar {
 	private String content;
 	private String rec_type;
 	private String event_pid;
-	private Timestamp event_length;
+	private long event_length;
 	
 	public String getId() {
 		return id;
@@ -55,18 +55,18 @@ public class Calendar {
 	public void setEvent_pid(String event_pid) {
 		this.event_pid = event_pid;
 	}
-	public Timestamp getEvent_length() {
+	public long getEvent_length() {
 		return event_length;
 	}
-	public void setEvent_length(Timestamp event_length) {
+	public void setEvent_length(long event_length) {
 		this.event_length = event_length;
 	}
 	
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
-				+ ", content=" + content + ", rec_type=" + rec_type + ", event_pid=" + event_pid + ", event_length="
-				+ event_length + "]";
+				+ ", content=" + content + ", rec_type=" + rec_type + ", event_pid=" + event_pid 
+				+ ", event_length " + event_length + "]";
 	}
 	
 }

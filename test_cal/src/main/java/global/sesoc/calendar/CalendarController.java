@@ -146,13 +146,7 @@ public class CalendarController {
 				}
 			}
 			// year
-			else if(i==3) {
-				int year = Integer.parseInt(st_end_date.nextElement().toString());
-				if(vo.getRec_type() != null) { //반복을 설정하는 패턴이 존재하면 end_date에 5년을 더해준다.
-					year += 5;
-				}
-				eyear = year+"";
-			}
+			else if(i==3) eyear = st_end_date.nextElement().toString();
 			// time
 			else if(i==4) etime = st_end_date.nextElement().toString();
 			// others

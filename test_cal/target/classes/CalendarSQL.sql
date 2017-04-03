@@ -10,7 +10,7 @@ create table events(
   content varchar2(2000),
   rec_type varchar2(50),
   event_pid number,
-  event_length timestamp
+  event_length number default 0
 );
   
   CREATE SEQUENCE events_seq;
@@ -40,3 +40,4 @@ commit
 
 
 --일정 삭제하기
+  
