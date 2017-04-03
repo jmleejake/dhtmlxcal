@@ -1,5 +1,7 @@
 package global.sesoc.calendar.vo;
 
+import java.sql.Timestamp;
+
 public class Calendar {
 	
 	private String id;
@@ -8,6 +10,9 @@ public class Calendar {
 	private String text;
 	private String content;
 	private String rec_type;
+	private String event_pid;
+	private Timestamp event_length;
+	
 	public String getId() {
 		return id;
 	}
@@ -44,9 +49,24 @@ public class Calendar {
 	public void setRec_type(String rec_type) {
 		this.rec_type = rec_type;
 	}
+	public String getEvent_pid() {
+		return event_pid;
+	}
+	public void setEvent_pid(String event_pid) {
+		this.event_pid = event_pid;
+	}
+	public Timestamp getEvent_length() {
+		return event_length;
+	}
+	public void setEvent_length(Timestamp event_length) {
+		this.event_length = event_length;
+	}
+	
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
-				+ ", content=" + content + ", rec_type=" + rec_type + "]";
+				+ ", content=" + content + ", rec_type=" + rec_type + ", event_pid=" + event_pid + ", event_length="
+				+ event_length + "]";
 	}
+	
 }

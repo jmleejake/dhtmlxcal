@@ -71,17 +71,19 @@ $(function() {
 				options:alarm_opts,
 				map_to:"alarm_val"
 			}, {
+				name : "time",
+				height : 72,
+				type : "time", //time or calendar_time
+				map_to : "auto"
+			}, {
 				name : "recurring",
 				type : "recurring",
 				map_to : "rec_type",
 				button : "recurring",
 				form : "my_recurring_form"
-			}, {
-				name : "time",
-				height : 72,
-				type : "time", //time or calendar_time
-				map_to : "auto"
-			} ];  
+			}];  
+			 
+			
  		//미니캘린더 (스케줄러(주))
 			var calendar = scheduler.renderCalendar({
 			    container:"cal_here", 
@@ -128,6 +130,8 @@ function showEvents(ret) {
 				, end_date:event.end_date
 				, content:event.content
 				, rec_type:event.rec_type
+				, event_pid:event.event_pid
+				, event_length:event.event_length
 		}
 		calArray.push(calObj);
 	});
@@ -238,6 +242,8 @@ html, body {
 		<div class="dhx_cal_header">header</div>
 		<div class="dhx_cal_data">data</div>
 	</div>
+	
+	
 			<!-- 스케줄러 옆에 미니 달력! -->
 			<div style='float: left; padding:10px;'>
         <div id="cal_here" style='width:250px;'></div></div>

@@ -8,8 +8,10 @@ create table events(
   end_date date,
   text varchar2(500),
   content varchar2(2000),
-  rec_type varchar2(50)
-  );
+  rec_type varchar2(50),
+  event_pid number,
+  event_length timestamp
+);
   
   CREATE SEQUENCE events_seq;
   

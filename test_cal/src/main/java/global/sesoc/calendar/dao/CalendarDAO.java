@@ -31,6 +31,26 @@ public class CalendarDAO {
 		}
 		//2)일정 저장
 		public int saveCal(Calendar calendar){
+			/*
+			 * 무제한 반복이라고 했을때 5년을 치고 컨트롤러로 넘겼을때...
+			 * 
+			 * .CalendarController - 0 : day
+				DEBUG: global.sesoc.calendar.CalendarController - 1 : 1
+				DEBUG: global.sesoc.calendar.CalendarController - 2 : 
+				DEBUG: global.sesoc.calendar.CalendarController - 3 : 
+				DEBUG: global.sesoc.calendar.CalendarController - 4 : #no
+				
+				매월 15일로 설정할 경우
+				CalendarController - start_time: 2017-04-15 00:00:00
+				DEBUG: global.sesoc.calendar.CalendarController - +++++++++++++
+				DEBUG: global.sesoc.calendar.CalendarController - end_time: 2022-04-05 00:05:00
+				DEBUG: global.sesoc.calendar.CalendarController - 0 : month
+				DEBUG: global.sesoc.calendar.CalendarController - 1 : 1
+				DEBUG: global.sesoc.calendar.CalendarController - 2 : 
+				DEBUG: global.sesoc.calendar.CalendarController - 3 : 
+				DEBUG: global.sesoc.calendar.CalendarController - 4 : #no
+			 * */
+			
 			int result = -1;
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
 			try {

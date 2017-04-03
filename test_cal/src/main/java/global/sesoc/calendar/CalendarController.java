@@ -74,6 +74,9 @@ public class CalendarController {
 		
 		logger.debug("cal :: \n{}", vo);
 		
+		/*
+		 * 시작일자 종료일자의 월에 대한 세팅
+		 * */
 		HashMap<String, Object> month_map = new HashMap<String, Object>();
 		//month_short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 		month_map.put("Jan", "01");
@@ -93,6 +96,9 @@ public class CalendarController {
 		StringTokenizer st_end_date = new StringTokenizer(vo.getEnd_date(), " ");
 		
 		logger.debug("+++++++++++++");
+		/*
+		 * 시작일자 세팅
+		 * */
 		String syear = "";
 		String smonth = "";
 		String sday = "";
@@ -117,6 +123,9 @@ public class CalendarController {
 		logger.debug("start_time: {}-{}-{} {}", syear, smonth, sday, stime);
 		
 		logger.debug("+++++++++++++");
+		/*
+		 * 종료일자 세팅
+		 * */
 		String eyear = "";
 		String emonth = "";
 		String eday = "";
@@ -127,9 +136,23 @@ public class CalendarController {
 			// month-short
 			if(i==1) emonth = month_map.get(st_end_date.nextElement().toString()).toString();
 			// day
-			else if(i==2) eday = st_end_date.nextElement().toString();
+			else if(i==2) {
+				eday = st_end_date.nextElement().toString();
+				
+				if(vo.getRec_type() != null) {
+					if("month".equals(vo.getRec_type().split("_")[0])) {
+						eday = sday; // 반복을 설정하는 패턴이 존재하며, 매월 x일에 반복하는 설정이면 시작일자의 일을 가져와 종료일에 넣어준다.
+					}
+				}
+			}
 			// year
-			else if(i==3) eyear = st_end_date.nextElement().toString();
+			else if(i==3) {
+				int year = Integer.parseInt(st_end_date.nextElement().toString());
+				if(vo.getRec_type() != null) { //반복을 설정하는 패턴이 존재하면 end_date에 5년을 더해준다.
+					year += 5;
+				}
+				eyear = year+"";
+			}
 			// time
 			else if(i==4) etime = st_end_date.nextElement().toString();
 			// others
@@ -145,6 +168,7 @@ public class CalendarController {
 		
 		Calendar exist = dao.getEvent(vo.getId());
 		logger.debug("exist: {}", exist);
+		
 		if(exist != null) {
 			logger.debug("-------------------- event update process start");
 			dao.modifyEvent(vo);
@@ -154,6 +178,7 @@ public class CalendarController {
 			dao.saveCal(vo);
 			logger.debug("-------------------- event create process end");
 		}
+		
 		logger.debug("-------------------- event save process end");
 		return "";
 	}
