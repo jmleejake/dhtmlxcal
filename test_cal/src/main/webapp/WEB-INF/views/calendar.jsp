@@ -13,17 +13,13 @@
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
 //현재 연월 값!
-var date = new Date();
-var thisMonth = date.getMonth();
-var thisYear = "";
-
-// var thisMonth = new Date().getMonth()+1;
-// var thisYear = new Date().getFullYear();
+var m_oMonth = new Date();
+m_oMonth.setDate(1);
 
 $(function() {	
 	// DB에서 가져오기
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
-	getCalData(thisYear, thisMonth);
+	getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
 	
 	
 		//시간 입력설정 셋팅하는 곳
@@ -97,29 +93,20 @@ $(function() {
 			        scheduler.setCurrentView(date, scheduler._mode);
 			    }
 			});
- var m_oMonth = new Date();
-	m_oMonth.setDate(1);
+
  		
  $('#getList').on('click', function(){
-	getCalData(thisYear, thisMonth);
+	 getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
  });
+ 
+ // 월 변경
  $('.dhx_cal_prev_button').on('click', function(){
-	 date.setDate(date.getMonth() - 1);
-	 alert(date.getFullYear() + " / " + date.getMonth());
-// 	 	thisMonth-=1;
-// 	 	alert(thisMonth+"/"+thisYear);
-// 		getCalData(thisYear, thisMonth);
-m_oMonth.setMonth(m_oMonth.getMonth() - 1);
-alert(m_oMonth);
+	 m_oMonth.setMonth(m_oMonth.getMonth() - 1);
+	 getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
 	 });
  $('.dhx_cal_next_button').on('click', function(){
 	 m_oMonth.setMonth(m_oMonth.getMonth() + 1);
-alert(m_oMonth);
-// 	 	thisMonth+=1;
-	 	/* alert(thisMonth+"/"+thisYear);
-	 	alert(thisMonth%12); */
-	 	//alert(thisYear+parseInt(thisMonth/12)+"/"+thisMonth%12)
- 		getCalData(thisYear, thisMonth);
+	 getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
 	 });
  
   

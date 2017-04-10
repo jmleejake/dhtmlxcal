@@ -1,7 +1,5 @@
 package global.sesoc.calendar.vo;
 
-import java.sql.Timestamp;
-
 public class Calendar {
 	
 	private String id;
@@ -12,6 +10,8 @@ public class Calendar {
 	private String rec_type;
 	private String event_pid;
 	private long event_length;
+	private String _end_date; // 반복설정시 종료일자
+	private String _start_date; // 매월반복 설정시 시작일자
 	
 	public String getId() {
 		return id;
@@ -61,12 +61,24 @@ public class Calendar {
 	public void setEvent_length(long event_length) {
 		this.event_length = event_length;
 	}
+	public String get_end_date() {
+		return _end_date;
+	}
+	public void set_end_date(String _end_date) {
+		this._end_date = _end_date;
+	}
+	public String get_start_date() {
+		return _start_date;
+	}
+	public void set_start_date(String _start_date) {
+		this._start_date = _start_date;
+	}
 	
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
-				+ ", content=" + content + ", rec_type=" + rec_type + ", event_pid=" + event_pid 
-				+ ", event_length " + event_length + "]";
+				+ ", content=" + content + ", rec_type=" + rec_type + ", event_pid=" + event_pid + ", event_length="
+				+ event_length + ", _end_date=" + _end_date + ", _start_date=" + _start_date + "]";
 	}
 	
 }

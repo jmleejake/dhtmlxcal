@@ -5,6 +5,7 @@ dhtmlxScheduler v.4.4.0 Stardard
 This software is covered by GPL license. You also can obtain Commercial or Enterprise license to use it in non-GPL project - please contact sales@dhtmlx.com. Usage without proper license is prohibited.
 
 (c) Dinamenta, UAB.
+[0001] customizing
 */
 window.dhtmlXScheduler = window.scheduler = { version: "4.4.0" };
 
@@ -6468,6 +6469,7 @@ scheduler.save_lightbox=function(){
 	// [0001] 등록
 	console.log(scheduler._lightbox_id);
 	console.log(JSON.stringify(data));
+	console.log(data._end_date);
 	$.ajax({
 		url : "save"
 			, type : "post"
@@ -6478,12 +6480,13 @@ scheduler.save_lightbox=function(){
 				, start_date: data.start_date
 				, end_date: data.end_date
 				, rec_type: data.rec_type
+				, _end_date : data._end_date
 			}
 			, success : function(){
-				getCalData(thisYear,thisMonth); // 스케쥴 리프레쉬
+				getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1); // 스케쥴 리프레쉬
 			}
 			,error : function(){
-				getCalData(thisYear,thisMonth); // 스케쥴 리프레쉬
+				getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1); // 스케쥴 리프레쉬
 			}
 	});
 //	scheduler.getSaveEvent(data);
@@ -6550,6 +6553,7 @@ scheduler._init_lightbox_events=function(){
 							, method : "post"
 							, data : {"id" : scheduler._lightbox_id}
 							, success : function(){
+								getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
 								alert("deleted!!!");
 							}
 							,error : function(){

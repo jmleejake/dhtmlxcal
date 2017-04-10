@@ -1,14 +1,12 @@
 package global.sesoc.calendar;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,14 +67,13 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST, produces="application/json;charset=utf-8")
-	public String saveSchedule(Calendar vo) {
+	public String saveSchedule(Calendar vo, String _end_date) {
 		logger.debug("-------------------- event save process start");
 		
 		logger.debug("cal :: \n{}", vo);
+		logger.debug("{}", _end_date);
 		
-		/*
-		 * 시작일자 종료일자의 월에 대한 세팅
-		 * */
+		// 시작일자 종료일자의 월에 대한 세팅
 		HashMap<String, Object> month_map = new HashMap<String, Object>();
 		//month_short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 		month_map.put("Jan", "01");
@@ -95,16 +92,16 @@ public class CalendarController {
 		StringTokenizer st_start_date = new StringTokenizer(vo.getStart_date(), " ");
 		StringTokenizer st_end_date = new StringTokenizer(vo.getEnd_date(), " ");
 		
+		StringTokenizer st_recurring_end_date = null;
+		StringTokenizer st_recurring_start_date = null;
+		
+		int i=0;
 		logger.debug("+++++++++++++");
-		/*
-		 * 시작일자 세팅
-		 * */
+		// 시작일자 세팅
 		String syear = "";
 		String smonth = "";
 		String sday = "";
 		String stime = "";
-		int i=0;
-		
 		while (st_start_date.hasMoreElements()) {
 			// month-short
 			if(i==1) smonth = month_map.get(st_start_date.nextElement().toString()).toString();
@@ -123,9 +120,8 @@ public class CalendarController {
 		logger.debug("start_time: {}-{}-{} {}", syear, smonth, sday, stime);
 		
 		logger.debug("+++++++++++++");
-		/*
-		 * 종료일자 세팅
-		 * */
+		
+		// 종료일자 세팅
 		String eyear = "";
 		String emonth = "";
 		String eday = "";
@@ -136,15 +132,7 @@ public class CalendarController {
 			// month-short
 			if(i==1) emonth = month_map.get(st_end_date.nextElement().toString()).toString();
 			// day
-			else if(i==2) {
-				eday = st_end_date.nextElement().toString();
-				
-				if(vo.getRec_type() != null) {
-					if("month".equals(vo.getRec_type().split("_")[0])) {
-						eday = sday; // 반복을 설정하는 패턴이 존재하며, 매월 x일에 반복하는 설정이면 시작일자의 일을 가져와 종료일에 넣어준다.
-					}
-				}
-			}
+			else if(i==2) eday = st_end_date.nextElement().toString();
 			// year
 			else if(i==3) eyear = st_end_date.nextElement().toString();
 			// time
@@ -159,6 +147,79 @@ public class CalendarController {
 		
 		vo.setStart_date(syear+ "-" + smonth + "-" + sday + " " + stime);
 		vo.setEnd_date(eyear+ "-" + emonth + "-" + eday + " " + etime);
+		
+		
+		// 매월 반복 설정시 시작일자 세팅
+		i=0;
+		if(vo.get_start_date() != null) {
+			if(!vo.get_start_date().equals("")) {
+				st_recurring_start_date = new StringTokenizer(vo.get_start_date(), " ");
+				
+				while (st_recurring_start_date.hasMoreElements()) {
+					// month-short
+					if(i==1) smonth = month_map.get(st_recurring_start_date.nextElement().toString()).toString();
+					// day
+					else if(i==2) sday = st_recurring_start_date.nextElement().toString();
+					// year
+					else if(i==3) syear = st_recurring_start_date.nextElement().toString();
+					// time
+					else if(i==4) stime = st_recurring_start_date.nextElement().toString();
+					// others
+					else st_recurring_start_date.nextElement();
+					
+					i++;
+				}
+				
+				logger.debug("start_time: {}-{}-{} {}", syear, smonth, sday, stime);
+				vo.set_start_date(syear+ "-" + smonth + "-" + sday + " " + stime);
+			}
+		}
+		
+		// 반복설정시 종료일자 세팅
+		i=0;
+		if(vo.get_end_date() != null) {
+			if(!vo.get_end_date().equals("")) {
+				st_recurring_end_date = new StringTokenizer(vo.get_end_date(), " ");
+				
+				while (st_recurring_end_date.hasMoreElements()) {
+					// month-short
+					if(i==1) emonth = month_map.get(st_recurring_end_date.nextElement().toString()).toString();
+					// day
+					else if(i==2) eday = st_recurring_end_date.nextElement().toString();
+					// year
+					else if(i==3) eyear = st_recurring_end_date.nextElement().toString();
+					// time
+					else if(i==4) etime = st_recurring_end_date.nextElement().toString();
+					// others
+					else st_recurring_end_date.nextElement();
+					
+					i++;
+				}
+				
+				if(vo.getRec_type() != null) {
+					String[] arr_rec = vo.getRec_type().split("#");
+					for (int j = 0; j < arr_rec.length; j++) {
+						logger.debug("{} : {}", j, arr_rec[j]);
+					}
+					logger.debug("check rec end_date :: length={}", arr_rec.length);
+					/*
+					 * 반복이 no end date로 설정 되었을때는 DB insert를 고려하여
+					 * 5년치에 대해서만 insert한다.
+					 * */
+					if(arr_rec.length > 1) {
+						if("no".equals(arr_rec[1])) { 
+							logger.debug("no end date!!!");
+							eyear = (Integer.parseInt(syear) + 5) + "";
+							emonth = smonth;
+							logger.debug("{}-{}-{}", eyear, emonth, eday);
+						}
+					}
+				}
+				
+				logger.debug("_end_date: {}-{}-{} {}", eyear, emonth, eday, etime);
+				vo.set_end_date(eyear+ "-" + emonth + "-" + eday + " " + etime);
+			}
+		}
 		
 		Calendar exist = dao.getEvent(vo.getId());
 		logger.debug("exist: {}", exist);
