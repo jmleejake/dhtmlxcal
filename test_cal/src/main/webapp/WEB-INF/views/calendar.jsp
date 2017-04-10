@@ -13,14 +13,19 @@
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
 //현재 연월 값!
-var thisMonth = new Date().getMonth()+1;
-var thisYear = new Date().getFullYear();
+var date = new Date();
+var thisMonth = date.getMonth();
+var thisYear = "";
+
+// var thisMonth = new Date().getMonth()+1;
+// var thisYear = new Date().getFullYear();
+
 $(function() {	
 	// DB에서 가져오기
 	scheduler.config.xml_date="%Y-%m-%d %H:%i";
 	getCalData(thisYear, thisMonth);
 	
-		
+	
 		//시간 입력설정 셋팅하는 곳
 		//change type:"time" -> type:"calendar_time"
 		/*  scheduler.config.lightbox.sections = [
@@ -92,18 +97,67 @@ $(function() {
 			        scheduler.setCurrentView(date, scheduler._mode);
 			    }
 			});
+ var m_oMonth = new Date();
+	m_oMonth.setDate(1);
+ 		
+			scheduler.attachEvent("onClick", function(id, e){
+// 				scheduler.showLightbox(id);
+				console.log(id);
+				console.log(e);
+			});
  		
  $('#getList').on('click', function(){
 	getCalData(thisYear, thisMonth);
  });
  $('.dhx_cal_prev_button').on('click', function(){
-	 	thisMonth-=1;
-		getCalData(thisYear, thisMonth);
+	 date.setDate(date.getMonth() - 1);
+	 alert(date.getFullYear() + " / " + date.getMonth());
+// 	 	thisMonth-=1;
+// 	 	alert(thisMonth+"/"+thisYear);
+// 		getCalData(thisYear, thisMonth);
+m_oMonth.setMonth(m_oMonth.getMonth() - 1);
+alert(m_oMonth);
 	 });
- $('.dhx_cal_next_button').on('click', function(){	
-	 	thisMonth+=1;
-		getCalData(thisYear, thisMonth);
+ $('.dhx_cal_next_button').on('click', function(){
+	 m_oMonth.setMonth(m_oMonth.getMonth() + 1);
+alert(m_oMonth);
+// 	 	thisMonth+=1;
+	 	/* alert(thisMonth+"/"+thisYear);
+	 	alert(thisMonth%12); */
+	 	//alert(thisYear+parseInt(thisMonth/12)+"/"+thisMonth%12)
+ 		getCalData(thisYear, thisMonth);
 	 });
+ 
+ // 기한을 설정하는 textbox를 클릭하면 미니 캘린더가 나오는 설정
+ scheduler.attachEvent("onLightbox", function(){
+		var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
+		var inputs = lightbox_form.getElementsByTagName('input');
+		var date_of_end = null;
+		for (var i=0; i<inputs.length; i++) {
+			if (inputs[i].name == "date_of_end") {
+				date_of_end = inputs[i];
+				break;
+			}
+		}
+
+		var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
+		var show_minical = function(){
+			if (scheduler.isCalendarVisible())
+				scheduler.destroyCalendar();
+			else {
+				scheduler.renderCalendar({
+					position:date_of_end,
+					date: scheduler.getState().date,
+					navigation:true,
+					handler:function(date,calendar) {
+						date_of_end.value = repeat_end_date_format(date);
+						scheduler.destroyCalendar()
+					}
+				});
+			}
+		};
+		date_of_end.onclick = show_minical;
+	});
  
   
 });//main Function
@@ -206,6 +260,14 @@ html, body {
 							<option value="month">매월</option>
 							<option value="year">매년</option>
 						</select>
+						<br />
+						<label>
+						    <input type="radio" name="end" value="no"/>No end date
+						</label>
+						<br />
+						<label>
+						    <input type="radio" name="end" value="date_of_end" checked />
+						    <input type="text" name="date_of_end" />까지</label>
 					</div>
 					<div>
 						<div style="display: none;" id="dhx_repeat_day">
