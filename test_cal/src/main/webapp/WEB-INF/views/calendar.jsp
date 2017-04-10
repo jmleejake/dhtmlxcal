@@ -100,12 +100,6 @@ $(function() {
  var m_oMonth = new Date();
 	m_oMonth.setDate(1);
  		
-			scheduler.attachEvent("onClick", function(id, e){
-// 				scheduler.showLightbox(id);
-				console.log(id);
-				console.log(e);
-			});
- 		
  $('#getList').on('click', function(){
 	getCalData(thisYear, thisMonth);
  });
@@ -127,37 +121,6 @@ alert(m_oMonth);
 	 	//alert(thisYear+parseInt(thisMonth/12)+"/"+thisMonth%12)
  		getCalData(thisYear, thisMonth);
 	 });
- 
- // 기한을 설정하는 textbox를 클릭하면 미니 캘린더가 나오는 설정
- scheduler.attachEvent("onLightbox", function(){
-		var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
-		var inputs = lightbox_form.getElementsByTagName('input');
-		var date_of_end = null;
-		for (var i=0; i<inputs.length; i++) {
-			if (inputs[i].name == "date_of_end") {
-				date_of_end = inputs[i];
-				break;
-			}
-		}
-
-		var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
-		var show_minical = function(){
-			if (scheduler.isCalendarVisible())
-				scheduler.destroyCalendar();
-			else {
-				scheduler.renderCalendar({
-					position:date_of_end,
-					date: scheduler.getState().date,
-					navigation:true,
-					handler:function(date,calendar) {
-						date_of_end.value = repeat_end_date_format(date);
-						scheduler.destroyCalendar()
-					}
-				});
-			}
-		};
-		date_of_end.onclick = show_minical;
-	});
  
   
 });//main Function
@@ -260,14 +223,6 @@ html, body {
 							<option value="month">매월</option>
 							<option value="year">매년</option>
 						</select>
-						<br />
-						<label>
-						    <input type="radio" name="end" value="no"/>No end date
-						</label>
-						<br />
-						<label>
-						    <input type="radio" name="end" value="date_of_end" checked />
-						    <input type="text" name="date_of_end" />까지</label>
 					</div>
 					<div>
 						<div style="display: none;" id="dhx_repeat_day">
