@@ -6484,6 +6484,8 @@ scheduler.save_lightbox=function(){
 			}
 			, success : function(){
 				console.log("success");
+				//이부분에 호출해서 반복되는 값을 보내준다 !!!!(반복에 대한 수정 삽입) 
+				
 				getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1); // 스케쥴 리프레쉬
 			}
 			,error : function(){
