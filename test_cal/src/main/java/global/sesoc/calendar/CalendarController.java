@@ -67,7 +67,8 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST, produces="application/json;charset=utf-8")
-	public String saveSchedule(Calendar vo, String _end_date) {
+	public int saveSchedule(Calendar vo, String _end_date) {
+		int ret = 0;
 		logger.debug("-------------------- event save process start");
 		
 		logger.debug("cal :: \n{}", vo);
@@ -226,16 +227,16 @@ public class CalendarController {
 		
 		if(exist != null) {
 			logger.debug("-------------------- event update process start");
-			dao.modifyEvent(vo);
+			ret = dao.modifyEvent(vo);
 			logger.debug("-------------------- event update process end");
 		} else {
 			logger.debug("-------------------- event create process start");
-			dao.saveCal(vo);
+			ret = dao.saveCal(vo);
 			logger.debug("-------------------- event create process end");
 		}
 		
 		logger.debug("-------------------- event save process end");
-		return "";
+		return ret;
 	}
 	
 	@ResponseBody

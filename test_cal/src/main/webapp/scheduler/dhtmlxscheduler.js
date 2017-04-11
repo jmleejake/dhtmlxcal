@@ -6483,9 +6483,11 @@ scheduler.save_lightbox=function(){
 				, _end_date : data._end_date
 			}
 			, success : function(){
+				console.log("success");
 				getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1); // 스케쥴 리프레쉬
 			}
 			,error : function(){
+				console.log("fail");
 				getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1); // 스케쥴 리프레쉬
 			}
 	});
