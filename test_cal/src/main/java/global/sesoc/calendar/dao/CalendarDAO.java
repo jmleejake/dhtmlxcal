@@ -87,7 +87,11 @@ public class CalendarDAO {
 				}
 			}
 			
-			return calendar;
+			if(result > 0) {
+				return calendar;
+			} else {
+				return null;
+			}
 		}
 		//3)일정 삭제
 		public int delCal(int calId){
