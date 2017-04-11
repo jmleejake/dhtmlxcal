@@ -226,7 +226,7 @@ public class CalendarController {
 		logger.debug("exist: {}", exist);
 		
 		if(exist != null) {
-			logger.debug("-------------------- event update process start");
+			logger.debug("-------------------- event update process start1");
 			ret = dao.modifyEvent(vo);
 			logger.debug("-------------------- event update process end");
 		} else {
