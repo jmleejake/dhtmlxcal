@@ -86,13 +86,13 @@ $(function() {
 			 
 			
  		//미니캘린더 (스케줄러(주))
-			var calendar = scheduler.renderCalendar({
+			/* var calendar = scheduler.renderCalendar({
 			    container:"cal_here", 
 			    navigation:true,
 			    handler:function(date){
 			        scheduler.setCurrentView(date, scheduler._mode);
 			    }
-			});
+			}); */
 
  		
  $('#getList').on('click', function(){
@@ -108,6 +108,77 @@ $(function() {
 	 m_oMonth.setMonth(m_oMonth.getMonth() + 1);
 	 getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
 	 });
+ 
+ 
+ 
+ 
+alert("start");
+var tGdayYear = new Date().getFullYear();
+var tGdayMonth = new Date().getMonth();
+var tGdayDay = new Date().getDate();
+
+//시작날짜를 Date로 !
+var tSday = "2017-04-11 00:01";
+var tSdatyYear=tSday.substring(0,4);
+var tSdatyMonth=tSday.substring(5,7);
+var tSdatyDay=tSday.substring(8,10);
+var tStart = new Date(tSdatyYear,tSdatyMonth-1,tSdatyDay,00,01,0);
+alert("시작날짜 : "+tStart);
+//종료날짜를 Date로!
+var tEday = "2018-05-30 00:05";
+var tEdatyYear=tEday.substring(0,4);
+var tEdatyMonth=tEday.substring(5,7);
+var tEdatyDay=tEday.substring(8,10);
+var tEnd = new Date(tEdatyYear,tEdatyMonth-1,tEdatyDay,00,01,0);
+alert("종료날짜 : "+tEnd);
+
+//시작날짜와 종료날짜의 시간텀!
+var diff = tEnd - tStart;
+var currDay = 24*60*60*1000;//시*분*초*밀리세컨
+var currMonth = currDay*30;//월만듬
+var currYear=currMonth*12;//년 만듬
+alert("diff : "+diff);
+alert("일수차이 = "+parseInt(diff/currDay)+"일");
+alert("월수차이 = "+parseInt(diff/currMonth)+"월");
+alert("년수차이 = "+parseInt(diff/currYear)+"년");
+
+
+
+
+//반복일정 만들기 view 딴에 뿌려주기 !!!! 
+var Repeat = "yearly";
+switch (Repeat) {
+case "daily":
+	var dayDiff = parseInt(diff/currDay);
+	for(var i=0;i<dayDiff;i++){
+	    tStart.setDate(tStart.getDate()+1);
+		alert(i+"번째 : "+tStart);
+	}
+	
+	break;
+case "monthly":
+	var monthDiff = parseInt(diff/currMonth);
+	for(var i=0;i<monthDiff;i++){
+	    tStart.setMonth(tStart.getMonth()+1);
+		alert(i+"번째 : "+tStart);
+	}
+	break;
+case "yearly":
+	var yearlyDiff = parseInt(diff/currYear);
+	for(var i=0;i<yearlyDiff;i++){
+	    tStart.setFullYear(tStart.getFullYear()+1);
+		alert(i+"번째 : "+tStart);
+	}
+	break;
+
+default:
+	break;
+}
+
+alert("end");
+
+
+
  
   
 });//main Function
