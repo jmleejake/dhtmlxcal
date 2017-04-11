@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,15 +13,150 @@
 	type="text/javascript"></script>
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
-function init() {
+//현재 연월 값!
+var todayDate = new Date();
+var nowHr = todayDate.getHours();
+var nowMin = todayDate.getMinutes();
+console.log(nowHr+":"+nowMin);
 
+function selectTime(){
+	if(nowHr<12){
+	$("#am")[0].selected=true;		
+	}else{
+	$("#pm")[0].selected=true;		
+	}
+}
+
+
+function init() {
+	getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
 	scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 	scheduler.config.details_on_dblclick = true;
 	scheduler.config.details_on_create = true;
 
 	scheduler.init('scheduler_here', new Date(), "month");
 	
+	
+	//달력 설정하는 textbox클릭시 미니캘린더 팝업    ===>input
+	scheduler.attachEvent("onLightbox", function(){
+		var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
+		var inputs = lightbox_form.getElementsByTagName('input');
+		var date_of_start = null;
+		for (var i=0; i<inputs.length; i++) {
+			if (inputs[i].name == "date_of_start") {
+				date_of_start = inputs[i];
+				break;
+			}
+		}
+		//var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
+		var show_minical = function(){
+			if (scheduler.isCalendarVisible())
+				scheduler.destroyCalendar();
+			else {
+				scheduler.renderCalendar({
+					position:date_of_end,
+					date: scheduler.getState().date,
+					navigation:true,
+					handler:function(date,calendar) {
+						date_of_start.value = date;
+						//date_of_end.value = repeat_end_date_format(date);
+						scheduler.destroyCalendar()
+					}
+				});
+			}
+		};
+		date_of_end.onclick = show_minical;
+	});
 
+	// 데이터 추가
+    scheduler.addEvent({
+       id:1234
+       , start_date: new Date(2017,3,22,14)
+       , end_date: new Date(2017,3,24,18)
+       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
+    });
+	
+    
+    // 월 변경
+    $('.dhx_cal_prev_button').on('click', function(){
+   	 todayDate.setMonth(todayDate.getMonth() - 1);
+   	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+   	 });
+    $('.dhx_cal_next_button').on('click', function(){
+   	 todayDate.setMonth(todayDate.getMonth() + 1);
+   	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+   	 });
+	//날짜 얻어오기
+    console.log("start");
+    var tGdayYear = new Date().getFullYear();
+    var tGdayMonth = new Date().getMonth();
+    var tGdayDay = new Date().getDate();
+
+    //시작날짜를 Date로 !
+    var tSday = "2017-04-11 00:01";
+    var tSdatyYear=tSday.substring(0,4);
+    var tSdatyMonth=tSday.substring(5,7);
+    var tSdatyDay=tSday.substring(8,10);
+    var tStart = new Date(tSdatyYear,tSdatyMonth-1,tSdatyDay,00,01,0);
+    console.log("시작날짜 : "+tStart);
+    //종료날짜를 Date로!
+    var tEday = "2017-04-20 00:05";
+    var tEdatyYear=tEday.substring(0,4);
+    var tEdatyMonth=tEday.substring(5,7);
+    var tEdatyDay=tEday.substring(8,10);
+    var tEnd = new Date(tEdatyYear,tEdatyMonth-1,tEdatyDay,00,01,0);
+    console.log("종료날짜 : "+tEnd);
+
+    //시작날짜와 종료날짜의 시간텀!
+    var diff = tEnd - tStart;
+    var currDay = 24*60*60*1000;//시*분*초*밀리세컨
+    var currMonth = currDay*30;//월만듬
+    var currYear=currMonth*12;//년 만듬
+    /*
+    alert("diff : "+diff);
+    alert("일수차이 = "+parseInt(diff/currDay)+"일");
+    alert("월수차이 = "+parseInt(diff/currMonth)+"월");
+    alert("년수차이 = "+parseInt(diff/currYear)+"년");
+    */
+
+
+
+
+    //반복일정 만들기 view 딴에 뿌려주기 !!!! 
+    var Repeat = "daily";
+    switch (Repeat) {
+    case "daily":
+    	var dayDiff = parseInt(diff/currDay);
+    	for(var i=0;i<dayDiff;i++){
+    	    tStart.setDate(tStart.getDate()+1);
+    		console.log(i+"번째 : "+tStart);
+    	}
+    	
+    	break;
+    case "monthly":
+    	var monthDiff = parseInt(diff/currMonth);
+    	for(var i=0;i<monthDiff;i++){
+    	    tStart.setMonth(tStart.getMonth()+1);
+    		console.log(i+"번째 : "+tStart);
+    	}
+    	break;
+    case "yearly":
+    	var yearlyDiff = parseInt(diff/currYear);
+    	for(var i=0;i<yearlyDiff;i++){
+    	    tStart.setFullYear(tStart.getFullYear()+1);
+    		console.log(i+"번째 : "+tStart);
+    	}
+    	break;
+
+    default:
+    	break;
+    }
+
+    console.log("end");
+
+	
+	
+	
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
@@ -36,10 +172,42 @@ scheduler.showLightbox = function(id) {
 	html("category").value = ev.category || "";
 	html("alarm").value = ev.alarm || "";
 	html("repeat").value = ev.repeat || "";
-	html("timeSetting").value = ev.timeSetting || "";
+	//html("timeSetting").value = ev.timeSetting || "";
+	
+	selectTime();
+	
 };
 
+function getCalData(thisYear, thisMonth) {
+	$.ajax({
+		url:"show"
+			, type:"post"
+			, data : {"thisYear":thisYear,"thisMonth" : thisMonth}
+			, dataType : "json"
+			, success:showEvents
+			, error:function(e) {
+				alert(JSON.stringify(e));
+			} 
+	});
+}
+function showEvents(ret) {
+	var calArray = new Array();
+	$.each(ret, function(i, event) {
+		var calObj = {
+				id:event.id
+				, text:event.text
+				, start_date:event.start_date
+				, end_date:event.end_date
+				, content:event.content
+// 				, rec_type:event.rec_type
+// 				, event_pid:event.event_pid
+		}
+		calArray.push(calObj);
+	});
+	scheduler.parse(calArray, "json");
+}
 function save_form() {
+	
 	var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
 	ev.text = html("description").value;
 	ev.custom1 = html("custom1").value;
@@ -56,7 +224,42 @@ function delete_event() {
 	scheduler.endLightbox(false, html("my_form"));
 	scheduler.deleteEvent(event_id);
 }
-
+function show_minical(){
+    if (scheduler.isCalendarVisible()){
+        scheduler.destroyCalendar();
+    } else {
+        scheduler.renderCalendar({
+            position:"dhx_minical_icon",
+            date:scheduler._date,
+            navigation:true,
+            handler:function(date,calendar){
+                scheduler.setCurrentView(date);
+                scheduler.destroyCalendar()
+            }
+        });
+    }
+}
+function input_minical(id){
+    if (scheduler.isCalendarVisible()){
+        scheduler.destroyCalendar();
+    } else {
+        scheduler.renderCalendar({
+            position: id,
+            date:scheduler._date,
+            navigation:true,
+            handler:function(date,calendar){
+                var originDate=date;
+                var tYear = originDate.getFullYear();
+                var tMonth = originDate.getMonth();
+                if(tMonth < 10) tMonth = "0" + tMonth;
+                var tDay = originDate.getDate();
+                if(tDay < 10) tDay = "0" + tDay;
+                $("#"+id).val(tYear+"-"+tMonth+"-"+tDay);
+                scheduler.destroyCalendar()
+            }
+        });
+    }
+}
 </script>
 <link rel="stylesheet" href="scheduler/dhtmlxscheduler_flat.css"
 	type="text/css">
@@ -72,7 +275,7 @@ html, body {
 			position: absolute;
 			top: 100px;
 			left: 200px;
-			z-index: 10001;
+			z-index: 15;
 			display: none;
 			background-color: white;
 			border: 2px outset gray;
@@ -96,13 +299,75 @@ html, body {
 <body onload="init();">
 
 <div id="my_form">
-	<label for="description">제목</label><input type="text" name="description" value="" id="description"><br>
+	<label for="description">제목</label><input type="text" name="description" value="" id="description"> 
 	<label for="custom1">작성자</label><input type="text" name="custom1" value="" id="custom1"><br>
 	<label for="custom2">내용</label><input type="text" name="custom2" value="" id="custom2"><br>
 	<label for="category">카테고리</label><input type="text" name="category" value="" id="category"><br>
 	<label for="alarm">알람</label><input type="text" name="alarm" value="" id="alarm"><br>
 	<label for="repeat">일정 반복</label><input type="text" name="repeat" value="" id="repeat"><br>
-	<label for="timeSetting">시간설정</label><input type="text" name="timeSetting" value="" id="timeSetting"><br>
+	<label for="timeSetting">시간설정</label><br>
+	<input type="text" name="timeSetStart" value="" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
+	<select id="ampm">
+	<option id="am">AM</option>
+	<option id="pm">PM</option>
+	</select>
+	<select id="selHour">
+	<c:forEach var="i" begin="1" end="12" >
+	<option id="selHour_${i }">
+	<c:if test="${i<10 }">
+	0${i }
+	</c:if>
+	<c:if test="${i>=10 }">
+	${i }
+	</c:if>
+	</option>
+	</c:forEach>
+	</select>:
+	<select id="selMin">
+	<c:forEach var="i" begin="0" end="55" step="5">
+	<option id="selMin_${i }">
+	<c:if test="${i<10 }">
+	0${i }
+	</c:if>
+	<c:if test="${i>=10 }">
+	${i }
+	</c:if>
+	</option>
+	</c:forEach>
+	<option></option>
+	</select>
+	~
+	<input type="text" name="timeSetEnd" value="" id="timeSetEnd" onclick="input_minical('timeSetEnd')" readonly="readonly">
+	<select id="ampm">
+	<option id="am">AM</option>
+	<option id="pm">PM</option>
+	</select>
+	<select id="selHour">
+	<c:forEach var="i" begin="1" end="12" >
+	<option id="selHour_${i }">
+	<c:if test="${i<10 }">
+	0${i }
+	</c:if>
+	<c:if test="${i>=10 }">
+	${i }
+	</c:if>
+	</option>
+	</c:forEach>
+	</select>:
+	<select id="selMin">
+	<c:forEach var="i" begin="0" end="55" step="5">
+	<option id="selMin_${i }">
+	<c:if test="${i<10 }">
+	0${i }
+	</c:if>
+	<c:if test="${i>=10 }">
+	${i }
+	</c:if>
+	</option>
+	</c:forEach>
+	<option></option>
+	</select>
+	<br>
 	<input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
 	<input type="button" name="close" value="Close" id="close" style='width:100px;' onclick="close_form()">
 	<input type="button" name="delete" value="Delete" id="delete" style='width:100px;' onclick="delete_event()">
@@ -114,6 +379,8 @@ html, body {
 		<div class="dhx_cal_next_button">&nbsp;</div>
 		<div class="dhx_cal_today_button"></div>
 		<div class="dhx_cal_date"></div>
+		<!-- 미니캘린더 -->
+		<div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div> 	
 		<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
 		<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
 		<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
