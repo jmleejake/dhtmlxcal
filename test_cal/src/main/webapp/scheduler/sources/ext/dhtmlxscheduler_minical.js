@@ -196,6 +196,7 @@ scheduler._render_calendar = function(obj, sd, conf, previous) {
 	} else {
 		d = document.createElement("DIV");
 		d.className = "dhx_cal_container dhx_mini_calendar";
+		//$('.dhx_cal_container dhx_mini_calendar').css('z-index', 20000);
 	}
 	d.setAttribute("date", this.templates.xml_format(sd));
 	d.innerHTML = "<div class='dhx_year_month'></div>" +
