@@ -6470,6 +6470,8 @@ scheduler.save_lightbox=function(){
 	console.log(scheduler._lightbox_id);
 	console.log(JSON.stringify(data));
 	console.log(data._end_date);
+	console.log("save!");
+	//successResult(data);
 	$.ajax({
 		url : "save"
 			, type : "post"
@@ -6482,8 +6484,10 @@ scheduler.save_lightbox=function(){
 				, rec_type: data.rec_type
 				, _end_date : data._end_date
 			}
-			, success : function(){
+			, dataType : "json"
+			, success : function(data){
 				console.log("success");
+//				successResult(data);
 				//이부분에 호출해서 반복되는 값을 보내준다 !!!!(반복에 대한 수정 삽입) 
 				
 				getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1); // 스케쥴 리프레쉬

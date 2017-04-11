@@ -8,10 +8,8 @@ public class Calendar {
 	private String text;
 	private String content;
 	private String rec_type;
-	private String event_pid;
-	private long event_length;
-	private String _end_date; // 반복설정시 종료일자
-	private String _start_date; // 매월반복 설정시 시작일자
+	private String repeat_type;
+	private String repeat_end_date;
 	
 	public String getId() {
 		return id;
@@ -49,36 +47,24 @@ public class Calendar {
 	public void setRec_type(String rec_type) {
 		this.rec_type = rec_type;
 	}
-	public String getEvent_pid() {
-		return event_pid;
+	public String getRepeat_type() {
+		return repeat_type;
 	}
-	public void setEvent_pid(String event_pid) {
-		this.event_pid = event_pid;
+	public void setRepeat_type(String repeat_type) {
+		this.repeat_type = repeat_type;
 	}
-	public long getEvent_length() {
-		return event_length;
+	public String getRepeat_end_date() {
+		return repeat_end_date;
 	}
-	public void setEvent_length(long event_length) {
-		this.event_length = event_length;
-	}
-	public String get_end_date() {
-		return _end_date;
-	}
-	public void set_end_date(String _end_date) {
-		this._end_date = _end_date;
-	}
-	public String get_start_date() {
-		return _start_date;
-	}
-	public void set_start_date(String _start_date) {
-		this._start_date = _start_date;
+	public void setRepeat_end_date(String repeat_end_date) {
+		this.repeat_end_date = repeat_end_date;
 	}
 	
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
-				+ ", content=" + content + ", rec_type=" + rec_type + ", event_pid=" + event_pid + ", event_length="
-				+ event_length + ", _end_date=" + _end_date + ", _start_date=" + _start_date + "]";
+				+ ", content=" + content + ", rec_type=" + rec_type + ", repeat_type=" + repeat_type
+				+ ", repeat_end_date=" + repeat_end_date + "]";
 	}
 	
 }

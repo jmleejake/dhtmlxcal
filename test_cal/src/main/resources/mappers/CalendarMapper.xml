@@ -14,9 +14,8 @@
 	  , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date 
 	  , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
 	  , content
-	  , rec_type
-	  , event_pid
-	  , event_length
+	  , repeat_type
+	  , repeat_end_date
   from events
   where start_date >= to_date(#{date}, 'yyyy-mm-dd')
   and end_date <= last_day(to_date(#{date}, 'yyyy-mm-dd'))
@@ -31,27 +30,21 @@ insert into events
 	, start_date
 	, end_date
 	, content
-	<if test="rec_type != null">
-	, rec_type
-	</if>
-	<if test="event_pid != null">
-	, event_pid
-	, event_length
+	, repeat_type
+	<if test="repeat_type != null and !repeat_type.equals('none')">
+	, repeat_end_date
 	</if>
 	)
 values 
 	(
 	events_seq.nextval
 	, #{text}
-	, to_date(#{start_date}, 'yyyy-mm-dd hh24:mi:ss')
-	, to_date(#{end_date}, 'yyyy-mm-dd hh24:mi:ss')
+	, to_date(substr(#{start_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
+    , to_date(substr(#{end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
 	, #{content}
-	<if test="rec_type != null">
-	, #{rec_type}
-	</if>
-	<if test="event_pid != null">
-	, #{event_pid}
-	, #{event_length}
+	, #{repeat_type}
+	<if test="repeat_type != null and !repeat_type.equals('none')">
+	, to_date(substr(#{repeat_end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
 	</if>
 	)
 </insert>
@@ -72,8 +65,8 @@ select * from events where id = #{id}
 	set 
 		text = #{text}
 		, content = #{content}
-		, start_date = to_date(#{start_date}, 'yyyy-mm-dd hh24:mi:ss')
-		, end_date = to_date(#{end_date}, 'yyyy-mm-dd hh24:mi:ss')
+		, start_date = to_date(substr(#{start_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
+		, end_date = to_date(substr(#{end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
 	where
 		id = #{id}
 </update>

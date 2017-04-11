@@ -1,6 +1,5 @@
 package global.sesoc.calendar.dao;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +17,10 @@ public class CalendarDAO {
 	@Autowired
 	SqlSession sqlSession;
 	
+	private final String NONE = "none";
+	private final String DAILY = "daily";
+	private final String MONTHLY = "monthly";
+	
 	private static final Logger logger = LoggerFactory.getLogger(CalendarDAO.class); 
 	//1)일정 조회하기(월별)
 		public ArrayList<Calendar> listCal(String date){
@@ -33,7 +36,7 @@ public class CalendarDAO {
 			return result;
 		}
 		//2)일정 저장
-		public int saveCal(Calendar calendar){
+		public Calendar saveCal(Calendar calendar){
 			/*
 			 * 무제한 반복이라고 했을때 5년을 치고 컨트롤러로 넘겼을때...
 			 * 
@@ -59,77 +62,32 @@ public class CalendarDAO {
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
 			
 			if(!calendar.getRec_type().equals("")) {
-				Calendar recurring = new Calendar();
-				recurring.setStart_date(calendar.getStart_date());
-				recurring.setEnd_date(calendar.getEnd_date());
-				recurring.setContent(calendar.getContent());
-				recurring.setRec_type(calendar.getRec_type());
-				recurring.setText(calendar.getText());
-				String[] arr_rec = recurring.getRec_type().split("_");
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				String[] arr_rec = calendar.getRec_type().split("_");
 				
 				switch (arr_rec[0]) {
 					case "day": // 매일 반복
-						try {
-							int check_ret = 0;
-							do {
-								try {
-									// 최초pid세팅
-									if(check_ret == 0) {
-										recurring.setEvent_pid("0");
-										/*
-										 * 반복의 경우 종료시점을 _end_date로 설정하여 보내기 때문에
-										 * while문에서의 compareTo비교문을 위해
-										 * 최초 세팅시 main vo(dao로 넘어올때 받은 vo)의 end_date를 _end_date로 설정
-										 * */
-										calendar.setEnd_date(calendar.get_end_date());
-										recurring.setEnd_date(calendar.get_end_date());
-									} else if(check_ret == 1) {
-										// 최초 생성후 바로 다음 row에 들어가는 이벤트에는
-									    // 최초생성당시의 start_date부터 해당일의 23:59:59까지로 세팅
-										recurring.setRec_type(null);
-										recurring.setStart_date(recurring.getStart_date());
-										String end_date = recurring.getStart_date().split(" ")[0] + " 23:59:59";
-										logger.debug("end_date : {}", end_date);
-										recurring.setEnd_date(end_date);
-									}
-									logger.debug("before insert :: {}", recurring);
-									result=mapper.saveCal(recurring);
-									if(result > 0) {
-										if(check_ret == 0) {
-											// 최초 생성한 반복 이벤트의 id를 얻어 pid로 세팅
-											String latest_id = mapper.selectLatestEventNum();
-											recurring.setEvent_pid(latest_id);
-										} else {
-											// 최초생성과 생성후 바로다음 row가 아니면,
-											// 최초 start_date, end_date에 하루를 더하여 각각을 세팅 
-											recurring.setStart_date(mapper.selectNextDate(recurring.getStart_date()));
-											recurring.setEnd_date(mapper.selectNextDate(recurring.getEnd_date()));
-										}
-										
-										check_ret++;
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							} while (dateCheck(sdf.parse(recurring.getStart_date()), sdf.parse(calendar.getEnd_date())) > 0);
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
+						calendar.setRepeat_type(DAILY);
 						break;
-	
-					default:
+						
+					case "month": // 매월 반복
+						calendar.setRepeat_type(MONTHLY);
 						break;
+				}
+				try {
+					result=mapper.saveCal(calendar);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			} else {
 				try {
+					calendar.setRepeat_type(NONE);
 					result=mapper.saveCal(calendar);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 			
-			return result;
+			return calendar;
 		}
 		//3)일정 삭제
 		public int delCal(int calId){

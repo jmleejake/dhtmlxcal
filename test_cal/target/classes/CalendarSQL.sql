@@ -8,12 +8,11 @@ create table events(
   end_date date,
   text varchar2(500),
   content varchar2(2000),
-  rec_type varchar2(50),
-  event_pid number,
-  event_length number default 0
+  repeat_type varchar2(50),
+  repeat_end_date date
 );
   
-  CREATE SEQUENCE events_seq;
+CREATE SEQUENCE events_seq;
   
 --기본 데이터 
 INSERT INTO EVENTS (ID, START_DATE, END_DATE, TEXT) VALUES (events_seq.nextval, TO_DATE('2017-03-14 09:34', 'YYYY-MM-DD HH24:MI'), TO_DATE('2017-03-14 11:34', 'YYYY-MM-DD HH24:MI'), '모임');

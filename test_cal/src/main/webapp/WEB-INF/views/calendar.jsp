@@ -112,7 +112,7 @@ $(function() {
  
  
  
-alert("start");
+console.log("start");
 var tGdayYear = new Date().getFullYear();
 var tGdayMonth = new Date().getMonth();
 var tGdayDay = new Date().getDate();
@@ -123,36 +123,38 @@ var tSdatyYear=tSday.substring(0,4);
 var tSdatyMonth=tSday.substring(5,7);
 var tSdatyDay=tSday.substring(8,10);
 var tStart = new Date(tSdatyYear,tSdatyMonth-1,tSdatyDay,00,01,0);
-alert("시작날짜 : "+tStart);
+console.log("시작날짜 : "+tStart);
 //종료날짜를 Date로!
-var tEday = "2018-05-30 00:05";
+var tEday = "2017-04-20 00:05";
 var tEdatyYear=tEday.substring(0,4);
 var tEdatyMonth=tEday.substring(5,7);
 var tEdatyDay=tEday.substring(8,10);
 var tEnd = new Date(tEdatyYear,tEdatyMonth-1,tEdatyDay,00,01,0);
-alert("종료날짜 : "+tEnd);
+console.log("종료날짜 : "+tEnd);
 
 //시작날짜와 종료날짜의 시간텀!
 var diff = tEnd - tStart;
 var currDay = 24*60*60*1000;//시*분*초*밀리세컨
 var currMonth = currDay*30;//월만듬
 var currYear=currMonth*12;//년 만듬
+/*
 alert("diff : "+diff);
 alert("일수차이 = "+parseInt(diff/currDay)+"일");
 alert("월수차이 = "+parseInt(diff/currMonth)+"월");
 alert("년수차이 = "+parseInt(diff/currYear)+"년");
+*/
 
 
 
 
 //반복일정 만들기 view 딴에 뿌려주기 !!!! 
-var Repeat = "yearly";
+var Repeat = "daily";
 switch (Repeat) {
 case "daily":
 	var dayDiff = parseInt(diff/currDay);
 	for(var i=0;i<dayDiff;i++){
 	    tStart.setDate(tStart.getDate()+1);
-		alert(i+"번째 : "+tStart);
+		console.log(i+"번째 : "+tStart);
 	}
 	
 	break;
@@ -160,14 +162,14 @@ case "monthly":
 	var monthDiff = parseInt(diff/currMonth);
 	for(var i=0;i<monthDiff;i++){
 	    tStart.setMonth(tStart.getMonth()+1);
-		alert(i+"번째 : "+tStart);
+		console.log(i+"번째 : "+tStart);
 	}
 	break;
 case "yearly":
 	var yearlyDiff = parseInt(diff/currYear);
 	for(var i=0;i<yearlyDiff;i++){
 	    tStart.setFullYear(tStart.getFullYear()+1);
-		alert(i+"번째 : "+tStart);
+		console.log(i+"번째 : "+tStart);
 	}
 	break;
 
@@ -175,9 +177,39 @@ default:
 	break;
 }
 
-alert("end");
+console.log("end");
 
 
+//달력 설정하는 textbox클릭시 미니캘린더 팝업
+scheduler.attachEvent("onLightbox", function(){
+	var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
+	var inputs = lightbox_form.getElementsByTagName('input');
+	var date_of_end = null;
+	for (var i=0; i<inputs.length; i++) {
+		if (inputs[i].name == "date_of_end") {
+			date_of_end = inputs[i];
+			break;
+		}
+	}
+
+	var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
+	var show_minical = function(){
+		if (scheduler.isCalendarVisible())
+			scheduler.destroyCalendar();
+		else {
+			scheduler.renderCalendar({
+				position:date_of_end,
+				date: scheduler.getState().date,
+				navigation:true,
+				handler:function(date,calendar) {
+					date_of_end.value = repeat_end_date_format(date);
+					scheduler.destroyCalendar()
+				}
+			});
+		}
+	};
+	date_of_end.onclick = show_minical;
+});
 
  
   
@@ -204,8 +236,8 @@ function showEvents(ret) {
 				, start_date:event.start_date
 				, end_date:event.end_date
 				, content:event.content
-				, rec_type:event.rec_type
-				, event_pid:event.event_pid
+// 				, rec_type:event.rec_type
+// 				, event_pid:event.event_pid
 		}
 		calArray.push(calObj);
 	});
@@ -226,6 +258,11 @@ function show_minical(){
             }
         });
     }
+}
+
+function successResult(data) {
+	console.log("successResult");
+	console.log(JSON.stringify(data));
 }
 	
 </script>
@@ -281,6 +318,14 @@ html, body {
 							<option value="month">매월</option>
 							<option value="year">매년</option>
 						</select>
+						<br />
+					<label>
+					    <input type="radio" name="end" value="no" checked/>No end date
+					</label>
+					<label>
+					    <input type="radio" name="end" value="date_of_end" />
+					    <input class="dhx_repeat_date" type="text" name="date_of_end" />까지
+				    </label>
 					</div>
 					<div>
 						<div style="display: none;" id="dhx_repeat_day">
