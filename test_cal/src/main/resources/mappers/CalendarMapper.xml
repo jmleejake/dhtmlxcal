@@ -31,7 +31,7 @@ insert into events
 	, end_date
 	, content
 	, repeat_type
-	<if test="repeat_type != null and !repeat_type.equals('none')">
+	<if test="repeat_end_date != null">
 	, repeat_end_date
 	</if>
 	)
@@ -43,8 +43,8 @@ values
     , to_date(substr(#{end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
 	, #{content}
 	, #{repeat_type}
-	<if test="repeat_type != null and !repeat_type.equals('none')">
-	, to_date(substr(#{repeat_end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
+	<if test="repeat_end_date != null">
+	, to_date(#{repeat_end_date}, 'YYYY-MM-DD')
 	</if>
 	)
 </insert>

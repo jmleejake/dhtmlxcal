@@ -7,7 +7,6 @@ public class Calendar {
 	private String end_date;
 	private String text;
 	private String content;
-	private String rec_type;
 	private String repeat_type;
 	private String repeat_end_date;
 	
@@ -41,12 +40,6 @@ public class Calendar {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getRec_type() {
-		return rec_type;
-	}
-	public void setRec_type(String rec_type) {
-		this.rec_type = rec_type;
-	}
 	public String getRepeat_type() {
 		return repeat_type;
 	}
@@ -63,7 +56,7 @@ public class Calendar {
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
-				+ ", content=" + content + ", rec_type=" + rec_type + ", repeat_type=" + repeat_type
+				+ ", content=" + content + ", repeat_type=" + repeat_type
 				+ ", repeat_end_date=" + repeat_end_date + "]";
 	}
 	

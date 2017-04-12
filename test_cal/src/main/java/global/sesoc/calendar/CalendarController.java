@@ -38,7 +38,7 @@ public class CalendarController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "calendar3";
+		return "calendarJM";
 	}
 	@RequestMapping(value = "custom", method = RequestMethod.GET)
 	public String custome() {
@@ -67,13 +67,11 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST, produces="application/json;charset=utf-8")
-	public Calendar saveSchedule(Calendar vo, String _end_date) {
+	public Calendar saveSchedule(Calendar vo) {
 		Calendar ret = new Calendar();
 		logger.debug("-------------------- event save process start");
 		
 		logger.debug("cal :: \n{}", vo);
-		logger.debug("{}", _end_date);
-		vo.setRepeat_end_date(_end_date); // 넘겨받은 반복 종료일자를 사용하기위해 세팅
 		
 		Calendar exist = dao.getEvent(vo.getId());
 		logger.debug("exist: {}", exist);
