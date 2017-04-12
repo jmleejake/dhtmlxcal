@@ -45,43 +45,15 @@ function init() {
 	scheduler.init('scheduler_here', new Date(), "month");
 	
 	
-	//달력 설정하는 textbox클릭시 미니캘린더 팝업    ===>input
-	scheduler.attachEvent("onLightbox", function(){
-		var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
-		var inputs = lightbox_form.getElementsByTagName('input');
-		var date_of_start = null;
-		for (var i=0; i<inputs.length; i++) {
-			if (inputs[i].name == "date_of_start") {
-				date_of_start = inputs[i];
-				break;
-			}
-		}
-		//var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
-		var show_minical = function(){
-			if (scheduler.isCalendarVisible())
-				scheduler.destroyCalendar();
-			else {
-				scheduler.renderCalendar({
-					position:date_of_end,
-					date: scheduler.getState().date,
-					navigation:true,
-					handler:function(date,calendar) {
-						date_of_start.value = date;
-						//date_of_end.value = repeat_end_date_format(date);
-						scheduler.destroyCalendar()
-					}
-				});
-			}
-		};
-		date_of_end.onclick = show_minical;
-	});
 
 	// 데이터 추가
     scheduler.addEvent({
        id:1234
-       , start_date: new Date(2017,3,22,14)
-       , end_date: new Date(2017,3,24,18)
+       , start_date: new Date(2017,3,12,14)
+       , end_date: new Date(2017,3,12,18)
        , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
+       ,repeat_type : "daily"
+       ,repeat_end_date : new Date(2017,3,15,18)
     });
 	
     
@@ -175,15 +147,16 @@ scheduler.showLightbox = function(id) {
 
 	html("description").focus();
 	html("description").value = ev.text;
-	html("custom1").value = ev.custom1 || "";
+	html("custom1").value = ev.custom1 || "데이터가져옴";
 	html("custom2").value = ev.custom2 || "";
 	html("category").value = ev.category || "";
 	html("alarm").value = ev.alarm || "";
 	html("repeat").value = ev.repeat || "";
 	//html("timeSetting").value = ev.timeSetting || "";
 	
-	console.log(ev.start_date);
-	console.log(ev.end_date);
+	//console.log(ev.start_date);
+	//console.log(ev.end_date);
+	/* //날짜입력창============================= */
 	var sDate=ev.start_date;
 	var eDate=ev.end_date;
 	console.log(new Date(eDate));
@@ -191,24 +164,23 @@ scheduler.showLightbox = function(id) {
 	if(sDate.getDate() != eDate.getDate()){
 	//alert("날짜 다름");
 	eDate=ev.end_date.setHours(ev.end_date.getHours()-1);
+	eDate=new Date(eDate);
 	}
-	//날짜입력창
+	
     var SYear = sDate.getFullYear();
     var SMonth = sDate.getMonth()+1;
     if(SMonth < 10) SMonth = "0" + SMonth;
     var SDay = sDate.getDate();
     if(SDay < 10) SDay = "0" + SDay;
     $("#timeSetStart").val(SYear+"-"+SMonth+"-"+SDay);
-    var EYear = ev.end_date.getFullYear();
-    var EMonth = ev.end_date.getMonth()+1;
+    var EYear = eDate.getFullYear();
+    var EMonth = eDate.getMonth()+1;
     if(EMonth < 10) EMonth = "0" + EMonth;
-    var EDay = ev.end_date.getDate();
+    var EDay = eDate.getDate();
     if(EDay < 10) EDay = "0" + EDay;
     $("#timeSetEnd").val(EYear+"-"+EMonth+"-"+EDay);
-	
-	
 	selectTime();
-	
+	/* //날짜입력창============================= */
 };
 
 function getCalData(thisYear, thisMonth) {
@@ -272,6 +244,7 @@ function show_minical(){
         });
     }
 }
+//날짜 미니캘린더
 function input_minical(id){
     if (scheduler.isCalendarVisible()){
         scheduler.destroyCalendar();
@@ -338,6 +311,7 @@ html, body {
 	<label for="category">카테고리</label><input type="text" name="category" value="" id="category"><br>
 	<label for="alarm">알람</label><input type="text" name="alarm" value="" id="alarm"><br>
 	<label for="repeat">일정 반복</label><input type="text" name="repeat" value="" id="repeat"><br>
+	<!-- 시간설정================================== -->
 	<label for="timeSetting">시간설정</label><br>
 	<input type="text" name="timeSetStart" value="" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
 	<select id="Sampm">
@@ -399,6 +373,7 @@ html, body {
 	</c:forEach>
 	</select>
 	<br>
+	<!-- 시간설정================================== -->
 	<input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
 	<input type="button" name="close" value="Close" id="close" style='width:100px;' onclick="close_form()">
 	<input type="button" name="delete" value="Delete" id="delete" style='width:100px;' onclick="delete_event()">

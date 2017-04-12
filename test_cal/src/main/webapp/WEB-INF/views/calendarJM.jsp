@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,8 +14,24 @@
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
 //현재 연월 값!
-var m_oMonth = new Date();
-m_oMonth.setDate(1);
+var todayDate = new Date();
+var todayDate2 = new Date();
+var nowHr = todayDate2.getHours();
+var nowMin = todayDate2.getMinutes();
+console.log(nowHr+":"+nowMin);
+//이벤트창 현재시간으로 설정 
+function selectTime(){
+	if(nowHr<12){
+	$("#Sam")[0].selected=true;		
+	}else{
+	$("#Spm")[0].selected=true;		
+	}
+	
+	$("#SHour_"+nowHr)[0].selected=true;
+	$("#EHour_"+nowHr)[0].selected=true;
+	$("#SMin_"+nowMin)[0].selected=true;
+	$("#EMin_"+nowMin)[0].selected=true;
+}
 
 function init() {
 
@@ -24,7 +41,106 @@ function init() {
 
 	scheduler.init('scheduler_here', new Date(), "month");
 	
-	getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
+	getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+
+	 // 월 변경
+    $('.dhx_cal_prev_button').on('click', function(){
+   	 todayDate.setMonth(todayDate.getMonth() - 1);
+   	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+   	 });
+    $('.dhx_cal_next_button').on('click', function(){
+   	 todayDate.setMonth(todayDate.getMonth() + 1);
+   	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+   	 });
+	//날짜 얻어오기
+    console.log("start");
+    var tGdayYear = new Date().getFullYear();
+    var tGdayMonth = new Date().getMonth();
+    var tGdayDay = new Date().getDate();
+
+    
+ // 데이터 추가
+   /*  scheduler.addEvent({
+       id:1234
+       , start_date: new Date(2017,3,12,14)
+       , end_date: new Date(2017,3,12,18)
+       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
+       ,repeat_type : "daily"
+       ,repeat_end_date : new Date(2017,3,15,18)
+    }); */
+    
+    
+    
+    //시작날짜를 Date로 !
+    var tSday = "2017-04-11 00:01";
+    var tSdatyYear=tSday.substring(0,4);
+    var tSdatyMonth=tSday.substring(5,7);
+    var tSdatyDay=tSday.substring(8,10);
+    var tStart = new Date(tSdatyYear,tSdatyMonth-1,tSdatyDay,00,01,0);
+    console.log("시작날짜 : "+tStart);
+    //종료날짜를 Date로!
+    var tEday = "2017-10-20 00:05";
+    var tEdatyYear=tEday.substring(0,4);
+    var tEdatyMonth=tEday.substring(5,7);
+    var tEdatyDay=tEday.substring(8,10);
+    var tEnd = new Date(tEdatyYear,tEdatyMonth-1,tEdatyDay,00,01,0);
+    console.log("종료날짜 : "+tEnd);
+
+    //시작날짜와 종료날짜의 시간텀!
+    var diff = tEnd - tStart;
+    var currDay = 24*60*60*1000;//시*분*초*밀리세컨
+    var currMonth = currDay*30;//월만듬
+    var currYear=currMonth*12;//년 만듬
+    /*
+    alert("diff : "+diff);
+    alert("일수차이 = "+parseInt(diff/currDay)+"일");
+    alert("월수차이 = "+parseInt(diff/currMonth)+"월");
+    alert("년수차이 = "+parseInt(diff/currYear)+"년");
+    */
+
+    //반복일정 만들기 view 딴에 뿌려주기 !!!! 
+    var Repeat = "daily";
+    switch (Repeat) {
+    case "daily":
+    	var dayDiff = parseInt(diff/currDay);
+    	for(var i=0;i<dayDiff;i++){
+    	    var test=tStart.setDate(tStart.getDate()+1);
+    	    var test2=tStart.setMinutes(tStart.getMinutes()+5);
+    	    console.log(new Date(test));
+    	    console.log(new Date(test2));
+    	    
+    		console.log(i+"번째 : "+tStart);
+    		 scheduler.addEvent({
+    		       id:repeat+"_"+i+"_"+1234
+    		       , start_date: new Date(test)
+    		       , end_date: new Date(test2)
+    		       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
+    		       ,repeat_type : "daily"
+    		       ,repeat_end_date : new Date(tEnd)
+    		    });
+    	}
+    	
+    	break;
+    case "monthly":
+    	var monthDiff = parseInt(diff/currMonth);
+    	for(var i=0;i<monthDiff;i++){
+    	    tStart.setMonth(tStart.getMonth()+1);
+    		console.log(i+"번째 : "+tStart);
+    	}
+    	break;
+    case "yearly":
+    	var yearlyDiff = parseInt(diff/currYear);
+    	for(var i=0;i<yearlyDiff;i++){
+    	    tStart.setFullYear(tStart.getFullYear()+1);
+    		console.log(i+"번째 : "+tStart);
+    	}
+    	break;
+
+    default:
+    	break;
+    }
+
+    console.log("end");
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
@@ -53,6 +169,32 @@ scheduler.showLightbox = function(id) {
 		$("#yr_day").val(sp[1]);	
 		break;
 	}
+	
+	/* //날짜입력창============================= */
+	var sDate=ev.start_date;
+	var eDate=ev.end_date;
+	console.log(new Date(eDate));
+	
+	if(sDate.getDate() != eDate.getDate()){
+	//alert("날짜 다름");
+	eDate=ev.end_date.setHours(ev.end_date.getHours()-1);
+	eDate=new Date(eDate);
+	}
+	
+    var SYear = sDate.getFullYear();
+    var SMonth = sDate.getMonth()+1;
+    if(SMonth < 10) SMonth = "0" + SMonth;
+    var SDay = sDate.getDate();
+    if(SDay < 10) SDay = "0" + SDay;
+    $("#timeSetStart").val(SYear+"-"+SMonth+"-"+SDay);
+    var EYear = eDate.getFullYear();
+    var EMonth = eDate.getMonth()+1;
+    if(EMonth < 10) EMonth = "0" + EMonth;
+    var EDay = eDate.getDate();
+    if(EDay < 10) EDay = "0" + EDay;
+    $("#timeSetEnd").val(EYear+"-"+EMonth+"-"+EDay);
+	selectTime();
+	/* //날짜입력창============================= */
 };
 
 function save_form() {
@@ -96,6 +238,7 @@ function close_form() {
 
 function delete_event() {
 	var event_id = scheduler.getState().lightbox_id;
+	
 	scheduler.endLightbox(false, html("my_form"));
 	scheduler.deleteEvent(event_id);
 }
@@ -172,7 +315,22 @@ function fnc_end_date() {
 function alarmChanged(){
 	console.log($("#alarm").val());
 }
-
+function show_minical(){
+    if (scheduler.isCalendarVisible()){
+        scheduler.destroyCalendar();
+    } else {
+        scheduler.renderCalendar({
+            position:"dhx_minical_icon",
+            date:scheduler._date,
+            navigation:true,
+            handler:function(date,calendar){
+                scheduler.setCurrentView(date);
+                scheduler.destroyCalendar()
+                getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+            }
+        });
+    }
+}
 function input_minical(id){
     if (scheduler.isCalendarVisible()){
         scheduler.destroyCalendar();
@@ -184,7 +342,7 @@ function input_minical(id){
             handler:function(date,calendar){
                 var originDate=date;
                 var tYear = originDate.getFullYear();
-                var tMonth = originDate.getMonth();
+                var tMonth = originDate.getMonth()+1;
                 if(tMonth < 10) tMonth = "0" + tMonth;
                 var tDay = originDate.getDate();
                 if(tDay < 10) tDay = "0" + tDay;
@@ -253,13 +411,7 @@ html, body {
 		#my_form label {
 			width: 200px;
 		}
-.mainwrapp {
-	width: 900px; 
-	height : 500px;
-	margin:0 auto;
-	/* left: 50%; */
-	text-align:center;
-}
+
 
 .detail_sel {
 	width: 65px;
@@ -326,40 +478,73 @@ html, body {
 		</tr>
 		<tr>
 			<th>시간설정</th>
-			<td></td>
+			<td> 
+			<!-- 시간설정================================== -->
+				<input type="text" name="timeSetStart" value="" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
+				<select id="Sampm">
+				<option id="Sam">AM</option>
+				<option id="Spm">PM</option>
+				</select>
+				<select id="SHour">
+				<c:forEach var="i" begin="1" end="12" >
+				<option id="SHour_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+				</select>:
+				<select id="SMin">
+				<c:forEach var="i" begin="0" end="59">
+				<option id="SMin_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+				</select>
+				~
+				<input type="text" name="timeSetEnd" value="" id="timeSetEnd" onclick="input_minical('timeSetEnd')" readonly="readonly">
+				<select id="Eampm">
+				<option id="Eam">AM</option>
+				<option id="Epm">PM</option>
+				</select>
+				<select id="EHour">
+				<c:forEach var="i" begin="1" end="12" >
+				<option id="EHour_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+				</select>:
+				<select id="EMin">
+				<c:forEach var="i" begin="0" end="59">
+				<option id="EMin_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+				</select>
+				<br>
+	<!-- 시간설정================================== -->
+			</td>
 		</tr>
 	</table>
-	<!-- 
-	<label for="description">제목</label><input type="text" name="description" value="" id="description"><br>
-	<label for="custom1">작성자</label><input type="text" name="custom1" value="" id="custom1"><br>
-	<label for="custom2"></label>내용<textarea rows="5" cols="50"></textarea><br>
-	<label for="category">카테고리</label><input type="text" name="category" value="" id="category"><br>
-	<label for="alarm">알람</label>
-	<select id="alarm" onchange="alarmChanged();">
-		<option value="none">알람없음</option>
-		<option value="0">시작시간</option>
-		<option value="5">5분전</option>
-		<option value="10">10분전</option>
-		<option value="60">1시간전</option>
-		<option value="180">3시간전</option>
-	</select><br>
-	<label for="repeat">반복 일정 ※체크박스를 누르고 종료기한을 설정하지 않을시 3개월간 반복합니다.</label>
-	<br>
-	<select id="repeat" onchange="repeatChanged();">
-		<option value="none">반복안함</option>
-		<option value="daily">매일</option>
-		<option value="monthly">매월</option>
-		<option value="yearly">매년</option>
-	</select>
-	<label>
-	    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
-	    <input class="dhx_repeat_date" type="text" id="end_date" name="date_of_end" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
-    </label><br>
-	<div class="detail_sel" id="div_repeat_month"></div>
-	<div class="detail_sel" id="div_repeat_day"></div><br>
-	<label for="timeSetting">시간설정</label><input type="text" name="timeSetting" value="" id="timeSetting"><br>
-	 -->
-	<div style="text-align: center;">
+<div style="text-align: center;">
 	<input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
 	<input type="button" name="close" value="Close" id="close" style='width:100px;' onclick="close_form()">
 	<input type="button" name="delete" value="Delete" id="delete" style='width:100px;' onclick="delete_event()">
@@ -372,6 +557,8 @@ html, body {
 		<div class="dhx_cal_next_button">&nbsp;</div>
 		<div class="dhx_cal_today_button"></div>
 		<div class="dhx_cal_date"></div>
+		<!-- 미니캘린더 -->
+		<div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div> 	
 		<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
 		<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
 		<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
