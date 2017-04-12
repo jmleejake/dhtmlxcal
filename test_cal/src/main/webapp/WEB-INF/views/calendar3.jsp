@@ -189,7 +189,7 @@ scheduler.showLightbox = function(id) {
 	console.log(new Date(eDate));
 	
 	if(sDate.getDate() != eDate.getDate()){
-	alert("날짜 다름");
+	//alert("날짜 다름");
 	eDate=ev.end_date.setHours(ev.end_date.getHours()-1);
 	}
 	//날짜입력창
