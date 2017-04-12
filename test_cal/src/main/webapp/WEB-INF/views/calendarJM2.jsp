@@ -23,8 +23,10 @@ console.log(nowHr+":"+nowMin);
 function selectTime(){
 	if(nowHr<12){
 	$("#Sam")[0].selected=true;		
+	$("#Eam")[0].selected=true;		
 	}else{
 	$("#Spm")[0].selected=true;		
+	$("#Epm")[0].selected=true;		
 	}
 	
 	$("#SHour_"+nowHr)[0].selected=true;
@@ -99,7 +101,7 @@ function init() {
     */
 
     //반복일정 만들기 view 딴에 뿌려주기 !!!! 
-    var Repeat = "daily";
+    var Repeat = "monthly";
     switch (Repeat) {
     case "daily":
     	var dayDiff = parseInt(diff/currDay);
