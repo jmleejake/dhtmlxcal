@@ -38,7 +38,7 @@ public class CalendarController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "calendarJM2";
+		return "cal_test";
 	}
 	@RequestMapping(value = "custom", method = RequestMethod.GET)
 	public String custome() {
