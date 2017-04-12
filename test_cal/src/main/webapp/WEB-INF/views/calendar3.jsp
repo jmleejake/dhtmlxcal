@@ -15,16 +15,24 @@
 <script type="text/javascript">
 //현재 연월 값!
 var todayDate = new Date();
-var nowHr = todayDate.getHours();
-var nowMin = todayDate.getMinutes();
+var todayDate2 = new Date();
+var nowHr = todayDate2.getHours();
+var nowMin = todayDate2.getMinutes();
 console.log(nowHr+":"+nowMin);
 
 function selectTime(){
 	if(nowHr<12){
-	$("#am")[0].selected=true;		
+	$("#Sam")[0].selected=true;		
 	}else{
-	$("#pm")[0].selected=true;		
+	$("#Spm")[0].selected=true;		
 	}
+	
+	$("#SHour_"+nowHr)[0].selected=true;
+	$("#EHour_"+nowHr)[0].selected=true;
+	$("#SMin_"+nowMin)[0].selected=true;
+	$("#EMin_"+nowMin)[0].selected=true;
+	
+	
 }
 
 
@@ -174,6 +182,30 @@ scheduler.showLightbox = function(id) {
 	html("repeat").value = ev.repeat || "";
 	//html("timeSetting").value = ev.timeSetting || "";
 	
+	//console.log(ev.start_date);
+	//console.log(ev.end_date);
+	var sDate=ev.start_date;
+	var eDate=ev.end_date;
+	if(sDate == eDate){
+	eDate=ev.end_date;
+	}else{
+	eDate=ev.end_date.setHours(ev.end_date.getHours()-1);
+	}
+	//날짜입력창
+    var SYear = ev.start_date.getFullYear();
+    var SMonth = ev.start_date.getMonth()+1;
+    if(SMonth < 10) SMonth = "0" + SMonth;
+    var SDay = ev.start_date.getDate();
+    if(SDay < 10) SDay = "0" + SDay;
+    $("#timeSetStart").val(SYear+"-"+SMonth+"-"+SDay);
+    var EYear = ev.end_date.getFullYear();
+    var EMonth = ev.end_date.getMonth()+1;
+    if(EMonth < 10) EMonth = "0" + EMonth;
+    var EDay = ev.end_date.getDate();
+    if(EDay < 10) EDay = "0" + EDay;
+    $("#timeSetEnd").val(EYear+"-"+EMonth+"-"+EDay);
+	
+	
 	selectTime();
 	
 };
@@ -250,7 +282,7 @@ function input_minical(id){
             handler:function(date,calendar){
                 var originDate=date;
                 var tYear = originDate.getFullYear();
-                var tMonth = originDate.getMonth();
+                var tMonth = originDate.getMonth()+1;
                 if(tMonth < 10) tMonth = "0" + tMonth;
                 var tDay = originDate.getDate();
                 if(tDay < 10) tDay = "0" + tDay;
@@ -307,13 +339,13 @@ html, body {
 	<label for="repeat">일정 반복</label><input type="text" name="repeat" value="" id="repeat"><br>
 	<label for="timeSetting">시간설정</label><br>
 	<input type="text" name="timeSetStart" value="" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
-	<select id="ampm">
-	<option id="am">AM</option>
-	<option id="pm">PM</option>
+	<select id="Sampm">
+	<option id="Sam">AM</option>
+	<option id="Spm">PM</option>
 	</select>
-	<select id="selHour">
+	<select id="SHour">
 	<c:forEach var="i" begin="1" end="12" >
-	<option id="selHour_${i }">
+	<option id="SHour_${i }">
 	<c:if test="${i<10 }">
 	0${i }
 	</c:if>
@@ -323,9 +355,9 @@ html, body {
 	</option>
 	</c:forEach>
 	</select>:
-	<select id="selMin">
-	<c:forEach var="i" begin="0" end="55" step="5">
-	<option id="selMin_${i }">
+	<select id="SMin">
+	<c:forEach var="i" begin="0" end="59">
+	<option id="SMin_${i }">
 	<c:if test="${i<10 }">
 	0${i }
 	</c:if>
@@ -334,17 +366,16 @@ html, body {
 	</c:if>
 	</option>
 	</c:forEach>
-	<option></option>
 	</select>
 	~
 	<input type="text" name="timeSetEnd" value="" id="timeSetEnd" onclick="input_minical('timeSetEnd')" readonly="readonly">
-	<select id="ampm">
-	<option id="am">AM</option>
-	<option id="pm">PM</option>
+	<select id="Eampm">
+	<option id="Eam">AM</option>
+	<option id="Epm">PM</option>
 	</select>
-	<select id="selHour">
+	<select id="EHour">
 	<c:forEach var="i" begin="1" end="12" >
-	<option id="selHour_${i }">
+	<option id="EHour_${i }">
 	<c:if test="${i<10 }">
 	0${i }
 	</c:if>
@@ -354,9 +385,9 @@ html, body {
 	</option>
 	</c:forEach>
 	</select>:
-	<select id="selMin">
-	<c:forEach var="i" begin="0" end="55" step="5">
-	<option id="selMin_${i }">
+	<select id="EMin">
+	<c:forEach var="i" begin="0" end="59">
+	<option id="EMin_${i }">
 	<c:if test="${i<10 }">
 	0${i }
 	</c:if>
@@ -365,7 +396,6 @@ html, body {
 	</c:if>
 	</option>
 	</c:forEach>
-	<option></option>
 	</select>
 	<br>
 	<input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
