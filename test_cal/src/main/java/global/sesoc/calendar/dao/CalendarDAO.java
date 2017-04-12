@@ -20,6 +20,7 @@ public class CalendarDAO {
 	private final String NONE = "none";
 	private final String DAILY = "daily";
 	private final String MONTHLY = "monthly";
+	private final String YEARLY = "yearly";
 	
 	private static final Logger logger = LoggerFactory.getLogger(CalendarDAO.class); 
 	//1)일정 조회하기(월별)
@@ -61,30 +62,28 @@ public class CalendarDAO {
 			int result = -1;
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
 			
-			if(!calendar.getRec_type().equals("")) {
-				String[] arr_rec = calendar.getRec_type().split("_");
-				
-				switch (arr_rec[0]) {
-					case "day": // 매일 반복
-						calendar.setRepeat_type(DAILY);
-						break;
-						
-					case "month": // 매월 반복
-						calendar.setRepeat_type(MONTHLY);
-						break;
-				}
-				try {
-					result=mapper.saveCal(calendar);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
+			switch (calendar.getRepeat_type()) {
+				case DAILY: // 매일 반복
+					calendar.setRepeat_type(DAILY);
+					break;
+					
+				case MONTHLY: // 매월 반복
+					calendar.setRepeat_type(MONTHLY);
+					break;
+					
+				case YEARLY: // 매년 반복
+					calendar.setRepeat_type(YEARLY);
+					break;
+					
+				default:
 					calendar.setRepeat_type(NONE);
-					result=mapper.saveCal(calendar);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+					break;
+			}
+			
+			try {
+				result = mapper.saveCal(calendar);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			
 			if(result > 0) {

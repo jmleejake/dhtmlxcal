@@ -12,6 +12,10 @@
 	type="text/javascript"></script>
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
+//현재 연월 값!
+var m_oMonth = new Date();
+m_oMonth.setDate(1);
+
 function init() {
 
 	scheduler.config.xml_date = "%Y-%m-%d %H:%i";
@@ -19,6 +23,8 @@ function init() {
 	scheduler.config.details_on_create = true;
 
 	scheduler.init('scheduler_here', new Date(), "month");
+	
+	getCalData(m_oMonth.getFullYear(), m_oMonth.getMonth() + 1);
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
@@ -30,18 +36,57 @@ scheduler.showLightbox = function(id) {
 	html("description").focus();
 	html("description").value = ev.text;
 	html("custom1").value = ev.custom1 || "";
-	html("custom2").value = ev.custom2 || "";
+	html("content").value = ev.content || "";
 	html("category").value = ev.category || "";
-	html("alarm").value = ev.alarm || "";
-	html("repeat").value = ev.repeat || "";
-	html("timeSetting").value = ev.timeSetting || "";
+	html("alarm").value = ev.alarm || "none";
+	html("repeat").value = ev.repeat_type || "none";
+	html("check_end_date").checked = ev.check_end_date;
+	html("end_date").value = ev.repeat_end_date || "";
+// 	html("timeSetting").value = ev.timeSetting || "";
+	switch(ev.repeat_type) {
+	case "monthly": // 매월
+		$("#mon_day").val(ev.repeat_detail);
+		break;
+	case "yearly": // 매년
+		var sp = ev.repeat_detail.split("_");
+		$("#yr_month").val(sp[0]);
+		$("#yr_day").val(sp[1]);	
+		break;
+	}
 };
 
 function save_form() {
 	var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
 	ev.text = html("description").value;
 	ev.custom1 = html("custom1").value;
-	ev.custom2 = html("custom2").value;
+	ev.content = $("#content")[0].value;
+	ev.alarm = $("#alarm").val();
+	ev.check_end_date = $("#check_end_date")[0].checked;
+	ev.repeat_type = $("#repeat").val()
+	ev.repeat_end_date = $("#end_date").val();
+	
+	switch($("#repeat").val()) {
+	case "monthly": // 매월
+		 ev.repeat_detail = $("#mon_day").val();
+		break;
+	case "yearly": // 매년
+		ev.repeat_detail = $("#yr_month").val() + "_" + $("#yr_day").val();	
+		break;
+	}
+	
+	console.log(ev);
+	
+	$.ajax({
+		url:"save"
+		, type:"post"
+		, data:ev
+		,success:function() {
+			
+		}
+		, error:function() {
+			
+		}
+	});
 
 	scheduler.endLightbox(true, html("my_form"));
 }
@@ -63,11 +108,12 @@ function repeatChanged() {
 	$("#div_repeat_day").html(r_day);
 	
 	switch($("#repeat").val()) {
-	case "monthly":
-		
+	case "monthly": // 매월
+		r_day += "<input style='width:30px;' type='text' id='mon_day' >일";
+		$("#div_repeat_day").html(r_day);
 		break;
-	case "yearly":
-		r_month += "<select id='repeat_month' onchange='rep_mon_changed();'>";
+	case "yearly": // 매년
+		r_month += "<select id='yr_month' onchange='rep_mon_changed();'>";
 		for(var i=1; i<13; i++) {
 			r_month += "<option>" + i + "</option>"
 		}
@@ -75,7 +121,7 @@ function repeatChanged() {
 		
 		$("#div_repeat_month").html(r_month);
 		
-		r_day += "<select>"
+		r_day += "<select id='yr_day'>"
 		for(var j=1; j<daysInMonth(1, new Date().getFullYear())+1; j++) {
 			r_day += "<option>" + j + "</option>"
 		}
@@ -86,15 +132,13 @@ function repeatChanged() {
 	}
 }
 
+// 반복일정 매년 선택시 해당 월의 일수를 얻어 셀렉트박스 갱신
 function rep_mon_changed() {
 	var r_day = "";
 	$("#div_repeat_day").html(r_day);
 	
-	console.log($("#repeat_month").val());
-	console.log(daysInMonth($("#repeat_month").val(), new Date().getFullYear()));
-	
-	r_day += "<select>"
-	for(var j=1; j<daysInMonth($("#repeat_month").val(), new Date().getFullYear())+1; j++) {
+	r_day += "<select id='yr_day'>"
+	for(var j=1; j<daysInMonth($("#yr_month").val(), new Date().getFullYear())+1; j++) {
 		r_day += "<option>" + j + "</option>"
 	}
 	r_day += "</select>일"
@@ -114,7 +158,15 @@ function daysInMonth(month,year) {
     return new Date(year, month, 0).getDate();
 }
 
-
+//반복일정 체크박스 클릭시
+function fnc_end_date() {
+	if($("#check_end_date")[0].checked) {
+		$("#end_date")[0].disabled = false;
+	} else {
+		$("#end_date").val("");
+		$("#end_date")[0].disabled = true;
+	}
+}
 
 // 알람 셀렉트박스
 function alarmChanged(){
@@ -143,13 +195,35 @@ function input_minical(id){
     }
 }
 
-function fnc_end_date() {
-	if($("#check_end_date")[0].checked) {
-		$("#end_date")[0].disabled = false;
-	} else {
-		$("#end_date").val("");
-		$("#end_date")[0].disabled = true;
-	}
+function getCalData(thisYear, thisMonth) {
+	$.ajax({
+		url:"show"
+			, type:"post"
+			, data : {"thisYear":thisYear,"thisMonth" : thisMonth}
+			, dataType : "json"
+			, success:showEvents
+			, error:function(e) {
+				alert(JSON.stringify(e));
+			} 
+	});
+}
+function showEvents(ret) {
+	var calArray = new Array();
+	$.each(ret, function(i, event) {
+		var calObj = {
+				id:event.id
+				, text:event.text
+				, start_date:event.start_date
+				, end_date:event.end_date
+				, content:event.content
+				, repeat_type:event.repeat_type
+				, repeat_end_date:event.repeat_end_date
+// 				, rec_type:event.rec_type
+// 				, event_pid:event.event_pid
+		}
+		calArray.push(calObj);
+	});
+	scheduler.parse(calArray, "json");
 }
 
 </script>
@@ -188,18 +262,77 @@ html, body {
 }
 
 .detail_sel {
-	width: 70px;
-	height: 15px;
+	width: 65px;
+	height: 20px;
 	display: inline-block;
+}
+
+.sel {
+	width: 80px;
+	height: 20px;
 }
 </style>
 </head>
 <body onload="init();">
 
 <div id="my_form">
+	<table>
+		<tr>
+			<th>제목</th>
+			<td><input type="text" id="description"></td>
+		</tr>
+		<tr>
+			<th>작성자</th>
+			<td><input type="text" id="custom1"></td>
+		</tr>
+		<tr>
+			<th>내용</th>
+			<td><textarea id="content" rows="5" cols="50"></textarea></td>
+		</tr>
+		<tr>
+			<th>카테고리</th>
+			<td><input type="text" name="category" value="" id="category"></td>
+		</tr>
+		<tr>
+			<th>알람</th>
+			<td>
+			<select class="sel" id="alarm" onchange="alarmChanged();">
+				<option value="none">알람없음</option>
+				<option value="0">시작시간</option>
+				<option value="5">5분전</option>
+				<option value="10">10분전</option>
+				<option value="60">1시간전</option>
+				<option value="180">3시간전</option>
+			</select>
+			</td>
+		</tr>
+		<tr>
+			<th>반복일정</th>
+			<td>
+			※체크박스를 누르고 종료기한을 설정하지 않을시 3개월간 반복합니다.<br>
+			<select class="sel" id="repeat" onchange="repeatChanged();">
+				<option value="none">반복안함</option>
+				<option value="daily">매일</option>
+				<option value="monthly">매월</option>
+				<option value="yearly">매년</option>
+			</select>
+			<label>
+			    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
+			    <input class="dhx_repeat_date" type="text" id="end_date" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
+		    </label><br>
+			<div class="detail_sel" id="div_repeat_month"></div>
+			<div class="detail_sel" id="div_repeat_day"></div>
+			</td>
+		</tr>
+		<tr>
+			<th>시간설정</th>
+			<td></td>
+		</tr>
+	</table>
+	<!-- 
 	<label for="description">제목</label><input type="text" name="description" value="" id="description"><br>
 	<label for="custom1">작성자</label><input type="text" name="custom1" value="" id="custom1"><br>
-	<label for="custom2">내용</label><input type="text" name="custom2" value="" id="custom2"><br>
+	<label for="custom2"></label>내용<textarea rows="5" cols="50"></textarea><br>
 	<label for="category">카테고리</label><input type="text" name="category" value="" id="category"><br>
 	<label for="alarm">알람</label>
 	<select id="alarm" onchange="alarmChanged();">
@@ -210,27 +343,27 @@ html, body {
 		<option value="60">1시간전</option>
 		<option value="180">3시간전</option>
 	</select><br>
-<!-- 	<input type="text" name="alarm" value="" id="alarm"> -->
-	<label for="repeat">반복 일정</label>
-	<div>
-		<select id="repeat" onchange="repeatChanged();">
-			<option value="none">반복안함</option>
-			<option value="daily">매일</option>
-			<option value="monthly">매월</option>
-			<option value="yearly">매년</option>
-		</select>
-		<label>
-		    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
-		    <input class="dhx_repeat_date" type="text" id="end_date" name="date_of_end" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
-	    </label><br>
-		<div class="detail_sel" id="div_repeat_month"></div>
-		<div class="detail_sel" id="div_repeat_day"></div>
-	</div>
-<!-- 	<input type="text" name="repeat" value="" id="repeat"> -->
+	<label for="repeat">반복 일정 ※체크박스를 누르고 종료기한을 설정하지 않을시 3개월간 반복합니다.</label>
+	<br>
+	<select id="repeat" onchange="repeatChanged();">
+		<option value="none">반복안함</option>
+		<option value="daily">매일</option>
+		<option value="monthly">매월</option>
+		<option value="yearly">매년</option>
+	</select>
+	<label>
+	    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
+	    <input class="dhx_repeat_date" type="text" id="end_date" name="date_of_end" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
+    </label><br>
+	<div class="detail_sel" id="div_repeat_month"></div>
+	<div class="detail_sel" id="div_repeat_day"></div><br>
 	<label for="timeSetting">시간설정</label><input type="text" name="timeSetting" value="" id="timeSetting"><br>
+	 -->
+	<div style="text-align: center;">
 	<input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
 	<input type="button" name="close" value="Close" id="close" style='width:100px;' onclick="close_form()">
 	<input type="button" name="delete" value="Delete" id="delete" style='width:100px;' onclick="delete_event()">
+	</div>
 </div>
 
 <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
