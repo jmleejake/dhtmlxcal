@@ -378,8 +378,6 @@ function showEvents(ret) {
 				, content:event.content
 				, repeat_type:event.repeat_type
 				, repeat_end_date:event.repeat_end_date
-// 				, rec_type:event.rec_type
-// 				, event_pid:event.event_pid
 		}
 		calArray.push(calObj);
 	});
