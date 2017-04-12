@@ -9,7 +9,8 @@ create table events(
   text varchar2(500),
   content varchar2(2000),
   repeat_type varchar2(50),
-  repeat_end_date date
+  repeat_end_date date,
+  is_dbdata char(1)
 );
   
 CREATE SEQUENCE events_seq;

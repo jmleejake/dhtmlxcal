@@ -15,7 +15,8 @@
 	  , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
 	  , content
 	  , repeat_type
-	  , repeat_end_date
+	  , to_char(repeat_end_date, 'yyyy-mm-dd') repeat_end_date
+	  , is_dbdata
   from events
   where start_date >= to_date(#{date}, 'yyyy-mm-dd')
   and end_date <= last_day(to_date(#{date}, 'yyyy-mm-dd'))
@@ -34,6 +35,7 @@ insert into events
 	<if test="repeat_end_date != null">
 	, repeat_end_date
 	</if>
+	, is_dbdata
 	)
 values 
 	(
@@ -46,6 +48,7 @@ values
 	<if test="repeat_end_date != null">
 	, to_date(#{repeat_end_date}, 'YYYY-MM-DD')
 	</if>
+	, 'T'
 	)
 </insert>
 <!-- 3)캘린더 일정 삭제하기 -->
@@ -67,6 +70,10 @@ select * from events where id = #{id}
 		, content = #{content}
 		, start_date = to_date(substr(#{start_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
 		, end_date = to_date(substr(#{end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
+		, repeat_type = #{repeat_type}
+		<if test="repeat_end_date != null">
+		, repeat_end_date = to_date(#{repeat_end_date}, 'YYYY-MM-DD')
+		</if>
 	where
 		id = #{id}
 </update>

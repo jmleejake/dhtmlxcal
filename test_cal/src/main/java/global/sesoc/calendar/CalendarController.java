@@ -38,23 +38,13 @@ public class CalendarController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "cal_test";
+		return "calendarJM";
 	}
 	@RequestMapping(value = "custom", method = RequestMethod.GET)
 	public String custome() {
 		return "custom_cal";
 	}
 
-	@ResponseBody
-	@RequestMapping(value="showYr", method=RequestMethod.POST)
-	public ArrayList<Calendar> showYr(int thisYear) {
-		String date = "";
-		date +=thisYear;		
-		System.out.println(date+"년도");
-		logger.debug("showSchedule!");
-		return dao.listCalYr(date);
-	}
-	
 	@ResponseBody
 	@RequestMapping(value="show", method=RequestMethod.POST)
 	public ArrayList<Calendar> showSchedule(int thisYear, int thisMonth) {
@@ -67,8 +57,8 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="save", method=RequestMethod.POST, produces="application/json;charset=utf-8")
-	public Calendar saveSchedule(Calendar vo) {
-		Calendar ret = new Calendar();
+	public int saveSchedule(Calendar vo) {
+		int ret = 0;
 		logger.debug("-------------------- event save process start");
 		
 		logger.debug("cal :: \n{}", vo);
@@ -78,7 +68,7 @@ public class CalendarController {
 		
 		if(exist != null) {
 			logger.debug("-------------------- event update process start1");
-//			ret = dao.modifyEvent(vo);
+			ret = dao.modifyEvent(vo);
 			logger.debug("-------------------- event update process end");
 		} else {
 			logger.debug("-------------------- event create process start");
@@ -92,7 +82,7 @@ public class CalendarController {
 	
 	@ResponseBody
 	@RequestMapping(value="del", method=RequestMethod.POST)
-	public String delSchedule(int id) {
+	public String delSchedule(String id) {
 		System.out.println("삭제할 게시물 :"+ id);
 		dao.delCal(id);
 		return "";

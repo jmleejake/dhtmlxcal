@@ -7,34 +7,61 @@
 <meta charset=UTF-8">
 <title>cal_test</title>
 <script src="resources/jquery-3.1.1.min.js"></script>
+<script src="resources/jquery-ui.js"></script>
 <script src="scheduler/dhtmlxscheduler.js" type="text/javascript"></script>
 <script src='scheduler/ext/dhtmlxscheduler_minical.js' type="text/javascript"></script>
 <script src="scheduler/ext/dhtmlxscheduler_recurring.js"
 	type="text/javascript"></script>
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
+$( function() {
+    $( "#my_form" ).draggable();
+} );
 //현재 연월 값!
 var todayDate = new Date();
 var todayDate2 = new Date();
 var nowHr = todayDate2.getHours();
 var nowMin = todayDate2.getMinutes();
-console.log(nowHr+":"+nowMin);
 //이벤트창 현재시간으로 설정 
 function selectTime(){
 	if(nowHr<12){
-	$("#Sam")[0].selected=true;		
-	}else{
-	$("#Spm")[0].selected=true;		
-	}
-	
+	$("#Sam")[0].selected=true;
+	$("#Eam")[0].selected=true;
 	$("#SHour_"+nowHr)[0].selected=true;
 	$("#EHour_"+nowHr)[0].selected=true;
+	}else{
+	$("#Spm")[0].selected=true;
+	$("#Epm")[0].selected=true;
+	$("#SHour_"+(nowHr-12))[0].selected=true;
+	$("#EHour_"+(nowHr-12))[0].selected=true;
+	}
 	$("#SMin_"+nowMin)[0].selected=true;
 	$("#EMin_"+nowMin)[0].selected=true;
 }
 
-function init() {
+function selectTimeFromDB(sH, sM, eH, eM){
+	if(sH<12){
+	$("#Sam")[0].selected=true;
+	$("#SHour_"+sH)[0].selected=true;
+	}else{
+	$("#Spm")[0].selected=true;
+	$("#SHour_"+(sH-12))[0].selected=true;
+	}
+	
+	
+	if(eH<12){
+	$("#Eam")[0].selected=true;
+	$("#EHour_"+eH)[0].selected=true;
+	}else{
+	$("#Epm")[0].selected=true;
+	$("#EHour_"+(eH-12))[0].selected=true;
+	}
+	$("#SMin_"+sM)[0].selected=true;
+	$("#EMin_"+eM)[0].selected=true;
+}
 
+// 초기화
+function init() {
 	scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 	scheduler.config.details_on_dblclick = true;
 	scheduler.config.details_on_create = true;
@@ -53,23 +80,10 @@ function init() {
    	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
    	 });
 	//날짜 얻어오기
-    console.log("start");
+//     console.log("start");
     var tGdayYear = new Date().getFullYear();
     var tGdayMonth = new Date().getMonth();
     var tGdayDay = new Date().getDate();
-
-    
- // 데이터 추가
-   /*  scheduler.addEvent({
-       id:1234
-       , start_date: new Date(2017,3,12,14)
-       , end_date: new Date(2017,3,12,18)
-       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
-       ,repeat_type : "daily"
-       ,repeat_end_date : new Date(2017,3,15,18)
-    }); */
-    
-    
     
     //시작날짜를 Date로 !
     var tSday = "2017-04-11 00:01";
@@ -77,14 +91,14 @@ function init() {
     var tSdatyMonth=tSday.substring(5,7);
     var tSdatyDay=tSday.substring(8,10);
     var tStart = new Date(tSdatyYear,tSdatyMonth-1,tSdatyDay,00,01,0);
-    console.log("시작날짜 : "+tStart);
+//     console.log("시작날짜 : "+tStart);
     //종료날짜를 Date로!
     var tEday = "2017-10-20 00:05";
     var tEdatyYear=tEday.substring(0,4);
     var tEdatyMonth=tEday.substring(5,7);
     var tEdatyDay=tEday.substring(8,10);
     var tEnd = new Date(tEdatyYear,tEdatyMonth-1,tEdatyDay,00,01,0);
-    console.log("종료날짜 : "+tEnd);
+//     console.log("종료날짜 : "+tEnd);
 
     //시작날짜와 종료날짜의 시간텀!
     var diff = tEnd - tStart;
@@ -106,18 +120,17 @@ function init() {
     	for(var i=0;i<dayDiff;i++){
     	    var test=tStart.setDate(tStart.getDate()+1);
     	    var test2=tStart.setMinutes(tStart.getMinutes()+5);
-    	    console.log(new Date(test));
-    	    console.log(new Date(test2));
     	    
-    		console.log(i+"번째 : "+tStart);
-    		 scheduler.addEvent({
-    		       id:repeat+"_"+i+"_"+1234
-    		       , start_date: new Date(test)
-    		       , end_date: new Date(test2)
-    		       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
-    		       ,repeat_type : "daily"
-    		       ,repeat_end_date : new Date(tEnd)
-    		    });
+//     		console.log(i+"번째 : "+tStart);
+
+    	    scheduler.addEvent({
+ 		       id:repeat+"_"+i+"_"+1234
+ 		       , start_date: new Date(test)
+ 		       , end_date: new Date(test2)
+ 		       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
+ 		       ,repeat_type : "daily"
+ 		       ,repeat_end_date : new Date(tEnd)
+ 		    });
     	}
     	
     	break;
@@ -125,14 +138,14 @@ function init() {
     	var monthDiff = parseInt(diff/currMonth);
     	for(var i=0;i<monthDiff;i++){
     	    tStart.setMonth(tStart.getMonth()+1);
-    		console.log(i+"번째 : "+tStart);
+//     		console.log(i+"번째 : "+tStart);
     	}
     	break;
     case "yearly":
     	var yearlyDiff = parseInt(diff/currYear);
     	for(var i=0;i<yearlyDiff;i++){
     	    tStart.setFullYear(tStart.getFullYear()+1);
-    		console.log(i+"번째 : "+tStart);
+//     		console.log(i+"번째 : "+tStart);
     	}
     	break;
 
@@ -140,12 +153,13 @@ function init() {
     	break;
     }
 
-    console.log("end");
+//     console.log("end");
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
 
 scheduler.showLightbox = function(id) {
+	e_dateInit();
 	var ev = scheduler.getEvent(id);
 	scheduler.startLightbox(id, html("my_form"));
 
@@ -173,14 +187,24 @@ scheduler.showLightbox = function(id) {
 	/* //날짜입력창============================= */
 	var sDate=ev.start_date;
 	var eDate=ev.end_date;
-	console.log(new Date(eDate));
 	
+	var sH=sDate.getHours();
+	var sM=sDate.getMinutes();
+	var eH=eDate.getHours();
+	var eM=eDate.getMinutes();
+	
+	//db에서 가져 올때
+	if(ev.is_dbdata == "T"){
+		selectTimeFromDB(sH, sM, eH, eM);
+	}
+	//이벤트창에 날짜설정
+	else{
 	if(sDate.getDate() != eDate.getDate()){
 	//alert("날짜 다름");
 	eDate=ev.end_date.setHours(ev.end_date.getHours()-1);
 	eDate=new Date(eDate);
+	}		
 	}
-	
     var SYear = sDate.getFullYear();
     var SMonth = sDate.getMonth()+1;
     if(SMonth < 10) SMonth = "0" + SMonth;
@@ -193,10 +217,13 @@ scheduler.showLightbox = function(id) {
     var EDay = eDate.getDate();
     if(EDay < 10) EDay = "0" + EDay;
     $("#timeSetEnd").val(EYear+"-"+EMonth+"-"+EDay);
-	selectTime();
+    //새로 이벤트 입력할때 
+	if(ev.is_dbdata == null)selectTime();
+	
 	/* //날짜입력창============================= */
 };
 
+// 저장
 function save_form() {
 	var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
 	ev.text = html("description").value;
@@ -206,6 +233,43 @@ function save_form() {
 	ev.check_end_date = $("#check_end_date")[0].checked;
 	ev.repeat_type = $("#repeat").val()
 	ev.repeat_end_date = $("#end_date").val();
+	/*
+	ev.start_date = $("#timeSetStart").val() 
+	+ " " + $("#Sampm").val() + " " 
+	+ $("#SHour").val() + ":" + $("#SMin").val();
+	ev.end_date = $("#timeSetEnd").val()
+	+ " " + $("#Eampm").val() + " " 
+	+ $("#EHour").val() + ":" + $("#EMin").val();
+	*/
+	//
+	
+	switch ($("#Sampm").val()) {
+	case "AM":
+		ev.start_date = new Date($("#timeSetStart").val() 
+		+ " " + $("#SHour").val() 
+		+ ":" + $("#SMin").val());
+		break;
+		
+	case "PM":
+		ev.start_date = new Date($("#timeSetStart").val() 
+		+ " " + (parseInt($("#SHour").val())+12) 
+		+ ":" + $("#SMin").val());
+		break;
+	}
+	
+	switch ($("#Eampm").val()) {
+	case "AM":
+		ev.end_date = new Date($("#timeSetEnd").val() 
+		+ " " + $("#EHour").val() 
+		+ ":" + $("#EMin").val());
+		break;
+		
+	case "PM":
+		ev.end_date = new Date($("#timeSetEnd").val() 
+		+ " " + (parseInt($("#EHour").val())+12) 
+		+ ":" + $("#EMin").val());
+		break;
+	}
 	
 	switch($("#repeat").val()) {
 	case "monthly": // 매월
@@ -223,82 +287,69 @@ function save_form() {
 		, type:"post"
 		, data:ev
 		,success:function() {
-			
+			console.log("success");
+			getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
 		}
 		, error:function() {
-			
+			alert("등록실패");
+			getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
 		}
 	});
 
 	scheduler.endLightbox(true, html("my_form"));
+	
+	if(ev.is_dbdata == null){
+		scheduler.deleteEvent(ev.id);
+	}
 }
+
+// 창닫기
 function close_form() {
 	scheduler.endLightbox(false, html("my_form"));
 }
 
+// 삭제
 function delete_event() {
 	var event_id = scheduler.getState().lightbox_id;
 	
 	scheduler.endLightbox(false, html("my_form"));
+	
+	$.ajax({
+		url : "del"
+		, method : "post"
+		, data : {"id" : event_id}
+		, success : function(){
+			getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+			alert("deleted!!!");
+		}
+		,error : function(){
+			alert("Not deleted!!!")
+		}
+	});
+	
 	scheduler.deleteEvent(event_id);
 }
 
 // 반복 일정 셀렉트박스
 function repeatChanged() {
-	var r_month = "";
-	var r_day = "";
-	$("#div_repeat_month").html(r_month);
-	$("#div_repeat_day").html(r_day);
+	e_dateInit();
+	switch ($("#repeat").val()) {
+		case "daily":
+			$("#timeSetEnd")[0].disabled = true;
+			$("#Eampm")[0].disabled = true;
+			$("#EHour")[0].disabled = true;
+			$("#EMin")[0].disabled = true;
+			break;
 	
-	switch($("#repeat").val()) {
-	case "monthly": // 매월
-		r_day += "<input style='width:30px;' type='text' id='mon_day' >일";
-		$("#div_repeat_day").html(r_day);
-		break;
-	case "yearly": // 매년
-		r_month += "<select id='yr_month' onchange='rep_mon_changed();'>";
-		for(var i=1; i<13; i++) {
-			r_month += "<option>" + i + "</option>"
-		}
-		r_month += "</select>월";
-		
-		$("#div_repeat_month").html(r_month);
-		
-		r_day += "<select id='yr_day'>"
-		for(var j=1; j<daysInMonth(1, new Date().getFullYear())+1; j++) {
-			r_day += "<option>" + j + "</option>"
-		}
-		r_day += "</select>일"
-		
-		$("#div_repeat_day").html(r_day);
-		break;
 	}
 }
 
-// 반복일정 매년 선택시 해당 월의 일수를 얻어 셀렉트박스 갱신
-function rep_mon_changed() {
-	var r_day = "";
-	$("#div_repeat_day").html(r_day);
-	
-	r_day += "<select id='yr_day'>"
-	for(var j=1; j<daysInMonth($("#yr_month").val(), new Date().getFullYear())+1; j++) {
-		r_day += "<option>" + j + "</option>"
-	}
-	r_day += "</select>일"
-	
-	$("#div_repeat_day").html(r_day);
-}
-
-// 월에 해당하는 일수 계산하여 얻기
-function daysInMonth(month,year) {
-	/*
-	//July
-	daysInMonth(7,2009); //31
-	//February
-	daysInMonth(2,2009); //28
-	daysInMonth(2,2008); //29
-	*/
-    return new Date(year, month, 0).getDate();
+// 시간설정 종료일자 초기화
+function e_dateInit() {
+	$("#timeSetEnd")[0].disabled = false;
+	$("#Eampm")[0].disabled = false;
+	$("#EHour")[0].disabled = false;
+	$("#EMin")[0].disabled = false;
 }
 
 //반복일정 체크박스 클릭시
@@ -315,6 +366,8 @@ function fnc_end_date() {
 function alarmChanged(){
 	console.log($("#alarm").val());
 }
+
+// 미니캘린더 보이기
 function show_minical(){
     if (scheduler.isCalendarVisible()){
         scheduler.destroyCalendar();
@@ -331,6 +384,8 @@ function show_minical(){
         });
     }
 }
+
+// 종료일자 textbox클릭시 미니캘린더 보이기
 function input_minical(id){
     if (scheduler.isCalendarVisible()){
         scheduler.destroyCalendar();
@@ -365,6 +420,7 @@ function getCalData(thisYear, thisMonth) {
 			} 
 	});
 }
+
 function showEvents(ret) {
 	var calArray = new Array();
 	$.each(ret, function(i, event) {
@@ -376,8 +432,7 @@ function showEvents(ret) {
 				, content:event.content
 				, repeat_type:event.repeat_type
 				, repeat_end_date:event.repeat_end_date
-// 				, rec_type:event.rec_type
-// 				, event_pid:event.event_pid
+				, is_dbdata:event.is_dbdata
 		}
 		calArray.push(calObj);
 	});
@@ -388,47 +443,55 @@ function showEvents(ret) {
 <link rel="stylesheet" href="scheduler/dhtmlxscheduler_flat.css"
 	type="text/css">
 <style type="text/css" media="screen">
-html, body {
-			margin: 0px;
-			padding: 0px;
-			height: 100%;
-			overflow: hidden;
-		}
+	html, body {
+		margin: 0px;
+		padding: 0px;
+		height: 100%;
+		overflow: hidden;
+	}
 
-		#my_form {
-			position: absolute;
-			top: 100px;
-			left: 200px;
-			z-index: 15;
-			display: none;
-			background-color: white;
-			border: 2px outset gray;
-			padding: 20px;
-			font-family: Tahoma;
-			font-size: 10pt;
-		}
+	#my_form {
+		position: absolute;
+		top: 100px;
+		left: 200px;
+		z-index: 15;
+		display: none;
+		background-color: white;
+		border: 2px outset gray;
+		padding: 20px;
+		font-family: Tahoma;
+		font-size: 10pt;
+	}
 
-		#my_form label {
-			width: 200px;
-		}
-
-
-.detail_sel {
-	width: 65px;
-	height: 20px;
-	display: inline-block;
-}
-
-.sel {
-	width: 80px;
-	height: 20px;
-}
+	.detail_sel {
+		width: 65px;
+		height: 20px;
+		display: inline-block;
+	}
+	
+	.sel {
+		width: 80px;
+		height: 20px;
+	}
+	
+	.time_section {
+		width: 100px;
+		height: 15px;
+	}
+	
+	p {
+		color: red;
+	}
 </style>
 </head>
 <body onload="init();">
 
 <div id="my_form">
 	<table>
+		<tr>
+			<th>카테고리</th>
+			<td><input type="text" id="category"></td>
+		</tr>
 		<tr>
 			<th>제목</th>
 			<td><input type="text" id="description"></td>
@@ -442,8 +505,80 @@ html, body {
 			<td><textarea id="content" rows="5" cols="50"></textarea></td>
 		</tr>
 		<tr>
-			<th>카테고리</th>
-			<td><input type="text" name="category" value="" id="category"></td>
+			<th>시간설정</th>
+			<td> 
+			<!-- 시간설정================================== -->
+			<input class="time_section" type="text" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
+			<select id="Sampm">
+				<option id="Sam">AM</option>
+				<option id="Spm">PM</option>
+			</select>
+			<select id="SHour">
+				<c:forEach var="i" begin="1" end="12" >
+				<option id="SHour_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+			</select> :
+			<select id="SMin">
+				<c:forEach var="i" begin="0" end="59">
+				<option id="SMin_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+			</select>
+			~
+			<input class="time_section" type="text" id="timeSetEnd" onclick="input_minical('timeSetEnd')" readonly="readonly">
+			<select id="Eampm">
+				<option id="Eam">AM</option>
+				<option id="Epm">PM</option>
+			</select>
+			<select id="EHour">
+				<c:forEach var="i" begin="1" end="12" >
+				<option id="EHour_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+			</select> :
+			<select id="EMin">
+				<c:forEach var="i" begin="0" end="59">
+				<option id="EMin_${i }">
+				<c:if test="${i<10 }">
+				0${i }
+				</c:if>
+				<c:if test="${i>=10 }">
+				${i }
+				</c:if>
+				</option>
+				</c:forEach>
+			</select>
+			<br>
+			<select class="sel" id="repeat" style="margin-top: 3px;" onchange="repeatChanged();">
+				<option value="none">반복안함</option>
+				<option value="daily">매일</option>
+				<option value="monthly">매월</option>
+				<option value="yearly">매년</option>
+			</select>
+		    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
+		    <input class="time_section" type="text" id="end_date" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
+		    <br>
+			<!-- 시간설정================================== -->
+			</td>
 		</tr>
 		<tr>
 			<th>알람</th>
@@ -456,91 +591,6 @@ html, body {
 				<option value="60">1시간전</option>
 				<option value="180">3시간전</option>
 			</select>
-			</td>
-		</tr>
-		<tr>
-			<th>반복일정</th>
-			<td>
-			※체크박스를 누르고 종료기한을 설정하지 않을시 3개월간 반복합니다.<br>
-			<select class="sel" id="repeat" onchange="repeatChanged();">
-				<option value="none">반복안함</option>
-				<option value="daily">매일</option>
-				<option value="monthly">매월</option>
-				<option value="yearly">매년</option>
-			</select>
-			<label>
-			    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
-			    <input class="dhx_repeat_date" type="text" id="end_date" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
-		    </label><br>
-			<div class="detail_sel" id="div_repeat_month"></div>
-			<div class="detail_sel" id="div_repeat_day"></div>
-			</td>
-		</tr>
-		<tr>
-			<th>시간설정</th>
-			<td> 
-			<!-- 시간설정================================== -->
-				<input type="text" name="timeSetStart" value="" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
-				<select id="Sampm">
-				<option id="Sam">AM</option>
-				<option id="Spm">PM</option>
-				</select>
-				<select id="SHour">
-				<c:forEach var="i" begin="1" end="12" >
-				<option id="SHour_${i }">
-				<c:if test="${i<10 }">
-				0${i }
-				</c:if>
-				<c:if test="${i>=10 }">
-				${i }
-				</c:if>
-				</option>
-				</c:forEach>
-				</select>:
-				<select id="SMin">
-				<c:forEach var="i" begin="0" end="59">
-				<option id="SMin_${i }">
-				<c:if test="${i<10 }">
-				0${i }
-				</c:if>
-				<c:if test="${i>=10 }">
-				${i }
-				</c:if>
-				</option>
-				</c:forEach>
-				</select>
-				~
-				<input type="text" name="timeSetEnd" value="" id="timeSetEnd" onclick="input_minical('timeSetEnd')" readonly="readonly">
-				<select id="Eampm">
-				<option id="Eam">AM</option>
-				<option id="Epm">PM</option>
-				</select>
-				<select id="EHour">
-				<c:forEach var="i" begin="1" end="12" >
-				<option id="EHour_${i }">
-				<c:if test="${i<10 }">
-				0${i }
-				</c:if>
-				<c:if test="${i>=10 }">
-				${i }
-				</c:if>
-				</option>
-				</c:forEach>
-				</select>:
-				<select id="EMin">
-				<c:forEach var="i" begin="0" end="59">
-				<option id="EMin_${i }">
-				<c:if test="${i<10 }">
-				0${i }
-				</c:if>
-				<c:if test="${i>=10 }">
-				${i }
-				</c:if>
-				</option>
-				</c:forEach>
-				</select>
-				<br>
-	<!-- 시간설정================================== -->
 			</td>
 		</tr>
 	</table>

@@ -9,6 +9,7 @@ public class Calendar {
 	private String content;
 	private String repeat_type;
 	private String repeat_end_date;
+	private String is_dbdata;
 	
 	public String getId() {
 		return id;
@@ -52,12 +53,18 @@ public class Calendar {
 	public void setRepeat_end_date(String repeat_end_date) {
 		this.repeat_end_date = repeat_end_date;
 	}
+	public String getIs_dbdata() {
+		return is_dbdata;
+	}
+	public void setIs_dbdata(String is_dbdata) {
+		this.is_dbdata = is_dbdata;
+	}
 	
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
-				+ ", content=" + content + ", repeat_type=" + repeat_type
-				+ ", repeat_end_date=" + repeat_end_date + "]";
+				+ ", content=" + content + ", repeat_type=" + repeat_type + ", repeat_end_date=" + repeat_end_date
+				+ ", is_dbdata=" + is_dbdata + "]";
 	}
 	
 }
