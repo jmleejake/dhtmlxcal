@@ -430,54 +430,23 @@ html, body {
 <div id="my_form">
 	<table>
 		<tr>
-			<th>제목</th>
-			<td><input type="text" id="description"></td>
+			<th>카테고리</th>
+			<td><input type="text" name="category" value="" id="category"></td>
 		</tr>
 		<tr>
+			<th>제목</th>
+			<td><input type="text" id="description" ></td>
 			<th>작성자</th>
-			<td><input type="text" id="custom1"></td>
+			<td><input type="hidden" id="custom1">TestID</td>
 		</tr>
 		<tr>
 			<th>내용</th>
 			<td><textarea id="content" rows="5" cols="50"></textarea></td>
 		</tr>
+		
+		
 		<tr>
-			<th>카테고리</th>
-			<td><input type="text" name="category" value="" id="category"></td>
-		</tr>
-		<tr>
-			<th>알람</th>
-			<td>
-			<select class="sel" id="alarm" onchange="alarmChanged();">
-				<option value="none">알람없음</option>
-				<option value="0">시작시간</option>
-				<option value="5">5분전</option>
-				<option value="10">10분전</option>
-				<option value="60">1시간전</option>
-				<option value="180">3시간전</option>
-			</select>
-			</td>
-		</tr>
-		<tr>
-			<th>반복일정</th>
-			<td>
-			※체크박스를 누르고 종료기한을 설정하지 않을시 3개월간 반복합니다.<br>
-			<select class="sel" id="repeat" onchange="repeatChanged();">
-				<option value="none">반복안함</option>
-				<option value="daily">매일</option>
-				<option value="monthly">매월</option>
-				<option value="yearly">매년</option>
-			</select>
-			<label>
-			    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
-			    <input class="dhx_repeat_date" type="text" id="end_date" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
-		    </label><br>
-			<div class="detail_sel" id="div_repeat_month"></div>
-			<div class="detail_sel" id="div_repeat_day"></div>
-			</td>
-		</tr>
-		<tr>
-			<th>시간설정</th>
+			<th rowspan="2" style="vertical-align: top;">시간설정</th>
 			<td> 
 			<!-- 시간설정================================== -->
 				<input type="text" name="timeSetStart" value="" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
@@ -541,6 +510,36 @@ html, body {
 				</select>
 				<br>
 	<!-- 시간설정================================== -->
+			</td>
+		</tr>
+		<tr>
+			
+			<td>
+			<select class="sel" id="repeat" onchange="repeatChanged();">
+				<option value="none">반복안함</option>
+				<option value="daily">매일</option>
+				<option value="monthly">매월</option>
+				<option value="yearly">매년</option>
+			</select>
+			<label>
+			    <input type="checkbox" id="check_end_date" value="date_of_end" onclick="fnc_end_date();" />
+			    <input class="dhx_repeat_date" type="text" id="end_date" disabled="disabled" readonly="readonly" onclick="input_minical('end_date')" />까지
+		    </label><br>
+			<div class="detail_sel" id="div_repeat_month"></div>
+			<div class="detail_sel" id="div_repeat_day"></div>
+			</td>
+		</tr>
+		<tr>
+			<th>알람</th>
+			<td>
+			<select class="sel" id="alarm" onchange="alarmChanged();">
+				<option value="none">알람없음</option>
+				<option value="0">시작시간</option>
+				<option value="5">5분전</option>
+				<option value="10">10분전</option>
+				<option value="60">1시간전</option>
+				<option value="180">3시간전</option>
+			</select>
 			</td>
 		</tr>
 	</table>
