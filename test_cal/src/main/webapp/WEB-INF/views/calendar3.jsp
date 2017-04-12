@@ -182,20 +182,21 @@ scheduler.showLightbox = function(id) {
 	html("repeat").value = ev.repeat || "";
 	//html("timeSetting").value = ev.timeSetting || "";
 	
-	//console.log(ev.start_date);
-	//console.log(ev.end_date);
+	console.log(ev.start_date);
+	console.log(ev.end_date);
 	var sDate=ev.start_date;
 	var eDate=ev.end_date;
-	if(sDate == eDate){
-	eDate=ev.end_date;
-	}else{
+	console.log(new Date(eDate));
+	
+	if(sDate.getDate() != eDate.getDate()){
+	alert("날짜 다름");
 	eDate=ev.end_date.setHours(ev.end_date.getHours()-1);
 	}
 	//날짜입력창
-    var SYear = ev.start_date.getFullYear();
-    var SMonth = ev.start_date.getMonth()+1;
+    var SYear = sDate.getFullYear();
+    var SMonth = sDate.getMonth()+1;
     if(SMonth < 10) SMonth = "0" + SMonth;
-    var SDay = ev.start_date.getDate();
+    var SDay = sDate.getDate();
     if(SDay < 10) SDay = "0" + SDay;
     $("#timeSetStart").val(SYear+"-"+SMonth+"-"+SDay);
     var EYear = ev.end_date.getFullYear();
