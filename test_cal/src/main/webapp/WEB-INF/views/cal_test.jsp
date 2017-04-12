@@ -7,12 +7,17 @@
 <meta charset=UTF-8">
 <title>cal_test</title>
 <script src="resources/jquery-3.1.1.min.js"></script>
+<script src="resources/jquery-ui.js"></script>
 <script src="scheduler/dhtmlxscheduler.js" type="text/javascript"></script>
 <script src='scheduler/ext/dhtmlxscheduler_minical.js' type="text/javascript"></script>
 <script src="scheduler/ext/dhtmlxscheduler_recurring.js"
 	type="text/javascript"></script>
 <script src="scheduler/locale/locale_ko.js" charset="utf-8"></script> 
 <script type="text/javascript">
+$( function() {
+    $( "#my_form" ).draggable();
+  } );
+
 //현재 연월 값!
 var todayDate = new Date();
 var todayDate2 = new Date();
@@ -24,15 +29,18 @@ function selectTime(){
 	if(nowHr<12){
 	$("#Sam")[0].selected=true;		
 	$("#Eam")[0].selected=true;		
+	$("#SHour_"+nowHr)[0].selected=true;
+	$("#EHour_"+nowHr)[0].selected=true;
 	}else{
 	$("#Spm")[0].selected=true;		
 	$("#Epm")[0].selected=true;		
+	$("#SHour_"+(nowHr-12))[0].selected=true;
+	$("#EHour_"+(nowHr-12))[0].selected=true;
 	}
-	
-	$("#SHour_"+nowHr)[0].selected=true;
-	$("#EHour_"+nowHr)[0].selected=true;
 	$("#SMin_"+nowMin)[0].selected=true;
 	$("#EMin_"+nowMin)[0].selected=true;
+	
+	
 }
 
 function init() {
@@ -108,9 +116,6 @@ function init() {
     	for(var i=0;i<dayDiff;i++){
     	    var test=tStart.setDate(tStart.getDate()+1);
     	    var test2=tStart.setMinutes(tStart.getMinutes()+5);
-    	    console.log(new Date(test));
-    	    console.log(new Date(test2));
-    	    
     		console.log(i+"번째 : "+tStart);
     		 scheduler.addEvent({
     		       id:repeat+"_"+i+"_"+1234
@@ -128,6 +133,7 @@ function init() {
     	for(var i=0;i<monthDiff;i++){
     	    tStart.setMonth(tStart.getMonth()+1);
     		console.log(i+"번째 : "+tStart);
+    		
     	}
     	break;
     case "yearly":
