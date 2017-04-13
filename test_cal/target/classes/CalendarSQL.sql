@@ -10,7 +10,9 @@ create table events(
   content varchar2(2000),
   repeat_type varchar2(50),
   repeat_end_date date,
-  is_dbdata char(1)
+  is_dbdata char(1),
+  alarm_yn char(1) DEFAULT 'F' NOT NULL,
+  alarm_val number
 );
   
 CREATE SEQUENCE events_seq;
@@ -40,4 +42,15 @@ commit
 
 
 --일정 삭제하기
+
+  
+  
+  
+  
+  select to_date('2017-04-30' || ' 00:00:00','YYYY-MM-DD hh24:mi:ss') + 1 from dual
+  
+  
+  
+  select to_char (start_date - alarm_val/(24*60), 'ss mi hh24 dd mm ? yyyy') alarm_time 
+  from msm_calendar where alarm_yn = 'T' and id ='2'
   

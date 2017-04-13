@@ -23,4 +23,6 @@ public interface CalendarMapper {
 	public String selectLatestEventNum() throws Exception;
 	// 날짜 구하기 (반복등록시 필요)
 	public String selectNextDate(String current_date) throws Exception;
+	// 아이디에 해당하는 알림시간 얻기
+	public String selectAlarmTime(String id) throws Exception;
 }

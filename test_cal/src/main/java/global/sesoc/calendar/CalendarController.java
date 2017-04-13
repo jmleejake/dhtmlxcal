@@ -63,18 +63,9 @@ public class CalendarController {
 		
 		logger.debug("cal :: \n{}", vo);
 		
-		Calendar exist = dao.getEvent(vo.getId());
-		logger.debug("exist: {}", exist);
+		String email = "jmlee825@naver.com";
 		
-		if(exist != null) {
-			logger.debug("-------------------- event update process start1");
-			ret = dao.modifyEvent(vo);
-			logger.debug("-------------------- event update process end");
-		} else {
-			logger.debug("-------------------- event create process start");
-			ret = dao.saveCal(vo);
-			logger.debug("-------------------- event create process end");
-		}
+		dao.saveScheduler(vo, email);
 		
 		logger.debug("-------------------- event save process end");
 		return ret;

@@ -2,6 +2,7 @@ package global.sesoc.calendar.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import global.sesoc.calendar.util.AlarmCronTrigger;
 import global.sesoc.calendar.vo.Calendar;
 
 @Repository
@@ -35,6 +37,73 @@ public class CalendarDAO {
 			}
 			return result;
 		}
+		
+		public int saveScheduler(Calendar vo, String email) {
+			int ret = 0;
+			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
+			
+			Calendar exist = getEvent(vo.getId());
+			logger.debug("exist: {}", exist);
+			logger.debug("email : {}", email);
+			
+			if(exist != null) {
+				logger.debug("-------------------- event update process start1");
+				ret = modifyEvent(vo);
+				logger.debug("-------------------- event update process end");
+			} else {
+				logger.debug("-------------------- event create process start");
+				ret = saveCal(vo);
+				logger.debug("-------------------- event create process end");
+			}
+			
+			HashMap<String, Object> param = new HashMap<>();
+			// 알림세팅 
+			if(ret > 0) {
+				if(exist != null) {
+					if("T".equals(exist.getAlarm_yn())) {
+						logger.debug("-------------------- UPDATE mail sending process start");
+						String alarm_time = null;
+						try {
+							alarm_time = mapper.selectAlarmTime(param.get("id").toString());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						logger.debug("alarm at {}", alarm_time);
+						AlarmCronTrigger cron = new AlarmCronTrigger(alarm_time, param.get("id").toString(), 
+								email, exist.getText(), exist.getContent() + " 이벤트 시작시간: " + exist.getStart_date() + " 이벤트 종료시간: " + exist.getEnd_date());
+						cron.deleteJob();
+						cron.createJob();
+						logger.debug("-------------------- UPDATE mail sending process end");
+					}
+				} else {
+					String latest_id = null;
+					try {
+						latest_id = mapper.selectLatestEventNum();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					Calendar latest_vo = getEvent(latest_id);
+					if("T".equals(latest_vo.getAlarm_yn())) {
+						logger.debug("-------------------- CREATE mail sending process start");
+						String alarm_time = null;
+						try {
+							alarm_time = mapper.selectAlarmTime(latest_id);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						logger.debug("alarm at {}", alarm_time);
+						AlarmCronTrigger cron = new AlarmCronTrigger(alarm_time, latest_id, 
+								email, latest_vo.getText(), latest_vo.getContent() + " 이벤트 시작시간: " + latest_vo.getStart_date() + " 이벤트 종료시간: " + latest_vo.getEnd_date());
+						cron.deleteJob();
+						cron.createJob();
+						logger.debug("-------------------- CREATE mail sending process end");
+					}
+				}
+			}
+			
+			return ret;
+		}
+		
 		//2)일정 저장
 		public int saveCal(Calendar calendar){
 			/*

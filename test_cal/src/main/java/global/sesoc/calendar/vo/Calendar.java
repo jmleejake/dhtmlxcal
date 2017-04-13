@@ -10,6 +10,8 @@ public class Calendar {
 	private String repeat_type;
 	private String repeat_end_date;
 	private String is_dbdata;
+	private String alarm_yn;
+	private String alarm_val;
 	
 	public String getId() {
 		return id;
@@ -59,12 +61,24 @@ public class Calendar {
 	public void setIs_dbdata(String is_dbdata) {
 		this.is_dbdata = is_dbdata;
 	}
+	public String getAlarm_yn() {
+		return alarm_yn;
+	}
+	public void setAlarm_yn(String alarm_yn) {
+		this.alarm_yn = alarm_yn;
+	}
+	public String getAlarm_val() {
+		return alarm_val;
+	}
+	public void setAlarm_val(String alarm_val) {
+		this.alarm_val = alarm_val;
+	}
 	
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
 				+ ", content=" + content + ", repeat_type=" + repeat_type + ", repeat_end_date=" + repeat_end_date
-				+ ", is_dbdata=" + is_dbdata + "]";
+				+ ", is_dbdata=" + is_dbdata + ", alarm_yn=" + alarm_yn + ", alarm_val=" + alarm_val + "]";
 	}
 	
 }

@@ -123,14 +123,16 @@ function init() {
     	    
 //     		console.log(i+"번째 : "+tStart);
 
-    	    /* scheduler.addEvent({
+    	    /*
+    	    scheduler.addEvent({
  		       id:repeat+"_"+i+"_"+1234
  		       , start_date: new Date(test)
  		       , end_date: new Date(test2)
  		       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
  		       ,repeat_type : "daily"
  		       ,repeat_end_date : new Date(tEnd)
- 		    }); */
+ 		    });
+    	    */
     	}
     	
     	break;
@@ -162,13 +164,16 @@ scheduler.showLightbox = function(id) {
 	e_dateInit();
 	var ev = scheduler.getEvent(id);
 	scheduler.startLightbox(id, html("my_form"));
+	
+	console.log("showLightBox");
+	console.log(ev);
 
 	html("description").focus();
 	html("description").value = ev.text;
 	html("custom1").value = ev.custom1 || "";
 	html("content").value = ev.content || "";
 	html("category").value = ev.category || "";
-	html("alarm").value = ev.alarm || "none";
+// 	html("alarm").value = ev.alarm_val  || "none";
 	html("repeat").value = ev.repeat_type || "none";
 	html("check_end_date").checked = ev.check_end_date;
 	html("end_date").value = ev.repeat_end_date || "";
@@ -183,6 +188,9 @@ scheduler.showLightbox = function(id) {
 		$("#yr_day").val(sp[1]);	
 		break;
 	}
+	
+	$("#alarm").val(ev.alarm_val != "" ? ev.alarm_val : "none");
+	
 	
 	/* //날짜입력창============================= */
 	var sDate=ev.start_date;
@@ -229,7 +237,7 @@ function save_form() {
 	ev.text = html("description").value;
 	ev.custom1 = html("custom1").value;
 	ev.content = $("#content")[0].value;
-	ev.alarm = $("#alarm").val();
+	ev.alarm_val = $("#alarm").val();
 	ev.check_end_date = $("#check_end_date")[0].checked;
 	ev.repeat_type = $("#repeat").val()
 	ev.repeat_end_date = $("#end_date").val();
@@ -319,8 +327,8 @@ function delete_event() {
 		, method : "post"
 		, data : {"id" : event_id}
 		, success : function(){
-			getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
 			alert("deleted!!!");
+			getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
 		}
 		,error : function(){
 			alert("Not deleted!!!")
@@ -433,6 +441,8 @@ function showEvents(ret) {
 				, repeat_type:event.repeat_type
 				, repeat_end_date:event.repeat_end_date
 				, is_dbdata:event.is_dbdata
+				, alarm_yn:event.alarm_yn
+				, alram_val:event.alarm_val
 		}
 		calArray.push(calObj);
 	});
