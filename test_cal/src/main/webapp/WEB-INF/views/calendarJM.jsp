@@ -39,6 +39,7 @@ function selectTime(){
 	$("#EMin_"+nowMin)[0].selected=true;
 }
 
+// DB에서 넘어온 값으로 시간설정 세팅
 function selectTimeFromDB(sH, sM, eH, eM){
 	if(sH<12){
 	$("#Sam")[0].selected=true;
@@ -363,11 +364,6 @@ function fnc_end_date() {
 	}
 }
 
-// 알람 셀렉트박스
-function alarmChanged(){
-	console.log($("#alarm").val());
-}
-
 // 미니캘린더 보이기
 function show_minical(){
     if (scheduler.isCalendarVisible()){
@@ -409,6 +405,7 @@ function input_minical(id){
     }
 }
 
+// 스케쥴 목록을 얻어 화면에 보이기
 function getCalData(thisYear, thisMonth) {
 	$.ajax({
 		url:"show"
@@ -422,6 +419,7 @@ function getCalData(thisYear, thisMonth) {
 	});
 }
 
+// 스케쥴 화면세팅
 function showEvents(ret) {
 	var calArray = new Array();
 	$.each(ret, function(i, event) {
