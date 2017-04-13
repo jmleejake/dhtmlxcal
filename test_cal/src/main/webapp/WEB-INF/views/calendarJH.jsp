@@ -85,75 +85,7 @@ function init() {
     var tGdayMonth = new Date().getMonth();
     var tGdayDay = new Date().getDate();
     
-    //시작날짜를 Date로 !
-    var tSday = "2017-04-11 00:01";
-    var tSdatyYear=tSday.substring(0,4);
-    var tSdatyMonth=tSday.substring(5,7);
-    var tSdatyDay=tSday.substring(8,10);
-    var tStart = new Date(tSdatyYear,tSdatyMonth-1,tSdatyDay,00,01,0);
-//     console.log("시작날짜 : "+tStart);
-    //종료날짜를 Date로!
-    var tEday = "2017-10-20 00:05";
-    var tEdatyYear=tEday.substring(0,4);
-    var tEdatyMonth=tEday.substring(5,7);
-    var tEdatyDay=tEday.substring(8,10);
-    var tEnd = new Date(tEdatyYear,tEdatyMonth-1,tEdatyDay,00,01,0);
-//     console.log("종료날짜 : "+tEnd);
 
-    //시작날짜와 종료날짜의 시간텀!
-    var diff = tEnd - tStart;
-    var currDay = 24*60*60*1000;//시*분*초*밀리세컨
-    var currMonth = currDay*30;//월만듬
-    var currYear=currMonth*12;//년 만듬
-    /*
-    alert("diff : "+diff);
-    alert("일수차이 = "+parseInt(diff/currDay)+"일");
-    alert("월수차이 = "+parseInt(diff/currMonth)+"월");
-    alert("년수차이 = "+parseInt(diff/currYear)+"년");
-    */
-
-    //반복일정 만들기 view 딴에 뿌려주기 !!!! 
-    var Repeat = "daily";
-    switch (Repeat) {
-    case "daily":
-    	var dayDiff = parseInt(diff/currDay);
-    	for(var i=0;i<dayDiff;i++){
-    	    var test=tStart.setDate(tStart.getDate()+1);
-    	    var test2=tStart.setMinutes(tStart.getMinutes()+5);
-    	    
-//     		console.log(i+"번째 : "+tStart);
-
-    	    /* scheduler.addEvent({
- 		       id:repeat+"_"+i+"_"+1234
- 		       , start_date: new Date(test)
- 		       , end_date: new Date(test2)
- 		       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
- 		       ,repeat_type : "daily"
- 		       ,repeat_end_date : new Date(tEnd)
- 		    }); */
-    	}
-    	
-    	break;
-    case "monthly":
-    	var monthDiff = parseInt(diff/currMonth);
-    	for(var i=0;i<monthDiff;i++){
-    	    tStart.setMonth(tStart.getMonth()+1);
-//     		console.log(i+"번째 : "+tStart);
-    	}
-    	break;
-    case "yearly":
-    	var yearlyDiff = parseInt(diff/currYear);
-    	for(var i=0;i<yearlyDiff;i++){
-    	    tStart.setFullYear(tStart.getFullYear()+1);
-//     		console.log(i+"번째 : "+tStart);
-    	}
-    	break;
-
-    default:
-    	break;
-    }
-
-//     console.log("end");
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
@@ -435,8 +367,102 @@ function showEvents(ret) {
 				, is_dbdata:event.is_dbdata
 		}
 		calArray.push(calObj);
+		//반복일정 뿌려주는 구간!!! repeat
+		if(event.repeat_type !="none") {
+			console.log("반복일정");
+			makeRepeat(event);
+		} 
 	});
 	scheduler.parse(calArray, "json");
+}
+
+function makeRepeat(ev){
+    //시작날짜를 Date로 !
+    var rStart = new Date(ev.start_date);
+    console.log("반복 기한 시작날짜 : "+rStart);
+    //종료날짜를 Date로!
+    var rEnd = new Date(ev.repeat_end_date);
+	console.log("반복 기한 종료날짜 : "+rEnd);
+	//이벤트의 종료날짜
+    var rEventEnd = new Date(ev.end_date);
+	console.log("r이벤트 종료날짜 : "+rEventEnd);
+    if(rStart.getTime() == rEventEnd.getTime()){
+    	alert("들어옴?");
+    	rEventEnd.setMinutes(rEventEnd.getMinutes()+5);
+    	console.log(new Date(rEventEnd));
+    }
+	//시작날짜와 종료날짜의 시간텀!
+    var diff = rEnd - rStart;
+    var currDay = 24*60*60*1000;//시*분*초*밀리세컨
+    var currMonth = currDay*30;//월만듬
+    var currYear=currMonth*12;//년 만듬
+
+    //반복일정 만들기 view 딴에 뿌려주기 !!!! 
+    var Repeat = ev.repeat_type;
+    switch (Repeat) {
+    case "daily":
+    	var dayDiff = parseInt(diff/currDay);
+    	for(var i=0;i<dayDiff;i++){
+    	    var rSday=rStart.setDate(rStart.getDate()+1);
+    	    var rEday=rEventEnd.setDate(rEventEnd.getDate()+1);
+    		console.log(i+"번째 시작: "+new Date(rSday));    	    
+    		console.log(i+"번째 종료: "+new Date(rEday));    	    
+    	  scheduler.addEvent({
+ 		       id:repeat+"_"+i+"_"+ev.id
+ 		      , text:ev.text
+				, start_date: new Date(rSday)
+				, end_date: new Date(rEday)
+				, content:ev.content
+				, repeat_type:ev.repeat_type
+				, repeat_end_date:ev.repeat_end_date
+				, is_dbdata:ev.is_dbdata
+ 		    });  
+    	}
+    	break;
+    case "monthly":
+    	var monthDiff = parseInt(diff/currMonth);
+    	for(var i=0;i<monthDiff;i++){
+    		var rSday2=rStart.setMonth(rStart.getMonth()+1);
+    		var rEday2=rEventEnd.setMonth(rEventEnd.getMonth()+1);
+    		console.log(i+"번째 시작: "+new Date(rSday2));    	    
+    		console.log(i+"번째 종료: "+new Date(rEday2));    	    
+    	  	scheduler.addEvent({
+ 		       id:repeat+"_"+i+"_"+ev.id
+ 		      , text:ev.text
+				, start_date: new Date(rSday2)
+				, end_date: new Date(rEday2)
+				, content:ev.content
+				, repeat_type:ev.repeat_type
+				, repeat_end_date:ev.repeat_end_date
+				, is_dbdata:ev.is_dbdata
+ 		    });  
+    	}
+    	break;
+    case "yearly":
+    	var yearlyDiff = parseInt(diff/currYear);
+    	for(var i=0;i<yearlyDiff;i++){
+    		var rSday3 = rStart.setFullYear(rStart.getFullYear()+1);
+    		var rEday3 = rEventEnd.setFullYear(rEventEnd.getFullYear()+1);
+    		console.log(i+"번째 시작: "+new Date(rSday3));    	    
+    		console.log(i+"번째 종료: "+new Date(rEday3));    	    
+    	  	scheduler.addEvent({
+ 		       id:repeat+"_"+i+"_"+ev.id
+ 		      , text:ev.text
+				, start_date: new Date(rSday3)
+				, end_date: new Date(rEday3)
+				, content:ev.content
+				, repeat_type:ev.repeat_type
+				, repeat_end_date:ev.repeat_end_date
+				, is_dbdata:ev.is_dbdata
+ 		    });  
+    	}
+    	break;
+
+    default:
+    	break;
+    }
+
+//     console.log("end");
 }
 
 </script>
