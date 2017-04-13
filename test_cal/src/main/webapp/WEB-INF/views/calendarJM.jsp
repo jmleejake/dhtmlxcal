@@ -79,83 +79,6 @@ function init() {
    	 todayDate.setMonth(todayDate.getMonth() + 1);
    	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
    	 });
-	//날짜 얻어오기
-//     console.log("start");
-    var tGdayYear = new Date().getFullYear();
-    var tGdayMonth = new Date().getMonth();
-    var tGdayDay = new Date().getDate();
-    
-    //시작날짜를 Date로 !
-    var tSday = "2017-04-11 00:01";
-    var tSdatyYear=tSday.substring(0,4);
-    var tSdatyMonth=tSday.substring(5,7);
-    var tSdatyDay=tSday.substring(8,10);
-    var tStart = new Date(tSdatyYear,tSdatyMonth-1,tSdatyDay,00,01,0);
-//     console.log("시작날짜 : "+tStart);
-    //종료날짜를 Date로!
-    var tEday = "2017-10-20 00:05";
-    var tEdatyYear=tEday.substring(0,4);
-    var tEdatyMonth=tEday.substring(5,7);
-    var tEdatyDay=tEday.substring(8,10);
-    var tEnd = new Date(tEdatyYear,tEdatyMonth-1,tEdatyDay,00,01,0);
-//     console.log("종료날짜 : "+tEnd);
-
-    //시작날짜와 종료날짜의 시간텀!
-    var diff = tEnd - tStart;
-    var currDay = 24*60*60*1000;//시*분*초*밀리세컨
-    var currMonth = currDay*30;//월만듬
-    var currYear=currMonth*12;//년 만듬
-    /*
-    alert("diff : "+diff);
-    alert("일수차이 = "+parseInt(diff/currDay)+"일");
-    alert("월수차이 = "+parseInt(diff/currMonth)+"월");
-    alert("년수차이 = "+parseInt(diff/currYear)+"년");
-    */
-
-    //반복일정 만들기 view 딴에 뿌려주기 !!!! 
-    var Repeat = "daily";
-    switch (Repeat) {
-    case "daily":
-    	var dayDiff = parseInt(diff/currDay);
-    	for(var i=0;i<dayDiff;i++){
-    	    var test=tStart.setDate(tStart.getDate()+1);
-    	    var test2=tStart.setMinutes(tStart.getMinutes()+5);
-    	    
-//     		console.log(i+"번째 : "+tStart);
-
-    	    /*
-    	    scheduler.addEvent({
- 		       id:repeat+"_"+i+"_"+1234
- 		       , start_date: new Date(test)
- 		       , end_date: new Date(test2)
- 		       , text: "니홍고 3차 역량 -0- -0- -0- -0- -0- -0- -0-"
- 		       ,repeat_type : "daily"
- 		       ,repeat_end_date : new Date(tEnd)
- 		    });
-    	    */
-    	}
-    	
-    	break;
-    case "monthly":
-    	var monthDiff = parseInt(diff/currMonth);
-    	for(var i=0;i<monthDiff;i++){
-    	    tStart.setMonth(tStart.getMonth()+1);
-//     		console.log(i+"번째 : "+tStart);
-    	}
-    	break;
-    case "yearly":
-    	var yearlyDiff = parseInt(diff/currYear);
-    	for(var i=0;i<yearlyDiff;i++){
-    	    tStart.setFullYear(tStart.getFullYear()+1);
-//     		console.log(i+"번째 : "+tStart);
-    	}
-    	break;
-
-    default:
-    	break;
-    }
-
-//     console.log("end");
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
@@ -166,8 +89,7 @@ scheduler.showLightbox = function(id) {
 	scheduler.startLightbox(id, html("my_form"));
 	
 	console.log("showLightBox");
-	console.log(ev);
-
+	
 	html("description").focus();
 	html("description").value = ev.text;
 	html("custom1").value = ev.custom1 || "";
@@ -189,7 +111,7 @@ scheduler.showLightbox = function(id) {
 		break;
 	}
 	
-	$("#alarm").val(ev.alarm_val != "" ? ev.alarm_val : "none");
+	$("#alarm").val(ev.alarm_val != null ? ev.alarm_val : "none");
 	
 	
 	/* //날짜입력창============================= */
@@ -319,16 +241,43 @@ function close_form() {
 // 삭제
 function delete_event() {
 	var event_id = scheduler.getState().lightbox_id;
+	var ev = scheduler.getEvent(event_id);
+	var sp_id = "";
 	
 	scheduler.endLightbox(false, html("my_form"));
+	
+	// 반복일정 삭제시
+	if(ev.repeat_type != 'none') {
+		try {
+			// 반복일정의 sub가 되는 id를 삭제할때
+			// ex> repeat_0_8
+			sp_id = event_id.split("_");
+			var org_id = sp_id[2];
+			event_id = org_id;
+			var del_id_list = rept_id_map.get(org_id);
+			for(var i=0; i<del_id_list.length; i++) {
+				console.log(del_id_list[i]);
+				scheduler.deleteEvent(del_id_list[i]);
+			}
+		} catch(err) {
+			// 반복일정의 main이 되는 id를 삭제할때
+			console.log("exception!!");
+			event_id = ev.id;
+			var del_id_list = rept_id_map.get(event_id);
+			for(var i=0; i<del_id_list.length; i++) {
+				console.log(del_id_list[i]);
+				scheduler.deleteEvent(del_id_list[i]);
+			}
+		}
+	}
 	
 	$.ajax({
 		url : "del"
 		, method : "post"
 		, data : {"id" : event_id}
 		, success : function(){
-			alert("deleted!!!");
 			getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
+			alert("deleted!!!");
 		}
 		,error : function(){
 			alert("Not deleted!!!")
@@ -344,9 +293,10 @@ function repeatChanged() {
 	switch ($("#repeat").val()) {
 		case "daily":
 			$("#timeSetEnd")[0].disabled = true;
-			$("#Eampm")[0].disabled = true;
-			$("#EHour")[0].disabled = true;
-			$("#EMin")[0].disabled = true;
+			// 매일 반복일때 날짜는 변경 못하되 시간은 수정가능하도록 함
+// 			$("#Eampm")[0].disabled = true;
+// 			$("#EHour")[0].disabled = true;
+// 			$("#EMin")[0].disabled = true;
 			break;
 	
 	}
@@ -442,11 +392,102 @@ function showEvents(ret) {
 				, repeat_end_date:event.repeat_end_date
 				, is_dbdata:event.is_dbdata
 				, alarm_yn:event.alarm_yn
-				, alram_val:event.alarm_val
+				, alarm_val:event.alarm_val
 		}
 		calArray.push(calObj);
+		
+		//반복일정 뿌려주는 구간!!! repeat
+		if(event.repeat_type !="none") {
+			console.log("반복일정");
+			makeRepeat(event);
+		} 
 	});
 	scheduler.parse(calArray, "json");
+}
+
+var rept_id_map = new Map();
+function makeRepeat(ev){
+	var rept_list_id = new Array();
+	
+    //시작날짜를 Date로 !
+    var rStart = new Date(ev.start_date);
+    console.log("반복 기한 시작날짜 : "+rStart);
+    //종료날짜를 Date로!
+    var rEnd = new Date(ev.repeat_end_date);
+	console.log("반복 기한 종료날짜 : "+rEnd);
+	//이벤트의 종료날짜
+    var rEventEnd = new Date(ev.end_date);
+	console.log("r이벤트 종료날짜 : "+rEventEnd);
+    if(rStart.getTime() == rEventEnd.getTime()){
+    	console.log("들어옴");
+    	rEventEnd.setMinutes(rEventEnd.getMinutes()+5);
+    }
+	//시작날짜와 종료날짜의 시간텀!
+    var diff = rEnd - rStart;
+    var currDay = 24*60*60*1000;//시*분*초*밀리세컨
+    var currMonth = currDay*30;//월만듬
+    var currYear=currMonth*12;//년 만듬
+
+    //반복일정 만들기 view 딴에 뿌려주기 !!!! 
+    var Repeat = ev.repeat_type;
+    switch (Repeat) {
+    case "daily":
+    	var dayDiff = parseInt(diff/currDay);
+    	for(var i=0;i<dayDiff;i++){
+    	    var rSday=rStart.setDate(rStart.getDate()+1);
+    	    var rEday=rEventEnd.setDate(rEventEnd.getDate()+1);
+    	  scheduler.addEvent({
+ 		       id:"repeat_"+i+"_"+ev.id
+ 		      , text:ev.text
+				, start_date: new Date(rSday)
+				, end_date: new Date(rEday)
+				, content:ev.content
+				, repeat_type:ev.repeat_type
+				, repeat_end_date:ev.repeat_end_date
+				, is_dbdata:ev.is_dbdata
+ 		    });
+    	  rept_list_id.push("repeat_"+i+"_"+ev.id);
+    	}
+    	break;
+    case "monthly":
+    	var monthDiff = parseInt(diff/currMonth);
+    	for(var i=0;i<monthDiff;i++){
+    		var rSday2=rStart.setMonth(rStart.getMonth()+1);
+    		var rEday2=rEventEnd.setMonth(rEventEnd.getMonth()+1);
+    	  	scheduler.addEvent({
+ 		       id:"repeat_"+i+"_"+ev.id
+ 		      , text:ev.text
+				, start_date: new Date(rSday2)
+				, end_date: new Date(rEday2)
+				, content:ev.content
+				, repeat_type:ev.repeat_type
+				, repeat_end_date:ev.repeat_end_date
+				, is_dbdata:ev.is_dbdata
+ 		    });
+    	  	rept_list_id.push("repeat_"+i+"_"+ev.id);
+    	}
+    	break;
+    case "yearly":
+    	var yearlyDiff = parseInt(diff/currYear);
+    	for(var i=0;i<yearlyDiff;i++){
+    		var rSday3 = rStart.setFullYear(rStart.getFullYear()+1);
+    		var rEday3 = rEventEnd.setFullYear(rEventEnd.getFullYear()+1);
+    	  	scheduler.addEvent({
+ 		       id:"repeat_"+i+"_"+ev.id
+ 		      , text:ev.text
+				, start_date: new Date(rSday3)
+				, end_date: new Date(rEday3)
+				, content:ev.content
+				, repeat_type:ev.repeat_type
+				, repeat_end_date:ev.repeat_end_date
+				, is_dbdata:ev.is_dbdata
+ 		    });
+    	  	rept_list_id.push("repeat_"+i+"_"+ev.id);
+    	}
+    	break;
+    }
+    rept_id_map.set(ev.id, rept_list_id);
+    console.log(rept_id_map);
 }
 
 </script>
