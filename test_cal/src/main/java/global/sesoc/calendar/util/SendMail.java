@@ -86,6 +86,9 @@ public class SendMail {
 			return pa;
 		}
 	}
+	
+	
+	//test한것!!!
 	public static void main(String[] args) {
 		int accreditation = (int) (Math.random() * 1000000);
 		String title = "[SES shopping mall] 인증 번호";
