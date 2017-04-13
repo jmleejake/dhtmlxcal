@@ -46,7 +46,7 @@ values
 	, #{content}
 	, #{repeat_type}
 	<if test="repeat_end_date != null">
-	, to_date(#{repeat_end_date}, 'YYYY-MM-DD')
+	, to_date(#{repeat_end_date} || ' 00:00:00', 'YYYY-MM-DD hh24:mi:ss') + 1
 	</if>
 	, 'T'
 	)
