@@ -12,6 +12,7 @@ public class Calendar {
 	private String is_dbdata;
 	private String alarm_yn;
 	private String alarm_val;
+	private String category;
 	
 	public String getId() {
 		return id;
@@ -73,12 +74,19 @@ public class Calendar {
 	public void setAlarm_val(String alarm_val) {
 		this.alarm_val = alarm_val;
 	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", start_date=" + start_date + ", end_date=" + end_date + ", text=" + text
 				+ ", content=" + content + ", repeat_type=" + repeat_type + ", repeat_end_date=" + repeat_end_date
-				+ ", is_dbdata=" + is_dbdata + ", alarm_yn=" + alarm_yn + ", alarm_val=" + alarm_val + "]";
+				+ ", is_dbdata=" + is_dbdata + ", alarm_yn=" + alarm_yn + ", alarm_val=" + alarm_val + ", category="
+				+ category + "]";
 	}
 	
 }

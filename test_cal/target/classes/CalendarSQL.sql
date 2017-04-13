@@ -12,7 +12,8 @@ create table events(
   repeat_end_date date,
   is_dbdata char(1),
   alarm_yn char(1) DEFAULT 'F' NOT NULL,
-  alarm_val number
+  alarm_val number,
+  category varchar2(30)
 );
   
 CREATE SEQUENCE events_seq;
@@ -53,4 +54,16 @@ commit
   
   select to_char (start_date - alarm_val/(24*60), 'ss mi hh24 dd mm ? yyyy') alarm_time 
   from msm_calendar where alarm_yn = 'T' and id ='2'
+  
+  
+  
+  update events 
+  set text = '새 이벤트101'
+  , content = '23456'
+  , start_date = to_date(substr('Sat Apr 15 2017 17:29:00 GMT+0900 (대한민국 표준시)',1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American') 
+  , end_date = to_date(substr('Sat Apr 15 2017 17:34:00 GMT+0900 (대한민국 표준시)',1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American') 
+  , repeat_type = 'daily'
+  , repeat_end_date = to_date('2017-04-16' || ' 00:00:00', 'YYYY-MM-DD hh24:mi:ss') + 1 
+  , alarm_yn = 'F' , alarm_val = 'none' 
+  where id = '19' 
   

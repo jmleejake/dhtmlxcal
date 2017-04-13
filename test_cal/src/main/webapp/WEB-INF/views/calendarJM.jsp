@@ -80,16 +80,25 @@ function init() {
    	 todayDate.setMonth(todayDate.getMonth() + 1);
    	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
    	 });
+    
+    // 반복일정 체크박스 초기화
+    fnc_e_date_init(true);
+}
+
+//반복일정 체크박스 및 종료일자 세팅 초기화
+function fnc_e_date_init(status) {
+	$("#check_end_date")[0].checked = !status;
+	if(status) $("#end_date").val("");
+	$("#end_date")[0].disabled = status;
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
 
 scheduler.showLightbox = function(id) {
+	fnc_e_date_init(true);
 	e_dateInit();
 	var ev = scheduler.getEvent(id);
 	scheduler.startLightbox(id, html("my_form"));
-	
-	console.log("showLightBox");
 	
 	html("description").focus();
 	html("description").value = ev.text;
@@ -101,6 +110,7 @@ scheduler.showLightbox = function(id) {
 	html("check_end_date").checked = ev.check_end_date;
 	html("end_date").value = ev.repeat_end_date || "";
 // 	html("timeSetting").value = ev.timeSetting || "";
+
 	switch(ev.repeat_type) {
 	case "monthly": // 매월
 		$("#mon_day").val(ev.repeat_detail);
@@ -113,7 +123,7 @@ scheduler.showLightbox = function(id) {
 	}
 	
 	$("#alarm").val(ev.alarm_val != null ? ev.alarm_val : "none");
-	
+	//$("#subject")
 	
 	/* //날짜입력창============================= */
 	var sDate=ev.start_date;
@@ -152,6 +162,16 @@ scheduler.showLightbox = function(id) {
 	if(ev.is_dbdata == null)selectTime();
 	
 	/* //날짜입력창============================= */
+	if(ev.is_dbdata == "T"){
+		// 수정시 반복여부 체크
+		ev.id = getRealId(ev, "update");
+		
+		// 반복등록시 종료일자 입력한 내용 체크박스와 함께 세팅.
+		if(ev.repeat_end_date != null) {
+			console.log("update & repeat status");
+			fnc_e_date_init(false);
+		}
+	}
 };
 
 // 저장
@@ -164,6 +184,7 @@ function save_form() {
 	ev.check_end_date = $("#check_end_date")[0].checked;
 	ev.repeat_type = $("#repeat").val()
 	ev.repeat_end_date = $("#end_date").val();
+	ev.category = $("#category").val();
 	/*
 	ev.start_date = $("#timeSetStart").val() 
 	+ " " + $("#Sampm").val() + " " 
@@ -243,34 +264,12 @@ function close_form() {
 function delete_event() {
 	var event_id = scheduler.getState().lightbox_id;
 	var ev = scheduler.getEvent(event_id);
-	var sp_id = "";
 	
 	scheduler.endLightbox(false, html("my_form"));
 	
 	// 반복일정 삭제시
-	if(ev.repeat_type != 'none') {
-		try {
-			// 반복일정의 sub가 되는 id를 삭제할때
-			// ex> repeat_0_8
-			sp_id = event_id.split("_");
-			var org_id = sp_id[2];
-			event_id = org_id;
-			var del_id_list = rept_id_map.get(org_id);
-			for(var i=0; i<del_id_list.length; i++) {
-				console.log(del_id_list[i]);
-				scheduler.deleteEvent(del_id_list[i]);
-			}
-		} catch(err) {
-			// 반복일정의 main이 되는 id를 삭제할때
-			console.log("exception!!");
-			event_id = ev.id;
-			var del_id_list = rept_id_map.get(event_id);
-			for(var i=0; i<del_id_list.length; i++) {
-				console.log(del_id_list[i]);
-				scheduler.deleteEvent(del_id_list[i]);
-			}
-		}
-	}
+	event_id = getRealId(ev, "delete");
+	console.log("after getRealId :: " + event_id);
 	
 	$.ajax({
 		url : "del"
@@ -286,6 +285,49 @@ function delete_event() {
 	});
 	
 	scheduler.deleteEvent(event_id);
+}
+
+// 반복일정 삭제/수정시 
+function getRealId(ev, type) {
+	var ret = ev.id;
+	console.log(ret);
+	console.log(ev);
+	
+	if(ev.repeat_type != 'none') {
+		console.log(ev.repeat_type);
+		try {
+			// 반복일정의 sub가 되는 id를 삭제할때
+			// ex> repeat_0_8
+			var sp_id = ret.split("_");
+			if(sp_id.length == 1) {
+				throw new error();
+			}
+			var org_id = sp_id[2];
+			ret = org_id;
+			if(type == "delete") {
+				console.log(ret);
+				var del_id_list = rept_id_map.get(ret);
+				for(var i=0; i<del_id_list.length; i++) {
+					console.log(del_id_list[i]);
+					scheduler.deleteEvent(del_id_list[i]);
+				}
+			}
+		} catch(err) {
+			// 반복일정의 main이 되는 id를 삭제할때
+			console.log("exception!!");
+			ret = ev.id;
+			if(type == "delete") {
+				console.log(ret);
+				var del_id_list = rept_id_map.get(ret);
+				for(var i=0; i<del_id_list.length; i++) {
+					console.log(del_id_list[i]);
+					scheduler.deleteEvent(del_id_list[i]);
+				}
+			}
+		}
+	}
+	console.log("getRealId :: " + ret);
+	return ret;
 }
 
 // 반복 일정 셀렉트박스
@@ -394,6 +436,7 @@ function showEvents(ret) {
 				, is_dbdata:event.is_dbdata
 				, alarm_yn:event.alarm_yn
 				, alarm_val:event.alarm_val
+				, category : event.category
 		}
 		calArray.push(calObj);
 		
@@ -406,7 +449,9 @@ function showEvents(ret) {
 	scheduler.parse(calArray, "json");
 }
 
+//반복 등록된 id들의 array를 original id를 key로 map형태로 저장
 var rept_id_map = new Map();
+
 function makeRepeat(ev){
 	var rept_list_id = new Array();
 	

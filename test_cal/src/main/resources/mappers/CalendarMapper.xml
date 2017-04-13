@@ -19,6 +19,7 @@
 	  , is_dbdata
 	  , alarm_yn
 	  , alarm_val
+	  , category
   from events
   where start_date >= add_months(to_date(#{date}, 'yyyy-mm-dd'), -1)
   and end_date <= add_months(last_day(to_date(#{date}, 'yyyy-mm-dd')) +1, 1)
@@ -42,6 +43,7 @@ insert into events
 	, alarm_yn
 	, alarm_val
 	</if>
+	, category
 	)
 values 
 	(
@@ -59,6 +61,7 @@ values
 	, 'T'
 	, #{alarm_val}
 	</if>
+	, #{category}
 	)
 </insert>
 <!-- 3)캘린더 일정 삭제하기 -->
@@ -82,7 +85,7 @@ select * from events where id = #{id}
 		, end_date = to_date(substr(#{end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
 		, repeat_type = #{repeat_type}
 		<if test="repeat_end_date != null and repeat_end_date != ''">
-		, to_date(#{repeat_end_date} || ' 00:00:00', 'YYYY-MM-DD hh24:mi:ss') + 1
+		, repeat_end_date = to_date(#{repeat_end_date} || ' 00:00:00', 'YYYY-MM-DD hh24:mi:ss') + 1
 		</if>
 		<choose>
 			<when test="!alarm_val.equals('none')">
@@ -91,9 +94,10 @@ select * from events where id = #{id}
 			</when>
 			<when test="alarm_val.equals('none')">
 			, alarm_yn = 'F'
-			, alarm_val = null
+			, alarm_val = 'none'
 			</when>
 		</choose>
+		, category = #{category}
 	where
 		id = #{id}
 </update>

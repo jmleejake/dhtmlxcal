@@ -175,6 +175,7 @@ public class CalendarDAO {
 			return result;
 		}
 		
+		// 아이디에 해당하는 내용 얻기
 		public Calendar getEvent(String id) {
 			Calendar ret = null;
 			CalendarMapper mapper = sqlSession.getMapper(CalendarMapper.class);
