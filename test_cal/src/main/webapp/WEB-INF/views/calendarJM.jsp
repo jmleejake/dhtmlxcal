@@ -65,6 +65,7 @@ function init() {
 	scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 	scheduler.config.details_on_dblclick = true;
 	scheduler.config.details_on_create = true;
+	scheduler.config.drag_move = false;
 
 	scheduler.init('scheduler_here', new Date(), "month");
 	
