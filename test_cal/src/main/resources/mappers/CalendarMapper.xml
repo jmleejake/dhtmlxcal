@@ -5,7 +5,10 @@
 
 <mapper namespace="global.sesoc.calendar.dao.CalendarMapper">
 
-<!-- 1)캘린더 일정 월별 불러오기 -->
+<!-- 
+1)캘린더 일정 월별 불러오기 
+월별 반복처리위해 쿼리변경
+-->
 <select id="listCal" resultType="Calendar" parameterType="String">
  <![CDATA[
   select 
