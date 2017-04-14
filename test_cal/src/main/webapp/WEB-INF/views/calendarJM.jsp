@@ -72,6 +72,7 @@ function init() {
 	
 	getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
 
+// 	scheduler.init('scheduler_here', todayDate, "month");
 	 // 월 변경
     $('.dhx_cal_prev_button').on('click', function(){
    	 todayDate.setMonth(todayDate.getMonth() - 1);
@@ -105,7 +106,7 @@ scheduler.showLightbox = function(id) {
 	html("description").value = ev.text;
 	html("custom1").value = ev.custom1 || "";
 	html("content").value = ev.content || "";
-	html("category").value = ev.category || "";
+	html("category").value = ev.subject || "";
 // 	html("alarm").value = ev.alarm_val  || "none";
 	html("repeat").value = ev.repeat_type || "none";
 	html("check_end_date").checked = ev.check_end_date;
@@ -434,17 +435,20 @@ function showEvents(ret) {
 				, is_dbdata:event.is_dbdata
 				, alarm_yn:event.alarm_yn
 				, alarm_val:event.alarm_val
-				, category : event.category
+				, subject : event.category
 		}
 		calArray.push(calObj);
-		
-		//반복일정 뿌려주는 구간!!! repeat
-		if(event.repeat_type !="none") {
-			console.log("반복일정");
-			makeRepeat(event);
-		} 
 	});
 	scheduler.parse(calArray, "json");
+	
+	//반복일정 뿌려주는 구간!!! repeat
+	if(event.repeat_type !="none") {
+		console.log("반복일정");
+		$.each(calArray, function(i, event) {
+			
+			makeRepeat(event);
+		});
+	} 
 }
 
 //반복 등록된 id들의 array를 original id를 key로 map형태로 저장
@@ -489,6 +493,7 @@ function makeRepeat(ev){
 				, repeat_type:ev.repeat_type
 				, repeat_end_date:ev.repeat_end_date
 				, is_dbdata:ev.is_dbdata
+				, subject : ev.subject
  		    });
     	  rept_list_id.push("repeat_"+i+"_"+ev.id);
     	}
@@ -507,6 +512,7 @@ function makeRepeat(ev){
 				, repeat_type:ev.repeat_type
 				, repeat_end_date:ev.repeat_end_date
 				, is_dbdata:ev.is_dbdata
+				, subject : ev.subject
  		    });
     	  	rept_list_id.push("repeat_"+i+"_"+ev.id);
     	}
@@ -525,6 +531,7 @@ function makeRepeat(ev){
 				, repeat_type:ev.repeat_type
 				, repeat_end_date:ev.repeat_end_date
 				, is_dbdata:ev.is_dbdata
+				, subject : ev.subject
  		    });
     	  	rept_list_id.push("repeat_"+i+"_"+ev.id);
     	}

@@ -7,7 +7,7 @@
 
 <!-- 1)캘린더 일정 월별 불러오기 -->
 <select id="listCal" resultType="Calendar" parameterType="String">
-  <![CDATA[
+ <![CDATA[
   select 
 	  id 
 	  , text 
@@ -20,10 +20,26 @@
 	  , alarm_yn
 	  , alarm_val
 	  , category
-  from events
-  where start_date >= add_months(to_date(#{date}, 'yyyy-mm-dd'), -1)
-  and end_date <= add_months(last_day(to_date(#{date}, 'yyyy-mm-dd')) +1, 1)
-  ]]>
+ from events
+ where repeat_type != 'none'
+ union
+ select 
+	  id 
+	  , text 
+	  , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date 
+	  , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
+	  , content
+	  , repeat_type
+	  , to_char(repeat_end_date, 'yyyy-mm-dd') repeat_end_date
+	  , is_dbdata
+	  , alarm_yn
+	  , alarm_val
+	  , category
+ from events
+ where start_date >= add_months(to_date(#{date}, 'yyyy-mm-dd'), -1)
+ and end_date <= add_months(last_day(to_date(#{date}, 'yyyy-mm-dd')) +1, 1)
+ and  repeat_type = 'none'
+ ]]>
 </select>
 <!-- 2)캘린더 일정 저장하기 -->
 <insert id="saveCal" parameterType="Calendar">
@@ -72,7 +88,19 @@ where id = #{id}
 
 <!-- id에 대한 이벤트 존재여부 구하기 -->
 <select id="selectEvent" parameterType="string" resultType="Calendar">
-select * from events where id = #{id}
+select 
+	id 
+	 , text 
+	 , to_char(start_date, 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American') start_date 
+	 , to_char(end_date, 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American') end_date
+	 , content
+	 , repeat_type
+	 , to_char(repeat_end_date, 'yyyy-mm-dd') repeat_end_date
+	 , is_dbdata
+	 , alarm_yn
+	 , alarm_val
+	 , category
+from events where id = #{id}
 </select>
 
 <!-- 일정 수정 -->
@@ -85,7 +113,7 @@ select * from events where id = #{id}
 		, end_date = to_date(substr(#{end_date},1,24), 'DY MON DD YYYY HH24:MI:SS','NLS_DATE_LANGUAGE = American')
 		, repeat_type = #{repeat_type}
 		<if test="repeat_end_date != null and repeat_end_date != ''">
-		, repeat_end_date = to_date(#{repeat_end_date} || ' 00:00:00', 'YYYY-MM-DD hh24:mi:ss') + 1
+		, repeat_end_date = to_date(#{repeat_end_date} || ' 00:00:00', 'YYYY-MM-DD hh24:mi:ss')
 		</if>
 		<choose>
 			<when test="!alarm_val.equals('none')">
@@ -94,7 +122,6 @@ select * from events where id = #{id}
 			</when>
 			<when test="alarm_val.equals('none')">
 			, alarm_yn = 'F'
-			, alarm_val = 'none'
 			</when>
 		</choose>
 		, category = #{category}

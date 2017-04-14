@@ -48,6 +48,11 @@ public class CalendarDAO {
 			
 			if(exist != null) {
 				logger.debug("-------------------- event update process start1");
+				if(!vo.getRepeat_type().equals("none")) {
+					vo.setStart_date(exist.getStart_date());
+					vo.setEnd_date(exist.getEnd_date());
+					logger.debug("recurring update start & end date setting");
+				}
 				ret = modifyEvent(vo);
 				logger.debug("-------------------- event update process end");
 			} else {

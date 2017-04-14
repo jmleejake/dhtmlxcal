@@ -67,3 +67,37 @@ commit
   , alarm_yn = 'F' , alarm_val = 'none' 
   where id = '19' 
   
+  
+  
+ select 
+	  id 
+	  , text 
+	  , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date 
+	  , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
+	  , content
+	  , repeat_type
+	  , to_char(repeat_end_date, 'yyyy-mm-dd') repeat_end_date
+	  , is_dbdata
+	  , alarm_yn
+	  , alarm_val
+	  , category
+ from events
+ where repeat_type != 'none'
+union
+ select 
+	  id 
+	  , text 
+	  , to_char(start_date, 'yyyy-mm-dd hh24:mi') start_date 
+	  , to_char(end_date, 'yyyy-mm-dd hh24:mi') end_date
+	  , content
+	  , repeat_type
+	  , to_char(repeat_end_date, 'yyyy-mm-dd') repeat_end_date
+	  , is_dbdata
+	  , alarm_yn
+	  , alarm_val
+	  , category
+ from events
+ where start_date >= add_months(to_date('2017-04-01', 'yyyy-mm-dd'), -1)
+ and end_date <= add_months(last_day(to_date('2017-04-01', 'yyyy-mm-dd')) +1, 1)
+ and repeat_type = 'none'
+  
