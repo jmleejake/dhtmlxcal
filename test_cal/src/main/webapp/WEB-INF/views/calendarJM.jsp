@@ -67,6 +67,18 @@ function init() {
 	scheduler.config.details_on_dblclick = true;
 	scheduler.config.details_on_create = true;
 	scheduler.config.drag_move = false;
+	
+	scheduler.templates.event_class=function(start, end, event) {
+		var css = "";
+
+		if(event.subject) // if event has subject property then special class should be assigned
+			css += "event_"+event.subject;
+
+		if(event.id == scheduler.getState().select_id){
+			css += " selected";
+		}
+		return css; // default return
+	}
 
 	scheduler.init('scheduler_here', new Date(), "month");
 	
@@ -583,6 +595,14 @@ function makeRepeat(ev){
 	
 	p {
 		color: red;
+	}
+	
+	.dhx_cal_event.event_month7 div, .dhx_cal_event_line.event_month7{
+		background-color: #36BD14 !important;
+		border-color: #698490 !important;
+	}
+	.dhx_cal_event_clear.event_month7{
+		color:#36BD14 !important;
 	}
 </style>
 </head>
