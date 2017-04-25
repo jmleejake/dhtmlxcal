@@ -63,7 +63,7 @@ public class CalendarController {
 		
 		logger.debug("cal :: \n{}", vo);
 		
-		String email = "jmlee825@naver.com";
+		String email = "kdcsilk@naver.com";
 		
 		dao.saveScheduler(vo, email);
 		

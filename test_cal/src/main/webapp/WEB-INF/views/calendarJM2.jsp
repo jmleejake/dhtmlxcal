@@ -39,7 +39,6 @@ function selectTime(){
 	$("#EMin_"+nowMin)[0].selected=true;
 }
 
-// DB에서 넘어온 값으로 시간설정 세팅
 function selectTimeFromDB(sH, sM, eH, eM){
 	if(sH<12){
 	$("#Sam")[0].selected=true;
@@ -68,11 +67,14 @@ function init() {
 	scheduler.config.details_on_create = true;
 	scheduler.config.drag_move = false;
 
+	
+
+	
+	
 	scheduler.init('scheduler_here', new Date(), "month");
 	
 	getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
 
-// 	scheduler.init('scheduler_here', todayDate, "month");
 	 // 월 변경
     $('.dhx_cal_prev_button').on('click', function(){
    	 todayDate.setMonth(todayDate.getMonth() - 1);
@@ -82,37 +84,27 @@ function init() {
    	 todayDate.setMonth(todayDate.getMonth() + 1);
    	 getCalData(todayDate.getFullYear(), todayDate.getMonth() + 1);
    	 });
-    
-    // 반복일정 체크박스 초기화
-    fnc_e_date_init(true);
-}
-
-//반복일정 체크박스 및 종료일자 세팅 초기화
-function fnc_e_date_init(status) {
-	$("#check_end_date")[0].checked = !status;
-	if(status) $("#end_date").val("");
-	$("#end_date")[0].disabled = status;
 }
 
 var html = function(id) { return document.getElementById(id); }; //just a helper
 
 scheduler.showLightbox = function(id) {
-	fnc_e_date_init(true);
 	e_dateInit();
 	var ev = scheduler.getEvent(id);
 	scheduler.startLightbox(id, html("my_form"));
-	console.log()
+	
+	console.log("showLightBox");
+	
 	html("description").focus();
 	html("description").value = ev.text;
 	html("custom1").value = ev.custom1 || "";
 	html("content").value = ev.content || "";
-	//html("category").value = ev.subject || "";
+	html("category").value = ev.category || "";
 // 	html("alarm").value = ev.alarm_val  || "none";
 	html("repeat").value = ev.repeat_type || "none";
 	html("check_end_date").checked = ev.check_end_date;
 	html("end_date").value = ev.repeat_end_date || "";
 // 	html("timeSetting").value = ev.timeSetting || "";
-
 	switch(ev.repeat_type) {
 	case "monthly": // 매월
 		$("#mon_day").val(ev.repeat_detail);
@@ -126,7 +118,6 @@ scheduler.showLightbox = function(id) {
 	
 	$("#alarm").val(ev.alarm_val != null ? ev.alarm_val : "none");
 	
-	//$("#subject")
 	
 	/* //날짜입력창============================= */
 	var sDate=ev.start_date;
@@ -163,25 +154,13 @@ scheduler.showLightbox = function(id) {
     $("#timeSetEnd").val(EYear+"-"+EMonth+"-"+EDay);
     //새로 이벤트 입력할때 
 	if(ev.is_dbdata == null)selectTime();
-	if(ev.is_dbdata == null) $("#category").val(ev.subject = "기본");
 	
 	/* //날짜입력창============================= */
-	if(ev.is_dbdata == "T"){
-		// 수정시 반복여부 체크
-		ev.id = getRealId(ev, "update");
-		
-		// 반복등록시 종료일자 입력한 내용 체크박스와 함께 세팅.
-		if(ev.repeat_end_date != null) {
-			console.log("update & repeat status");
-			fnc_e_date_init(false);
-		}
-	}
 };
 
 // 저장
 function save_form() {
 	var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
-	console.log(ev);
 	ev.text = html("description").value;
 	ev.custom1 = html("custom1").value;
 	ev.content = $("#content")[0].value;
@@ -189,7 +168,7 @@ function save_form() {
 	ev.check_end_date = $("#check_end_date")[0].checked;
 	ev.repeat_type = $("#repeat").val()
 	ev.repeat_end_date = $("#end_date").val();
-	ev.category = $("#category").val();
+	ev.subject = $("#category").val();
 	/*
 	ev.start_date = $("#timeSetStart").val() 
 	+ " " + $("#Sampm").val() + " " 
@@ -269,12 +248,34 @@ function close_form() {
 function delete_event() {
 	var event_id = scheduler.getState().lightbox_id;
 	var ev = scheduler.getEvent(event_id);
+	var sp_id = "";
 	
 	scheduler.endLightbox(false, html("my_form"));
 	
 	// 반복일정 삭제시
-	event_id = getRealId(ev, "delete");
-	console.log("after getRealId :: " + event_id);
+	if(ev.repeat_type != 'none') {
+		try {
+			// 반복일정의 sub가 되는 id를 삭제할때
+			// ex> repeat_0_8
+			sp_id = event_id.split("_");
+			var org_id = sp_id[2];
+			event_id = org_id;
+			var del_id_list = rept_id_map.get(org_id);
+			for(var i=0; i<del_id_list.length; i++) {
+				console.log(del_id_list[i]);
+				scheduler.deleteEvent(del_id_list[i]);
+			}
+		} catch(err) {
+			// 반복일정의 main이 되는 id를 삭제할때
+			console.log("exception!!");
+			event_id = ev.id;
+			var del_id_list = rept_id_map.get(event_id);
+			for(var i=0; i<del_id_list.length; i++) {
+				console.log(del_id_list[i]);
+				scheduler.deleteEvent(del_id_list[i]);
+			}
+		}
+	}
 	
 	$.ajax({
 		url : "del"
@@ -290,49 +291,6 @@ function delete_event() {
 	});
 	
 	scheduler.deleteEvent(event_id);
-}
-
-// 반복일정 삭제/수정시 
-function getRealId(ev, type) {
-	var ret = ev.id;
-	console.log(ret);
-	console.log(ev);
-	
-	if(ev.repeat_type != 'none') {
-		console.log(ev.repeat_type);
-		try {
-			// 반복일정의 sub가 되는 id를 삭제할때
-			// ex> repeat_0_8
-			var sp_id = ret.split("_");
-			if(sp_id.length == 1) {
-				throw new error();
-			}
-			var org_id = sp_id[2];
-			ret = org_id;
-			if(type == "delete") {
-				console.log(ret);
-				var del_id_list = rept_id_map.get(ret);
-				for(var i=0; i<del_id_list.length; i++) {
-					console.log(del_id_list[i]);
-					scheduler.deleteEvent(del_id_list[i]);
-				}
-			}
-		} catch(err) {
-			// 반복일정의 main이 되는 id를 삭제할때
-			console.log("exception!!");
-			ret = ev.id;
-			if(type == "delete") {
-				console.log(ret);
-				var del_id_list = rept_id_map.get(ret);
-				for(var i=0; i<del_id_list.length; i++) {
-					console.log(del_id_list[i]);
-					scheduler.deleteEvent(del_id_list[i]);
-				}
-			}
-		}
-	}
-	console.log("getRealId :: " + ret);
-	return ret;
 }
 
 // 반복 일정 셀렉트박스
@@ -366,6 +324,11 @@ function fnc_end_date() {
 		$("#end_date").val("");
 		$("#end_date")[0].disabled = true;
 	}
+}
+
+// 알람 셀렉트박스
+function alarmChanged(){
+	console.log($("#alarm").val());
 }
 
 // 미니캘린더 보이기
@@ -409,7 +372,6 @@ function input_minical(id){
     }
 }
 
-// 스케쥴 목록을 얻어 화면에 보이기
 function getCalData(thisYear, thisMonth) {
 	$.ajax({
 		url:"show"
@@ -423,7 +385,6 @@ function getCalData(thisYear, thisMonth) {
 	});
 }
 
-// 스케쥴 화면세팅
 function showEvents(ret) {
 	var calArray = new Array();
 	$.each(ret, function(i, event) {
@@ -438,25 +399,19 @@ function showEvents(ret) {
 				, is_dbdata:event.is_dbdata
 				, alarm_yn:event.alarm_yn
 				, alarm_val:event.alarm_val
-				, subject : event.category
 		}
 		calArray.push(calObj);
+		
+		//반복일정 뿌려주는 구간!!! repeat
+		if(event.repeat_type !="none") {
+			console.log("반복일정");
+			makeRepeat(event);
+		} 
 	});
 	scheduler.parse(calArray, "json");
-	
-	//반복일정 뿌려주는 구간!!! repeat
-	if(event.repeat_type !="none") {
-		console.log("반복일정");
-		$.each(calArray, function(i, event) {
-			
-			makeRepeat(event);
-		});
-	} 
 }
 
-//반복 등록된 id들의 array를 original id를 key로 map형태로 저장
 var rept_id_map = new Map();
-
 function makeRepeat(ev){
 	var rept_list_id = new Array();
 	
@@ -496,7 +451,6 @@ function makeRepeat(ev){
 				, repeat_type:ev.repeat_type
 				, repeat_end_date:ev.repeat_end_date
 				, is_dbdata:ev.is_dbdata
-				, subject : ev.subject
  		    });
     	  rept_list_id.push("repeat_"+i+"_"+ev.id);
     	}
@@ -515,7 +469,6 @@ function makeRepeat(ev){
 				, repeat_type:ev.repeat_type
 				, repeat_end_date:ev.repeat_end_date
 				, is_dbdata:ev.is_dbdata
-				, subject : ev.subject
  		    });
     	  	rept_list_id.push("repeat_"+i+"_"+ev.id);
     	}
@@ -534,7 +487,6 @@ function makeRepeat(ev){
 				, repeat_type:ev.repeat_type
 				, repeat_end_date:ev.repeat_end_date
 				, is_dbdata:ev.is_dbdata
-				, subject : ev.subject
  		    });
     	  	rept_list_id.push("repeat_"+i+"_"+ev.id);
     	}
@@ -595,12 +547,7 @@ function makeRepeat(ev){
 	<table>
 		<tr>
 			<th>카테고리</th>
-			<td><select id="category" >
-				<option value="기본">기본</option>
-				<option value="전체공지">공지</option>
-				<option value="모임">모임</option>
-				<option value="행사">행사</option>
-			</select></td>
+			<td><input type="text" id="category"></td>
 		</tr>
 		<tr>
 			<th>제목</th>
@@ -615,7 +562,7 @@ function makeRepeat(ev){
 			<td><textarea id="content" rows="5" cols="50"></textarea></td>
 		</tr>
 		<tr>
-			<th>시간설정</th>
+			<th style="vertical-align: top;">시간설정</th>
 			<td> 
 			<!-- 시간설정================================== -->
 			<input class="time_section" type="text" id="timeSetStart" onclick="input_minical('timeSetStart')" readonly="readonly">
@@ -719,9 +666,9 @@ function makeRepeat(ev){
 		<div class="dhx_cal_date"></div>
 		<!-- 미니캘린더 -->
 		<div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div> 	
-		<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+		<!-- <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
 		<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-		<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+		<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div> -->
 	</div>
 	<div class="dhx_cal_header">
 	</div>
