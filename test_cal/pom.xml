@@ -191,6 +191,14 @@
 		    <artifactId>mail</artifactId>
 		    <version>1.5.0-b01</version>
 		</dependency>
+		
+		<!-- open csv -->
+		<dependency>
+		    <groupId>com.opencsv</groupId>
+		    <artifactId>opencsv</artifactId>
+		    <version>4.1</version>
+		</dependency>
+		
 	</dependencies>
     <build>
         <plugins>
