@@ -16,8 +16,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 public class RCsvTestMain {
 
 	// 20171230rul.csv  20180103UL.csv
-	private static final String SAMPLE_CSV_FILE_PATH = "D:\\Chemical-EDI\\20180103UL.csv";
-	private static final String SAMPLE_OUT_FILE_PATH = "D:\\Chemical-EDI\\20180103UL-csv.txt";
+	private static final String SAMPLE_CSV_FILE_PATH = "D:\\Chemical-EDI\\doc\\2018010900000000001.csv";
+	private static final String SAMPLE_OUT_FILE_PATH = SAMPLE_CSV_FILE_PATH + ".txt";
 
     public static void main(String[] args) throws IOException {
         try (
@@ -50,7 +50,27 @@ public class RCsvTestMain {
             		HashSet<String> options = new HashSet<>();
             		for (int i=0; i<arr.length; i++) {
             			String[] data = arr[i].split(":");
-        				options.add(data[1].trim());
+            			System.out.println(data.length);
+            			if (data.length > 1) {
+            				// 예외적인 경우가 있어 스플릿결과의 제일 마지막 배열값을 가져올수있게 처리
+            				options.add(data[data.length-1].trim());
+            			} else {
+            				// 또 다른 예외로 일본어 자판 컴마로 데이터가 이어져있는 경우로,
+            				// 콜론이 없이 컴마로만 되어있는 경우의 처리
+            				String[] comma = arr[i].split("、");
+            				for (String value : comma) {
+            					options.add(value.trim());
+            				}
+            			}
+            			
+            			// 일단 한번밖에 보지 못하였으나 콜론과 컴마가 섞여있는 경우의 처리
+            			// 이번의 경우에는 중복되는 데이터는 눈으로 봐서 삭제처리 하는것이 나을듯함
+            			if (data[0].contains("、")) {
+            				String[] comma = arr[i].split("、");
+            				for (String value : comma) {
+            					options.add(value.trim());
+            				}
+            			}
             		}
             		System.out.println(String.format("final value :: %s", options));
             		writer.write(String.format("final value :: %s\r\n", options));
