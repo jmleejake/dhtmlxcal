@@ -16,7 +16,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 public class RCsvTestMain {
 
 	// 20171230rul.csv  20180103UL.csv
-	private static final String SAMPLE_CSV_FILE_PATH = "D:\\Chemical-EDI\\doc\\2018010900000000001.csv";
+	private static final String SAMPLE_CSV_FILE_PATH = "D:\\Chemical-EDI\\doc\\20180103UL.csv";
 	private static final String SAMPLE_OUT_FILE_PATH = SAMPLE_CSV_FILE_PATH + ".txt";
 
     public static void main(String[] args) throws IOException {
@@ -40,6 +40,9 @@ public class RCsvTestMain {
             while (iterator.hasNext()) {
             	RCsvTest rcsv = iterator.next();
             	String option_content = rcsv.getProduct_option();
+            	
+            	String delivery_date = rcsv.getDelivery_date_sel();
+            	System.out.println(String.format("delivery_date :: %s\r\n", delivery_date));
             	
             	System.out.println(option_content);
             	writer.write(String.format("%s\r\n", option_content));

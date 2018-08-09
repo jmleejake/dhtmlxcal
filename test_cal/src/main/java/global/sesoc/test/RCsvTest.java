@@ -766,6 +766,16 @@ public class RCsvTest {
 	 * @param delivery_date_sel the delivery_date_sel to set
 	 */
 	public void setDelivery_date_sel(String delivery_date_sel) {
+		if (delivery_date_sel.contains("-")) {
+			delivery_date_sel = delivery_date_sel.replace("-", "/");
+		}
+		
+		if (delivery_date_sel.length() == 8) {
+			String year = delivery_date_sel.substring(0, 4);
+			String month = delivery_date_sel.substring(4, 6);
+			String day = delivery_date_sel.substring(6, 8);
+			delivery_date_sel = String.format("%s/%s/%s", year, month, day);
+		}
 		this.delivery_date_sel = delivery_date_sel;
 	}
 

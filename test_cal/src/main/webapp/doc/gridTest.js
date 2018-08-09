@@ -2,13 +2,21 @@
  * SELECT ADDDATE(now(), -1);
  * csv파일에서 내용을 추출하는 당일과 그 전 날의 데이터를 가져오기위한 
  * 오라클의 add_day였나... 암튼 그런 날짜 관련 함수를 찾아보았다.
+ * 
+ * select STR_TO_DATE("2017/8/7 00:00:00", "%Y/%m/%d %H:%i:%s");
+ * 
+ * var d = new Date();
+ * d.getFullYear() +'/'+ (d.getMonth()+1) + '/' + (d.getDate());
+ * 
+ * 자바스크립트에서 서버로 보내고 쿼리결과를 아작스로 받아오는게 나을듯싶어
+ * 자바스크립트 date활용법을 찾아보았다.
  */
 
 // specify the columns
   var columnDefs = [
     {headerName: "Make", field: "make", width:150
     	, editable: true
-    	, cellEditor: 'agTextCellEditor'
+    	, cellEditor: 'agPopupTextCellEditor'
 		, cellEditorParams: {
             maxLength: '300'
 		}

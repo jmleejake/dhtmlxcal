@@ -3,9 +3,7 @@ package global.sesoc.calendar;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import global.sesoc.calendar.dao.CalendarDAO;
@@ -26,7 +25,7 @@ public class CalendarController {
 
 	private static final Logger logger = LoggerFactory.getLogger(CalendarController.class);
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/calHome", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -74,10 +73,41 @@ public class CalendarController {
 	@ResponseBody
 	@RequestMapping(value="del", method=RequestMethod.POST)
 	public String delSchedule(String id) {
-		System.out.println("삭제할 게시물 :"+ id);
+		System.out.println("�く��懦腹 �ｲ護亨�ｬｼ :"+ id);
 		dao.delCal(id);
 		return "";
 	}
 	
+	
+	
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home2(Locale locale, Model model) {
+		logger.info("Welcome home! The client locale is {}.", locale);
+		
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		
+		String formattedDate = dateFormat.format(date);
+		
+		model.addAttribute("serverTime", formattedDate );
+		
+		return "home2";
+	}
+	
+	@RequestMapping(value="/testPage")
+	public String testPage() {
+		logger.info("testPage called!");
+		return "test/test";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/ajaxTest")
+	public String ajaxTest(@RequestParam(value="intVal") int val) {
+		logger.info("ajaxTest in {}", val);
+		int result = 4 + val;
+		
+		return result+"";
+	}
 	
 }
