@@ -78,7 +78,6 @@ var rowData = [
         	console.log(modifiedData);
         }
     }
-
   };
   
   function isFirstColumn(params) {
@@ -97,8 +96,6 @@ var eGridDiv = document.querySelector('#myGrid');
 
 // create the grid passing in the div to use together with the columns & data we want to use
 new agGrid.Grid(eGridDiv, gridOptions);
-
-gridOptions.api.setHeaderHeight(null);
 
 $("#btn_sel").on("click", function() {
 	var selectedRows = gridOptions.api.getSelectedRows();
