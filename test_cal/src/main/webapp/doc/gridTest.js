@@ -98,6 +98,7 @@ var eGridDiv = document.querySelector('#myGrid');
 // create the grid passing in the div to use together with the columns & data we want to use
 new agGrid.Grid(eGridDiv, gridOptions);
 
+gridOptions.api.setHeaderHeight(null);
 
 $("#btn_sel").on("click", function() {
 	var selectedRows = gridOptions.api.getSelectedRows();
@@ -150,6 +151,19 @@ $("#btn_create").on("click", function() {
 	
 	gridOptions.api.updateRowData({add:[rowData]});
 });
+
+$("#txt_keyword").keyup(function(event) {
+	console.log(event.keyCode);
+	if (event.keyCode == 13) {
+		$("#btn_srch").click();
+	}
+});
+
+$("#btn_srch").on("click", function() {
+	console.log("btn_srch clicked!");
+	console.log($("#txt_keyword").val());
+});
+
 
 function getInfo(data) {
 	console.log("getInfo");

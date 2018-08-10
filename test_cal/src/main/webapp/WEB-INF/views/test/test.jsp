@@ -39,6 +39,8 @@ $(document).ready(function(){
 <button type="button" class="btn btn-primary" id="btn_show">Show Data</button>
 <button type="button" class="btn btn-primary" id="btn_create">登録</button>
 <input type="text" id="txt_order" class="form-control" style="width: 150px;" placeholder="日付選択">
+<input type="text" id="txt_keyword" placeholder="press any... and press enter" style="width: 200px;">
+<button type="button" class="btn btn-primary" id="btn_srch">検索</button>
 <div id="myGrid" style="height: 300px;width:500px;" class="ag-theme-balham"></div>
 
 <script src="./resources/gridTest.js"></script>
