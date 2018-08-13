@@ -10,13 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import global.sesoc.calendar.dao.CalendarDAO;
 import global.sesoc.calendar.vo.Calendar;
+import global.sesoc.calendar.vo.Car;
 
 @Controller
 public class CalendarController {
@@ -81,33 +82,19 @@ public class CalendarController {
 	
 	
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home2(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
-		return "home2";
-	}
-	
-	@RequestMapping(value="/testPage")
-	public String testPage() {
-		logger.info("testPage called!");
-		return "test/test";
-	}
-	
+	// , produces="application/json;charset=UTF-8"
 	@ResponseBody
-	@RequestMapping(value="/ajaxTest")
-	public String ajaxTest(@RequestParam(value="intVal") int val) {
-		logger.info("ajaxTest in {}", val);
-		int result = 4 + val;
-		
-		return result+"";
+	@RequestMapping(value="/update", method=RequestMethod.POST, consumes="application/json;charset=UTF-8")
+	public ArrayList<Car> updateTest(@RequestBody ArrayList<Car> text) {
+		logger.info("updateTest :: {}", text);
+		ArrayList<Car> list = new ArrayList<Car>();
+		list.add(new Car("111", "maker", "model name", "how much"));
+		list.add(new Car("222", "maker2", "model name2", "how much2"));
+		list.add(new Car("333", "maker3", "model name3", "how much3"));
+		list.add(new Car("444", "maker4", "model name4", "how much4"));
+		list.add(new Car("555", "maker5", "model name5", "how much5"));
+		logger.debug(list.toString());
+		return list;
 	}
 	
 }
