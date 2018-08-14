@@ -14,7 +14,8 @@
 <script>
 $(document).ready(function() {
 	$(".loader").fadeOut("slow");
-	getYesterday();
+	console.log("today? " + getDate(0));
+	console.log("this date? " + getDate(-7));
 });
 </script>
 
@@ -37,7 +38,7 @@ $(document).ready(function() {
 	        <a class="nav-link" href="testPage">ファイル</a>
 	      </li>
 	      <li id="list" class="nav-item">
-	        <a class="nav-link" href="modalTest">リスト</a>
+	        <a class="nav-link" href="#">リスト</a>
 	      </li>
 	      <li id="baggage" class="nav-item">
 	        <a class="nav-link" href="#">荷物管理番号</a>

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import global.sesoc.calendar.dao.CalendarDAO;
@@ -28,7 +29,7 @@ public class CalendarController {
 	
 	@RequestMapping(value = "/calHome", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+		logger.info("Welcome calHome! The client locale is {}.", locale);
 		
 		Date date = new Date();
 		logger.info(date.toString());
@@ -40,13 +41,13 @@ public class CalendarController {
 		
 		return "typeTest";
 	}
-	@RequestMapping(value = "custom", method = RequestMethod.GET)
+	@RequestMapping(value = "/custom", method = RequestMethod.GET)
 	public String custome() {
 		return "custom_cal";
 	}
 
 	@ResponseBody
-	@RequestMapping(value="show", method=RequestMethod.POST)
+	@RequestMapping(value="/show", method=RequestMethod.POST)
 	public ArrayList<Calendar> showSchedule(int thisYear, int thisMonth) {
 		String date = "";
 		date +=thisYear+"-"+String.format("%02d", thisMonth)+"-01";
@@ -56,7 +57,7 @@ public class CalendarController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="save", method=RequestMethod.POST, produces="application/json;charset=utf-8")
+	@RequestMapping(value="/save", method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	public int saveSchedule(Calendar vo) {
 		int ret = 0;
 		logger.debug("-------------------- event save process start");
@@ -72,28 +73,82 @@ public class CalendarController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="del", method=RequestMethod.POST)
+	@RequestMapping(value="/del", method=RequestMethod.POST)
 	public String delSchedule(String id) {
 		System.out.println("�く��懦腹 �ｲ護亨�ｬｼ :"+ id);
 		dao.delCal(id);
 		return "";
 	}
 	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String gridHome(Locale locale, Model model) {
+		logger.info("Welcome gridHome! The client locale is {}.", locale);
+		
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		
+		String formattedDate = dateFormat.format(date);
+		
+		model.addAttribute("serverTime", formattedDate );
+		
+		return "home2";
+	}
 	
+	@RequestMapping(value="/testPage")
+	public String testPage() {
+		logger.info("testPage called!");
+		return "test/test";
+	}
 	
-	
-	// , produces="application/json;charset=UTF-8"
 	@ResponseBody
-	@RequestMapping(value="/update", method=RequestMethod.POST, consumes="application/json;charset=UTF-8")
-	public ArrayList<Car> updateTest(@RequestBody ArrayList<Car> text) {
+	@RequestMapping(value="/ajaxTest")
+	public String ajaxTest(@RequestParam(value="intVal") int val) {
+		logger.info("ajaxTest in {}", val);
+		int result = 4 + val;
+		
+		return result+"";
+	}
+	
+	@RequestMapping(value="/getInfo")
+	public void getDetail(String id) {
+		logger.info("getDetail : {}", id);
+	}
+	
+	@RequestMapping(value="/fileTest", method=RequestMethod.POST)
+	public String fileTest(String testValue) {
+		logger.info("fileTest :: {}", testValue);
+		return "redirect:testPage";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/update")
+	public ArrayList<Car> updateGridTest(@RequestBody ArrayList<Car> text) {
 		logger.info("updateTest :: {}", text);
 		ArrayList<Car> list = new ArrayList<Car>();
-		list.add(new Car("111", "maker", "model name", "how much"));
-		list.add(new Car("222", "maker2", "model name2", "how much2"));
-		list.add(new Car("333", "maker3", "model name3", "how much3"));
-		list.add(new Car("444", "maker4", "model name4", "how much4"));
-		list.add(new Car("555", "maker5", "model name5", "how much5"));
-		logger.debug(list.toString());
+		list.add(new Car("111", "maker", "model name", "how much", "2018/08/04"));
+		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/11"));
+		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/13"));
+		list.add(new Car("444", "maker4", "model name4", "how much4", "2018/08/14"));
+		list.add(new Car("555", "maker5", "model name5", "how much5", "2018/08/12"));
+		for (Car carObj : text) {
+			list.add(carObj);
+		}
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/delete")
+	public ArrayList<Car> deleteGridTest(@RequestBody ArrayList<String> del_seq_id) {
+		logger.info("deleteGridTest :: {}", del_seq_id);
+		
+		ArrayList<Car> list = new ArrayList<Car>();
+		list.add(new Car("111", "maker", "model name", "how much", "2018/08/11"));
+		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/14"));
+		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/09"));
+		
 		return list;
 	}
 	

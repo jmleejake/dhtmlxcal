@@ -15,6 +15,8 @@
 $(document).ready(function(){
 	$("#file").addClass("active");
 	
+	gridPageInit();
+	
 	$("#txt_order").datepicker(); // datepicker : bootstrap 4.1.3 및 ag-grid와 css충돌문제없음
 	
 	$.ajax({
@@ -36,8 +38,8 @@ $(document).ready(function(){
 
 <button type="button" class="btn btn-primary" id="btn_sel">選択結果</button>
 <button type="button" class="btn btn-primary" id="btn_mod">更新</button>
-<button type="button" class="btn btn-primary" id="btn_show">Show Data</button>
 <button type="button" class="btn btn-primary" id="btn_create">登録</button>
+<button type="button" class="btn btn-primary" id="btn_del">削除</button>
 <input type="text" id="txt_order" class="form-control" style="width: 150px;" placeholder="日付選択">
 <input type="text" id="txt_keyword" placeholder="press any... and press enter" style="width: 200px;">
 <button type="button" class="btn btn-primary" id="btn_srch">検索</button>

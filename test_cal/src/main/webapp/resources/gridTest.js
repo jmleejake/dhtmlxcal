@@ -16,34 +16,42 @@ var gridOptions = {};
 var previousData, afterData;
 var modifiedData = [];
 
-function gridPageInit() {
-	// specify the columns
-	  var columnDefs = [
-	    {headerName: "Make", field: "make", width:200
-	    	, editable: true
-	    	, cellEditor: 'agPopupTextCellEditor'
-	    }
-	    , {headerName: "Model", field: "model", width:200
-	    	, editable: true
-	        , cellEditor: 'agLargeTextCellEditor'
-	        , cellEditorParams: {
-	            maxLength: '500',
-	            cols: '50',
-	            rows: '6'
-	        }
+//specify the columns
+var columnDefs = [
+  {headerName: "Make", field: "make", width:200
+  	, editable: true
+  	, cellEditor: 'agPopupTextCellEditor'
+  }
+  , {headerName: "Model", field: "model", width:200
+  	, editable: true
+      , cellEditor: 'agLargeTextCellEditor'
+      , cellEditorParams: {
+          maxLength: '500',
+          cols: '50',
+          rows: '6'
+      }
+  , tooltip: function(params) { // 길이가 긴 항목에 대해서 툴팁 추가.
+  	return params.value;
+  }
 
-	    }
-	    , {headerName: "Price", field: "price", width:200
-	    	, editable: true
-	    	, cellEditor: 'agTextCellEditor'
-	    }
-	  ];
+  }
+  , {headerName: "Price", field: "price", width:200
+  	, editable: true
+  	, cellEditor: 'agTextCellEditor'
+  }
+];
+
+//lookup the container we want the Grid to use
+var eGridDiv = document.querySelector('#myGrid');
+
+function gridPageInit() {
 	  
 	// specify the data
 	var rowData = [
-		{make: "Toyota", model: "Celica", price: 35000, id:11},
-		{make: "Ford", model: "Mondeo", price: 32000, id:22},
-		{make: "Porsche", model: "Boxter", price: 72000, id:33}
+		{make: "Toyota", model: "Celica", price: 35000, id:11, register_date:"2018/08/13"}
+		, {make: "Ford", model: "Mondeo", price: 32000, id:22, register_date:"2018/08/14"}
+		, {make: "Porsche", model: "Boxter", price: 72000, id:33, register_date:"2018/08/12"}
+		, {make:"news", model:"関東甲信、中心に急な激しい雨に注意「同じ災害なのに」豪雨支援金で差ねぶた 駐車代6万500円支払いの人も", price:200, id:44, register_date:"2018/08/13"}
 	];
 	//  var rowData = [];
 	  
@@ -70,15 +78,73 @@ function gridPageInit() {
 	        console.log("after : " + afterData);
 	        if (!(previousData == afterData)) {
 	        	console.log("modified!");
-	        	modifiedData.push({id:event.node.data.id, model:event.node.data.model});
+	        	modifiedData.push({
+	        		id:event.node.data.id
+	        		, model:event.node.data.model
+	        		, make:event.node.data.make
+	        		, price:event.node.data.price
+        		});
 	        }
 	    }
-
+	    
 	  };
-	  
-	// lookup the container we want the Grid to use
-	  var eGridDiv = document.querySelector('#myGrid');
 
+	  // create the grid passing in the div to use together with the columns & data we want to use
+	  new agGrid.Grid(eGridDiv, gridOptions);
+}
+
+
+function afterDataChange(rowData) {
+	  // let the grid know which columns and what data to use
+	gridOptions = {
+			  defaultColDef: {
+			        width: 100,
+			        headerCheckboxSelection: isFirstColumn,
+			        checkboxSelection: isFirstColumn
+			    },
+		    enableColResize: true,
+		    suppressRowClickSelection: false,
+		    rowSelection: 'multiple',
+		    columnDefs: columnDefs,
+//		    onRowSelected: onRowSelected,
+		    rowData: rowData,
+		    rowClassRules: {
+		    	'trans-modified': function(params) {
+		    		var target = params.data.register_date;
+		    		return !(target > getDate(0));
+		    	},
+		    	'trans-created': function(params) {
+		    		console.log("created");
+		    		var target = params.data.register_date;
+		    		console.log(target);
+		    		console.log(getDate(0));
+		    		console.log((target === getDate(0)));
+		    		return target === getDate(0);
+		    	}
+		    },
+		    onCellEditingStarted: function(event) {
+		        previousData = event.node.data.model;
+		    },
+		    onCellEditingStopped: function(event) {
+		        afterData = event.node.data.model;
+		        
+		        console.log("previous : " + previousData);
+		        console.log("after : " + afterData);
+		        if (!(previousData == afterData)) {
+		        	console.log("modified!");
+		        	modifiedData.push({
+		        		id:event.node.data.id
+		        		, model:event.node.data.model
+		        		, make:event.node.data.make
+		        		, price:event.node.data.price
+	        		});
+		        }
+		    }
+		    
+		  };
+	  
+		eGridDiv = document.querySelector('#myGrid');
+	
 	  // create the grid passing in the div to use together with the columns & data we want to use
 	  new agGrid.Grid(eGridDiv, gridOptions);
 }
@@ -103,7 +169,44 @@ $("#btn_sel").on("click", function() {
 		
 		console.log(data);
 	}
-})
+});
+
+
+$("#btn_del").on("click", function() {
+	var selectedRows = gridOptions.api.getSelectedRows();
+	var del_seq_id = [];
+	
+	console.log("del clicked");
+	$.each(selectedRows, function(index, selectedRow) {
+		del_seq_id.push(selectedRow.id);
+	});
+	console.log(del_seq_id);
+	
+	$.ajax({
+		url: "delete"
+		, type:"post"
+		, dataType: "json"
+		, contentType: 'application/json'
+		, data:JSON.stringify(del_seq_id)
+		, success: function(result){
+			console.log("success!");
+			var rowData = [];
+			for (var i=0; i<result.length; i++) {
+				rowData.push({
+					id:result[i].id
+					, make:result[i].make
+					, model:result[i].model
+					, price:result[i].price
+					, register_date:result[i].register_date});
+			}
+			gridOptions.api.setRowData(rowData);
+    	}
+		, error: function(event) {
+			console.log("error");
+			console.log(event);
+		}
+	});
+});
 
 $("#btn_mod").on("click", function() {
 	if (modifiedData.length == 0) {
@@ -111,12 +214,6 @@ $("#btn_mod").on("click", function() {
 		return;
 	}
 	
-	console.log("mod in");
-	console.log(modifiedData);
-	
-	var test = [{id:11, model:"111"}, {id:22, model:"11122"}, {id:33, model:"13121"}];
-	console.log("test value");
-	console.log(test);
 	$.ajax({
 		url: "update"
 		, type:"post"
@@ -126,26 +223,28 @@ $("#btn_mod").on("click", function() {
 		, success: function(result){
 			var rowData = [];
 			for (var i=0; i<result.length; i++) {
-				rowData.push({id:result[i].id, make:result[i].make, model:result[i].model, price:result[i].price});
+				rowData.push({
+					id:result[i].id
+					, make:result[i].make
+					, model:result[i].model
+					, price:result[i].price
+					, register_date:result[i].register_date});
 			}
-			gridOptions.api.setRowData(rowData);
+			
+			afterDataChange(rowData);
+			
+			 gridOptions.api.setRowData(rowData);
+				
+			// 수정데이터 초기화
+			modifiedData = [];
     	}
 	});
-});
-
-$("#btn_show").on("click", function() {
-	var rowData = [
-	  {make: "Toyota", model: "Celica", price: 35000, id:11},
-	  {make: "Ford", model: "Mondeo", price: 32000, id:22},
-	  {make: "Porsche", model: "Boxter", price: 72000, id:33}
-	];
-	
-	gridOptions.api.setRowData(rowData);
 });
 
 $("#btn_create").on("click", function() {
 	var rowData = {make:"", modle:"", price:0};
 	
+	// 맨 윗줄에 추가한 row가 보일수있게 세팅
 	gridOptions.api.updateRowData({add:[rowData], addIndex:0});
 });
 
@@ -160,12 +259,3 @@ $("#btn_srch").on("click", function() {
 	console.log("btn_srch clicked!");
 	console.log($("#txt_keyword").val());
 });
-
-function getInfo(data) {
-	console.log("getInfo");
-	console.log(data);
-	$('form').attr('action', "getInfo");
-	$('form').attr('method', "post");
-	$("#car_id").val(data);
-	$("form").submit();
-}

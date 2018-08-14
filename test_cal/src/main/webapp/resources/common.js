@@ -2,9 +2,15 @@
  * 
  */
 
-function getYesterday() {
+function getDate(range) {
 	var d = new Date();
-	var yesterday = d.getFullYear() +'/'+ (d.getMonth()+1) + '/' + (d.getDate()-1);
-	console.log(yesterday);
-//	return yesterday;
+	var month = ''+(d.getMonth() + 1);
+    var day = ''+(d.getDate()+range);
+    var year = d.getFullYear();
+
+	if (month.length < 2) month = '0' + month;
+	if (day.length < 2) day = '0' + day;
+	
+	var date = year +'/'+ month + '/' + day;
+	return date;
 }

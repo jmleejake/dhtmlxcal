@@ -14,10 +14,10 @@
 
 	<!-- db.properties의 설정 값을 읽어서 setting -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${driver}" />
-		<property name="url" value="${url}" />
-		<property name="username" value="${user}" />
-		<property name="password" value="${password}" />
+<!-- 		<property name="driverClassName" value="${driver}" /> -->
+<!-- 		<property name="url" value="${url}" /> -->
+<!-- 		<property name="username" value="${user}" /> -->
+<!-- 		<property name="password" value="${password}" /> -->
 	</bean>
 
 	<!-- 트랙잭션 관리를 위한 빈설정 -->
