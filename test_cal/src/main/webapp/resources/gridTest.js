@@ -68,6 +68,17 @@ function gridPageInit() {
 	    columnDefs: columnDefs,
 //	    onRowSelected: onRowSelected,
 	    rowData: rowData,
+	    rowClassRules: {
+	    	'trans-created': function(params) {
+	    		console.log("created");
+	    		var target = params.data.register_date;
+	    		return target === getDate(0);
+	    	},
+	    	'trans-modified': function(params) {
+	    		var target = params.data.update_date;
+	    		return target === getDate(0);
+	    	}
+	    },
 	    onCellEditingStarted: function(event) {
 	        previousData = event.node.data.model;
 	    },
@@ -89,62 +100,6 @@ function gridPageInit() {
 	    
 	  };
 
-	  // create the grid passing in the div to use together with the columns & data we want to use
-	  new agGrid.Grid(eGridDiv, gridOptions);
-}
-
-
-function afterDataChange(rowData) {
-	  // let the grid know which columns and what data to use
-	gridOptions = {
-			  defaultColDef: {
-			        width: 100,
-			        headerCheckboxSelection: isFirstColumn,
-			        checkboxSelection: isFirstColumn
-			    },
-		    enableColResize: true,
-		    suppressRowClickSelection: false,
-		    rowSelection: 'multiple',
-		    columnDefs: columnDefs,
-//		    onRowSelected: onRowSelected,
-		    rowData: rowData,
-		    rowClassRules: {
-		    	'trans-modified': function(params) {
-		    		var target = params.data.register_date;
-		    		return !(target > getDate(0));
-		    	},
-		    	'trans-created': function(params) {
-		    		console.log("created");
-		    		var target = params.data.register_date;
-		    		console.log(target);
-		    		console.log(getDate(0));
-		    		console.log((target === getDate(0)));
-		    		return target === getDate(0);
-		    	}
-		    },
-		    onCellEditingStarted: function(event) {
-		        previousData = event.node.data.model;
-		    },
-		    onCellEditingStopped: function(event) {
-		        afterData = event.node.data.model;
-		        
-		        console.log("previous : " + previousData);
-		        console.log("after : " + afterData);
-		        if (!(previousData == afterData)) {
-		        	console.log("modified!");
-		        	modifiedData.push({
-		        		id:event.node.data.id
-		        		, model:event.node.data.model
-		        		, make:event.node.data.make
-		        		, price:event.node.data.price
-	        		});
-		        }
-		    }
-		    
-		  };
-	  
-		eGridDiv = document.querySelector('#myGrid');
-	
 	  // create the grid passing in the div to use together with the columns & data we want to use
 	  new agGrid.Grid(eGridDiv, gridOptions);
 }
@@ -197,7 +152,8 @@ $("#btn_del").on("click", function() {
 					, make:result[i].make
 					, model:result[i].model
 					, price:result[i].price
-					, register_date:result[i].register_date});
+					, register_date:result[i].register_date
+					, update_date:result[i].update_date});
 			}
 			gridOptions.api.setRowData(rowData);
     	}
@@ -228,10 +184,9 @@ $("#btn_mod").on("click", function() {
 					, make:result[i].make
 					, model:result[i].model
 					, price:result[i].price
-					, register_date:result[i].register_date});
+					, register_date:result[i].register_date
+					, update_date:result[i].update_date});
 			}
-			
-			afterDataChange(rowData);
 			
 			 gridOptions.api.setRowData(rowData);
 				

@@ -10,16 +10,18 @@ public class Car {
 	private String model;
 	private String price;
 	private String register_date;
+	private String update_date;
 	
 	public Car() {}
 
-	public Car(String id, String make, String model, String price, String register_date) {
+	public Car(String id, String make, String model, String price, String register_date, String update_date) {
 		super();
 		this.id = id;
 		this.make = make;
 		this.model = model;
 		this.price = price;
 		this.register_date = register_date;
+		this.update_date = update_date;
 	}
 
 	/**
@@ -84,6 +86,20 @@ public class Car {
 		this.register_date = register_date;
 	}
 
+	/**
+	 * @return the update_date
+	 */
+	public String getUpdate_date() {
+		return update_date;
+	}
+
+	/**
+	 * @param update_date the update_date to set
+	 */
+	public void setUpdate_date(String update_date) {
+		this.update_date = update_date;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -100,8 +116,11 @@ public class Car {
 		builder.append(price);
 		builder.append(", register_date=");
 		builder.append(register_date);
+		builder.append(", update_date=");
+		builder.append(update_date);
 		builder.append("]");
 		return builder.toString();
 	}
+
 
 }

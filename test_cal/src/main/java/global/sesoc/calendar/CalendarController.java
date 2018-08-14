@@ -128,11 +128,11 @@ public class CalendarController {
 	public ArrayList<Car> updateGridTest(@RequestBody ArrayList<Car> text) {
 		logger.info("updateTest :: {}", text);
 		ArrayList<Car> list = new ArrayList<Car>();
-		list.add(new Car("111", "maker", "model name", "how much", "2018/08/04"));
-		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/11"));
-		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/13"));
-		list.add(new Car("444", "maker4", "model name4", "how much4", "2018/08/14"));
-		list.add(new Car("555", "maker5", "model name5", "how much5", "2018/08/12"));
+		list.add(new Car("111", "maker", "model name", "how much", "2018/08/04", "2018/08/13"));
+		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/11", "2018/08/14"));
+		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/13", "2018/08/13"));
+		list.add(new Car("444", "maker4", "model name4", "how much4", "2018/08/14", "2018/08/14"));
+		list.add(new Car("555", "maker5", "model name5", "how much5", "2018/08/12", "2018/08/13"));
 		for (Car carObj : text) {
 			list.add(carObj);
 		}
@@ -145,9 +145,9 @@ public class CalendarController {
 		logger.info("deleteGridTest :: {}", del_seq_id);
 		
 		ArrayList<Car> list = new ArrayList<Car>();
-		list.add(new Car("111", "maker", "model name", "how much", "2018/08/11"));
-		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/14"));
-		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/09"));
+		list.add(new Car("111", "maker", "model name", "how much", "2018/08/11", "2018/08/13"));
+		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/14", "2018/08/14"));
+		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/14", ""));
 		
 		return list;
 	}

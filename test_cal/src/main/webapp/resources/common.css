@@ -21,10 +21,10 @@
 	font-size: 20px;
 }
 
-.ag-theme-balham .trans-modified {
-	background-color: #99ccff; !important;
-}
-
 .ag-theme-balham .trans-created {
 	background-color: #ff8533; !important;
+}
+
+.ag-theme-balham .trans-modified {
+	background-color: #99ccff; !important;
 }
