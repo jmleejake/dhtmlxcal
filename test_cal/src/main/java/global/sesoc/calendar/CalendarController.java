@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonObject;
+
 import global.sesoc.calendar.dao.CalendarDAO;
 import global.sesoc.calendar.vo.Calendar;
 import global.sesoc.calendar.vo.Car;
@@ -149,6 +151,38 @@ public class CalendarController {
 		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/14", "2018/08/14"));
 		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/14", ""));
 		
+		return list;
+	}
+	
+	@RequestMapping(value="/goResult")
+	public String goResultPage() {
+		logger.info("goResultPage - get");
+		return "test/result";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/goResult", method=RequestMethod.POST)
+	public String goResultPage(@RequestBody ArrayList<Car> text) {
+		logger.info("goResultPage - post :: {}", text);
+		JsonObject obj = new JsonObject();
+		obj.addProperty("result", "FAIL");
+		
+		logger.info("logic execute...");
+		obj.addProperty("result", "OK");
+		
+		return obj.toString();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/transResult")
+	public ArrayList<Car> showTransResult() {
+		logger.info("showTransResult");
+		ArrayList<Car> list = new ArrayList<Car>();
+		list.add(new Car("111", "maker", "model name", "how much", "2018/08/04", "2018/08/13"));
+		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/11", "2018/08/14"));
+		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/13", "2018/08/13"));
+		list.add(new Car("444", "maker4", "model name4", "how much4", "2018/08/14", "2018/08/14"));
+		list.add(new Car("555", "maker5", "model name5", "how much5", "2018/08/12", "2018/08/13"));
 		return list;
 	}
 	

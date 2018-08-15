@@ -40,6 +40,7 @@ $(document).ready(function(){
 <button type="button" class="btn btn-primary" id="btn_mod">更新</button>
 <button type="button" class="btn btn-primary" id="btn_create">登録</button>
 <button type="button" class="btn btn-primary" id="btn_del">削除</button>
+<button type="button" class="btn btn-primary" id="btn_trans">置換</button>
 <input type="text" id="txt_order" class="form-control" style="width: 150px;" placeholder="日付選択">
 <input type="text" id="txt_keyword" placeholder="press any... and press enter" style="width: 200px;">
 <button type="button" class="btn btn-primary" id="btn_srch">検索</button>
@@ -47,9 +48,6 @@ $(document).ready(function(){
 
 <script src="./resources/gridTest.js"></script>
 
-<form>
-	<input type="hidden" name="id" id="car_id">
-</form>
 </div>
 </body>
 </html>

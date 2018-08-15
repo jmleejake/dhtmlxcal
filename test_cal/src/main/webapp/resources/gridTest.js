@@ -70,7 +70,6 @@ function gridPageInit() {
 	    rowData: rowData,
 	    rowClassRules: {
 	    	'trans-created': function(params) {
-	    		console.log("created");
 	    		var target = params.data.register_date;
 	    		return target === getDate(0);
 	    	},
@@ -157,10 +156,30 @@ $("#btn_del").on("click", function() {
 			}
 			gridOptions.api.setRowData(rowData);
     	}
-		, error: function(event) {
-			console.log("error");
-			console.log(event);
-		}
+	});
+});
+
+$("#btn_trans").on("click", function() {
+	console.log("tranlation");
+	var selectedRows = gridOptions.api.getSelectedRows();
+	
+	if (selectedRows.length == 0) {
+		alert("no seleted rows");
+		return;
+	}
+	
+	$.ajax({
+		url: "goResult"
+		, type:"post"
+		, dataType: "json"
+		, contentType: 'application/json'
+		, data:JSON.stringify(selectedRows)
+		, success: function(params){
+			console.log("success!");
+			if (params.result === "OK") {
+				window.location.href("goResult");
+			}
+    	}
 	});
 });
 
