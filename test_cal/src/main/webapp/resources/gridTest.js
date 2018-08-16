@@ -169,16 +169,16 @@ $("#btn_trans").on("click", function() {
 	}
 	
 	$.ajax({
-		url: "goResult"
+		url: "returnArrayTest"
 		, type:"post"
 		, dataType: "json"
 		, contentType: 'application/json'
 		, data:JSON.stringify(selectedRows)
 		, success: function(params){
-			console.log("success!");
-			if (params.result === "OK") {
-				window.location.href("goResult");
-			}
+			console.log(params);
+			$("#hid_data").val(params);
+			
+			$("#frm_test").submit();
     	}
 	});
 });

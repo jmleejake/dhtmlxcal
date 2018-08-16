@@ -64,8 +64,47 @@ public class SendMail {
 		} catch (MessagingException msg_e) {
 		}
 	}
+	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
+	}
 
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(String user) {
+		this.user = user;
+	}
 
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	class MyAuthentication extends Authenticator {
 

@@ -11,6 +11,9 @@
 <script>
 $(document).ready(function(){
 	$("#file").addClass("active");
+	console.log("result page");
+	
+	getData();
 });
 
 </script>
@@ -26,6 +29,6 @@ $(document).ready(function(){
 <script src="./resources/resultPage.js"></script>
 
 </div>
-
+<input type="hidden" id="seq_id_list" value="${idList }">
 </body>
 </html>

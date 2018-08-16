@@ -170,7 +170,12 @@ public class CalendarDAO {
 				id = Integer.parseInt(calId);
 			} catch (NumberFormatException e) {
 				String[] sp = calId.split("_");
+				
+				for (String str : sp) {
+					logger.debug(str);
+				}
 			}
+			
 			
 			try {
 				mapper.delCal(id);

@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.JsonObject;
-
 import global.sesoc.calendar.dao.CalendarDAO;
 import global.sesoc.calendar.vo.Calendar;
 import global.sesoc.calendar.vo.Car;
@@ -87,7 +85,7 @@ public class CalendarController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String gridHome(Locale locale, Model model) {
-		logger.info("Welcome gridHome! The client locale is {}.", locale);
+		logger.debug("Welcome gridHome! The client locale is {}.", locale);
 		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
@@ -101,14 +99,14 @@ public class CalendarController {
 	
 	@RequestMapping(value="/testPage")
 	public String testPage() {
-		logger.info("testPage called!");
+		logger.debug("testPage called!");
 		return "test/test";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/ajaxTest")
 	public String ajaxTest(@RequestParam(value="intVal") int val) {
-		logger.info("ajaxTest in {}", val);
+		logger.debug("ajaxTest in {}", val);
 		int result = 4 + val;
 		
 		return result+"";
@@ -116,19 +114,19 @@ public class CalendarController {
 	
 	@RequestMapping(value="/getInfo")
 	public void getDetail(String id) {
-		logger.info("getDetail : {}", id);
+		logger.debug("getDetail : {}", id);
 	}
 	
 	@RequestMapping(value="/fileTest", method=RequestMethod.POST)
 	public String fileTest(String testValue) {
-		logger.info("fileTest :: {}", testValue);
+		logger.debug("fileTest :: {}", testValue);
 		return "redirect:testPage";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/update")
 	public ArrayList<Car> updateGridTest(@RequestBody ArrayList<Car> text) {
-		logger.info("updateTest :: {}", text);
+		logger.debug("updateTest :: {}", text);
 		ArrayList<Car> list = new ArrayList<Car>();
 		list.add(new Car("111", "maker", "model name", "how much", "2018/08/04", "2018/08/13"));
 		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/11", "2018/08/14"));
@@ -144,7 +142,7 @@ public class CalendarController {
 	@ResponseBody
 	@RequestMapping(value="/delete")
 	public ArrayList<Car> deleteGridTest(@RequestBody ArrayList<String> del_seq_id) {
-		logger.info("deleteGridTest :: {}", del_seq_id);
+		logger.debug("deleteGridTest :: {}", del_seq_id);
 		
 		ArrayList<Car> list = new ArrayList<Car>();
 		list.add(new Car("111", "maker", "model name", "how much", "2018/08/11", "2018/08/13"));
@@ -154,35 +152,52 @@ public class CalendarController {
 		return list;
 	}
 	
-	@RequestMapping(value="/goResult")
-	public String goResultPage() {
-		logger.info("goResultPage - get");
+	@ResponseBody
+	@RequestMapping(value="/returnArrayTest", method=RequestMethod.POST)
+	public ArrayList<String> returnArrayTest(@RequestBody ArrayList<Car> text) {
+		logger.debug("returnArrayTest :: {}", text);
+		
+		/**
+		 * [치환완료 화면전환시 seq_id리스트 처리하기]
+		 * 1. 치환이 끝나고 새롭게 발급된 seq_id를 리스트형태로 ajax반환한다
+		 * 2. 반환된 리스트는 hidden 객체에 담아 해당시점에 화면이동을 위해 submit한다
+		 * 3. submit된 리스트는 model객체에 담아 해당 화면에서 사용 할 수 있게 처리한다.
+		 * 4. ajax로 grid rowData를 요청하는 시점에 model로 넘겨준 seq_id리스트를 함께 data로 넘겨 쿼리를 진행한다.
+		 * */
+		ArrayList<String> ret = new ArrayList<>();
+		for (Car car : text) {
+			ret.add(car.getModel());
+		}
+		return ret;
+	}
+	
+	@RequestMapping(value="/showResultPage", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	public String goResultPageWithJSON(String[] text, Model model) {
+		logger.debug("goResultPageWithJSON");
+		ArrayList<String> list = new ArrayList<>();
+		for (String str : text) {
+			logger.debug("str : {}", str);
+			list.add(str);
+		}
+		
+		model.addAttribute("idList", list);
 		return "test/result";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/goResult", method=RequestMethod.POST)
-	public String goResultPage(@RequestBody ArrayList<Car> text) {
-		logger.info("goResultPage - post :: {}", text);
-		JsonObject obj = new JsonObject();
-		obj.addProperty("result", "FAIL");
-		
-		logger.info("logic execute...");
-		obj.addProperty("result", "OK");
-		
-		return obj.toString();
-	}
-	
-	@ResponseBody
 	@RequestMapping(value="/transResult")
-	public ArrayList<Car> showTransResult() {
-		logger.info("showTransResult");
+	public ArrayList<Car> transResult3(@RequestParam(value="id_lst") String val) {
+		logger.debug("transResult3");
+		val = val.replace("[", "");
+		val = val.replace("]", "");
+		String[] strArr = val.split(",");
+		
 		ArrayList<Car> list = new ArrayList<Car>();
-		list.add(new Car("111", "maker", "model name", "how much", "2018/08/04", "2018/08/13"));
-		list.add(new Car("222", "maker2", "model name2", "how much2", "2018/08/11", "2018/08/14"));
-		list.add(new Car("333", "maker3", "model name3", "how much3", "2018/08/13", "2018/08/13"));
-		list.add(new Car("444", "maker4", "model name4", "how much4", "2018/08/14", "2018/08/14"));
-		list.add(new Car("555", "maker5", "model name5", "how much5", "2018/08/12", "2018/08/13"));
+		for (int i=0; i<strArr.length; i++) {
+			logger.debug("str : {}", strArr[i]);
+			list.add(new Car(i+""+i, strArr[i], "model name", "how much", "2018/08/16", ""));
+		}
+		
 		return list;
 	}
 	

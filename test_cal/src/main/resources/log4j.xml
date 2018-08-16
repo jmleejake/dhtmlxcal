@@ -10,9 +10,19 @@
 		</layout>
 	</appender>
 	
+	<!-- 출처: http://jace.tistory.com/111 [Jace's Blog] -->
+	<appender name="DAILY" class="org.apache.log4j.DailyRollingFileAppender">
+	    <param name="datePattern" value="'.'yyyy-MM-dd" />
+	    <param name="file" value="${webapp.root}/WEB-INF/logs/cal.log" />
+	    <param name="append" value="true" />
+	    <layout class="org.apache.log4j.PatternLayout">
+	        <param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%L] [%p] %m %n"/>
+	    </layout>
+	</appender>
+	
 	<!-- Application Loggers -->
 	<logger name="global.sesoc.calendar">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
@@ -36,6 +46,7 @@
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />
+		<appender-ref ref="DAILY" />
 	</root>
 	
 </log4j:configuration>

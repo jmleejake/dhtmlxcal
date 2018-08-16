@@ -32,33 +32,24 @@ var rowData = [];
 
   // create the grid passing in the div to use together with the columns & data we want to use
   new agGrid.Grid(eGridDiv, gridOptions);
-
-$.ajax({
-	url: "transResult"
-	, dataType: "json"
-	, contentType: 'application/json'
-	, success: function(result){
-		for (var i=0; i<result.length; i++) {
-			rowData.push({
-				id:result[i].id
-				, make:result[i].make
-				, model:result[i].model
-				, price:result[i].price
-				, register_date:result[i].register_date
-				, update_date:result[i].update_date});
+  
+  function getData() {
+	$.ajax({
+		url: "transResult"
+		, type:"post"
+		, data:{id_lst:$("#seq_id_list").val()}
+		, success: function(result){
+			for (var i=0; i<result.length; i++) {
+				rowData.push({
+					id:result[i].id
+					, make:result[i].make
+					, model:result[i].model
+					, price:result[i].price
+					, register_date:result[i].register_date
+					, update_date:result[i].update_date});
+			}
+			
+			 gridOptions.api.setRowData(rowData);
 		}
-		
-		 gridOptions.api.setRowData(rowData);
-	}
-});
-
-  function isFirstColumn(params) {
-	    var displayedColumns = params.columnApi.getAllDisplayedColumns();
-	    var thisIsFirstColumn = displayedColumns[0] === params.column;
-	    return thisIsFirstColumn;
-	}
-
-$("#btn_srch").on("click", function() {
-	console.log("btn_srch clicked!");
-	console.log($("#txt_keyword").val());
-});
+	});
+  }

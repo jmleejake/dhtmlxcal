@@ -49,5 +49,9 @@ $(document).ready(function(){
 <script src="./resources/gridTest.js"></script>
 
 </div>
+
+<form id="frm_test" action="showResultPage" method="post" enctype="text/plain;charset=UTF-8" accept-charset="utf-8">
+<input type="hidden" id="hid_data" name="text">
+</form>
 </body>
 </html>

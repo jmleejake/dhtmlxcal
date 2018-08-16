@@ -1,7 +1,6 @@
 package global.sesoc.calendar.dao;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import global.sesoc.calendar.vo.Calendar;
 
