@@ -23,7 +23,7 @@ $(document).ready(function(){
 <div class="container-fluid">
 <h3>Test2 - result page</h3>
 
-<button type="button" class="btn btn-primary" id="btn_sel">ダウンロード</button>
+<button type="button" class="btn btn-primary" id="btn_down">ダウンロード</button>
 <div id="myGrid" style="height: 300px;width:500px;" class="ag-theme-balham"></div>
 
 <script src="./resources/resultPage.js"></script>

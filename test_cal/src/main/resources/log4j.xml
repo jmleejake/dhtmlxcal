@@ -6,22 +6,38 @@
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+			<param name="ConversionPattern" value="[%-5p] %d{yyyy/MMM/dd HH:mm:ss.SSS} %l - %m%n" />
 		</layout>
 	</appender>
 	
+	<!-- main resources -->
 	<!-- 출처: http://jace.tistory.com/111 [Jace's Blog] -->
-	<appender name="DAILY" class="org.apache.log4j.DailyRollingFileAppender">
-	    <param name="datePattern" value="'.'yyyy-MM-dd" />
-	    <param name="file" value="${webapp.root}/WEB-INF/logs/cal.log" />
-	    <param name="append" value="true" />
-	    <layout class="org.apache.log4j.PatternLayout">
-	        <param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%L] [%p] %m %n"/>
-	    </layout>
+	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
+<!-- 		<param name="File" value="${webapp.root}/WEB-INF/logs/cal.log" /> -->
+		<param name="File" value="${catalina.home}/logs/cal.log" />
+		<param name="Append" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<param name="Threshold" value="debug"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+		    <param name="ConversionPattern" value="[%-5p] %d{yyyy/MMM/dd HH:mm:ss.SSS} %l - %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="file_test" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/cal2.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+		    <param name="ConversionPattern" value="[%-5p] %d{yyyy/MMM/dd HH:mm:ss.SSS} %l - %m%n" />
+		</layout>
 	</appender>
 	
 	<!-- Application Loggers -->
 	<logger name="global.sesoc.calendar">
+		<level value="info" />
+	</logger>
+	
+	<logger name="global.sesoc.test">
 		<level value="info" />
 	</logger>
 	
@@ -41,12 +57,19 @@
 	<logger name="org.springframework.web">
 		<level value="info" />
 	</logger>
+	
+	<category name="global.sesoc.test" additivity="false">
+		<priority value="debug" />
+		<appender-ref ref="console" />
+		<appender-ref ref="file_test"/>
+	</category>
 
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />
-		<appender-ref ref="DAILY" />
+		<appender-ref ref="file" />
+		<appender-ref ref="file_test" />
 	</root>
 	
 </log4j:configuration>
