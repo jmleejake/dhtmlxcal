@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset=UTF-8">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="resources/jquery-3.1.1.min.js"></script>
 <script src="resources/jquery-ui.js"></script>

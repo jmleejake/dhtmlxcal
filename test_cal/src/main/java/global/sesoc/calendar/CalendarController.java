@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +25,14 @@ import global.sesoc.calendar.vo.Car;
 public class CalendarController {
 	@Autowired
 	CalendarDAO dao;
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(CalendarController.class);
+	
+	@SuppressWarnings("resource")
+	public CalendarController() {
+		logger.debug("calendar controller");
+		new ClassPathXmlApplicationContext("quartz-config.xml");
+	}
 	
 	@RequestMapping(value = "/calHome", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {

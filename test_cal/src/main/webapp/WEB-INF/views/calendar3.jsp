@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset=UTF-8">
+<meta charset="UTF-8">
 <title>cal_test</title>
 <script src="resources/jquery-3.1.1.min.js"></script>
 <script src="scheduler/dhtmlxscheduler.js" type="text/javascript"></script>
