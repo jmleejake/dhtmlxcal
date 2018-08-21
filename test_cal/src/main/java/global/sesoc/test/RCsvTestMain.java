@@ -18,16 +18,21 @@ public class RCsvTestMain {
 	// 20171230rul.csv  20180103UL.csv
 	private static final String SAMPLE_CSV_FILE_PATH = "D:\\Chemical-EDI\\doc\\20180103UL.csv";
 	private static final String SAMPLE_OUT_FILE_PATH = SAMPLE_CSV_FILE_PATH + ".txt";
+	private static final String DATETIME_OUT_FILE_PATH = SAMPLE_CSV_FILE_PATH + "-datetime.txt";
+	
+	private static final String encoding ="MS932";
 
     public static void main(String[] args) throws IOException {
         try (
 //            Reader reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
         		// japanese Windows-31J / MS932
         		BufferedReader reader = new BufferedReader(
-        				new InputStreamReader(new FileInputStream(SAMPLE_CSV_FILE_PATH), "Windows-31J"));
+        				new InputStreamReader(new FileInputStream(SAMPLE_CSV_FILE_PATH), encoding));
         		
         		BufferedWriter writer = new BufferedWriter(
-        				new OutputStreamWriter(new FileOutputStream(SAMPLE_OUT_FILE_PATH), "Windows-31J"));
+        				new OutputStreamWriter(new FileOutputStream(SAMPLE_OUT_FILE_PATH), encoding));
+        		BufferedWriter writer2 = new BufferedWriter(
+        				new OutputStreamWriter(new FileOutputStream(DATETIME_OUT_FILE_PATH), encoding));
         ) {
 				CsvToBean<RCsvTest> csvToBean = new CsvToBeanBuilder<RCsvTest>(reader)
                     .withType(RCsvTest.class)
@@ -39,10 +44,10 @@ public class RCsvTestMain {
 
             while (iterator.hasNext()) {
             	RCsvTest rcsv = iterator.next();
-            	String option_content = rcsv.getProduct_option();
             	
-            	String delivery_date = rcsv.getDelivery_date_sel();
-            	System.out.println(String.format("delivery_date :: %s\r\n", delivery_date));
+            	writer2.write(String.format("%s;%s;%s\r\n", rcsv.getOrder_no(), rcsv.getOrder_datetime(), rcsv.getProduct_name()));
+            	
+            	String option_content = rcsv.getProduct_option();
             	
             	System.out.println(option_content);
             	writer.write(String.format("%s\r\n", option_content));
@@ -82,6 +87,7 @@ public class RCsvTestMain {
             	}
             }
             writer.close();
+            writer2.close();
         }
     }
 }

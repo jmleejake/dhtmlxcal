@@ -34,11 +34,11 @@
 	
 	<!-- Application Loggers -->
 	<logger name="global.sesoc.calendar">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<logger name="global.sesoc.test">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

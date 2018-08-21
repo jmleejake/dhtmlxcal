@@ -11,24 +11,6 @@
 <script>
 $(document).ready(function(){
 	$("#home").addClass("active");
-	
-	$('#js-selectFile').on('click', 'button', function () {
-	    $('#js-upload').click();
-	    return false;
-	});
-
-	$('#js-upload').on('change', function() {
-	    //選択したファイル情報を取得し変数に格納
-	    var file = $(this).prop('files')[0];
-	    //アイコンを選択中に変更
-	    $('#js-selectFile').find('.icon').addClass('select').html('選択中');
-	    //未選択→選択の場合（.filenameが存在しない場合）はファイル名表示用の<div>タグを追加
-	    if(!($('.filename').length)){
-	        $('#js-selectFile').append('<div class="filename"></div>');
-	    };
-	    //ファイル名を表示
-	    $('.filename').html('ファイル名：' + file.name);
-	});
 });
 </script>
 
@@ -70,16 +52,9 @@ $(document).ready(function(){
 <div class="container-fluid">
 <h3>Home2</h3>
 <span id="retSpan"></span>
-<!-- onsubmit 걸리는거 확인완료 -->
-<form action="/test" method="post" enctype="application/multipart-file" onsubmit="return test();">
-<div id="js-selectFile col-md-8">
-<input id="js-upload" type="file" name="upload" style="display:none">
-<button class="original_btn">ファイルを選択</button>
-<span class="icon">未選択</span>
-</div>
-<div class="col-md-4">
-<input type="submit" class="original_btn">
-</div>
+<form action="fileUpload" method="post" enctype="multipart/form-data">
+	<input type="file" name="file">
+	<input type="submit">
 </form>
 </div>
 </body>
