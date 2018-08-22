@@ -1,9 +1,14 @@
 package global.sesoc.test;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import global.sesoc.calendar.util.EncryptionUtil;
 
 public class TestMain {
 
@@ -66,6 +71,25 @@ public class TestMain {
 			final_str = last;
 		}
 		System.out.println(final_str.trim());
+		
+		System.out.println("++++++++++++Encryption++++++++++++");
+		System.out.println(EncryptionUtil.sha256Encrypt("12345"));
+		
+		try {
+			EncryptionUtil cipher = new EncryptionUtil("1111222233334444");
+			
+			System.out.println("+++++++++aes256+++++++++");
+			System.out.println("+++++++++encryption+++++++++");
+			System.out.println(cipher.encrypt("blahblah"));
+			System.out.println("+++++++++decryption+++++++++");
+			System.out.println(cipher.decrypt("mVIvFxvZQ1vDWmc4stQMXQ=="));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
 	}
-
 }

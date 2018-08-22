@@ -50,7 +50,7 @@ public class CalendarController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "typeTest";
+		return "test/scheduler";
 	}
 	@RequestMapping(value = "/custom", method = RequestMethod.GET)
 	public String custome() {

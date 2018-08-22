@@ -37,8 +37,8 @@ $(document).ready(function() {
 	      <li id="file" class="nav-item">
 	        <a class="nav-link" href="testPage">ファイル</a>
 	      </li>
-	      <li id="list" class="nav-item">
-	        <a class="nav-link" href="#">リスト</a>
+	      <li id="sche" class="nav-item">
+	        <a class="nav-link" href="calHome">スケヂュール</a>
 	      </li>
 	      <li id="baggage" class="nav-item">
 	        <a class="nav-link" href="#">荷物管理番号</a>
