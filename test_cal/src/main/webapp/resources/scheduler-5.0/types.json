@@ -5,35 +5,63 @@
 		"type": "1",
 		"text": "dblclick me!",
 		"start_date": "2018-3-2",
-		"end_date": "2018-3-4"
+		"end_date": "2018-3-4",
+		"details": "Philippe-Chatrier Court\n Paris, FRA",
+		"test":"test1"
 	  },
 	  {
 		"id": "2",
 		"type": "2",
 		"text": "and me!",
 		"start_date": "2018-3-9",
-		"end_date": "2018-3-11"
+		"end_date": "2018-3-11",
+		"details": "The Queens Club\n London, ENG",
+		"test":"test2"
 	  },
 	  {
 		"id": "3",
 		"type": "3",
 		"text": "and me too!",
 		"start_date": "2018-3-16",
-		"end_date": "2018-3-18"
+		"end_date": "2018-3-18",
+		"details": "Wimbledon\n June 21, 2009 - July 5, 2009",
+		"test":"test3"
 	  },
 	  {
 		"id": "4",
-		"type": "4",
+		"type": "2",
 		"text": "and me three!!",
 		"start_date": "2018-3-23",
-		"end_date": "2018-3-25"
+		"end_date": "2018-3-25",
+		"details": "Indianapolis Tennis Center\n Indianapolis, IN",
+		"test":"test4"
 	  },
 	  {
 		"id": "5",
-		"type": "5",
-		"text": "and me three!!",
+		"type": "1",
+		"text": "and me four!!",
 		"start_date": "2018-3-18",
-		"end_date": "2018-3-20"
+		"end_date": "2018-3-20",
+		"details": "Los Angeles Tennis Center.\n Los Angeles, CA  ",
+		"test":"test5"
+	  },
+	  {
+		"id": "6",
+		"type": "1",
+		"text": "and me five!!",
+		"start_date": "2018-3-01 09:30",
+		"end_date": "2018-3-03 22:30",
+		"details": "Rexall Centre\n Toronto, ON",
+		"test":"test6"
+	  },
+	  {
+		"id": "11223344",
+		"type": "3",
+		"text": "and me six!!",
+		"start_date": "2018-3-13 10:00",
+		"end_date": "2018-3-15 19:30",
+		"details": "Ranchero 123 Alberta Canada, AB",
+		"test":"the id of this schedule is 11223344"
 	  }
 	]
 }
