@@ -1,12 +1,12 @@
 package global.sesoc.calendar;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import global.sesoc.calendar.dao.CalendarDAO;
 import global.sesoc.calendar.vo.Calendar;
@@ -38,9 +37,16 @@ public class CalendarController {
 		new ClassPathXmlApplicationContext("quartz-config.xml");
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/calHome", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(Locale locale, Model model, HttpServletRequest req) {
 		logger.info("Welcome calHome! The client locale is {}.", locale);
+		
+		HttpSession session = req.getSession();
+		ArrayList<Car> carList = (ArrayList<Car>) session.getAttribute("errList");
+		
+		logger.debug("carList? {}", carList);
+		logger.debug("size? {}", carList.size());
 		
 		Date date = new Date();
 		logger.info(date.toString());
@@ -210,28 +216,6 @@ public class CalendarController {
 		}
 		
 		return list;
-	}
-	
-	@RequestMapping(value="/fileUpload", method=RequestMethod.POST)
-	public String processFileUpload(MultipartFile file) throws IOException {
-		logger.info("processFileUpload");
-		logger.debug("contentType: {}", file.getContentType()); 
-		logger.debug("name: {}", file.getName()); 
-		logger.debug("original name: {}", file.getOriginalFilename()); 
-		logger.debug("size: {}", file.getSize());
-		
-		BufferedReader reader = 
-				new BufferedReader(
-						new InputStreamReader(file.getInputStream(), "MS932"));
-		
-		String line;
-		
-		while ((line = reader.readLine()) != null) {
-			logger.debug("one line : {}", line);
-		}
-
-		// 일단 갈데없으니 파일업로드한 첫페이지 리다이렉트
-		return "redirect:";
 	}
 	
 }
